@@ -21,16 +21,24 @@ import {
   Smartphone,
   ChevronRight,
   Check,
+  Sun,
+  Moon,
+  Palette,
+  Globe,
 } from 'lucide-react';
 import { PageHeader } from '../../components/layout/PageHeader';
 import { useApp } from '../../context/AppContext';
 import { useToast } from '../../context/ToastContext';
+import { useTheme, THEME_PALETTES, type ThemeColor } from '../../context/ThemeContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { ChangeCompanyFYModal } from './ChangeCompanyFYModal';
 
 export const ProfilePage: React.FC = () => {
   const navigate = useNavigate();
   const toast = useToast();
   const { userProfile, lockApp } = useApp();
+  const { isDarkMode, setDarkMode, themeColor, setThemeColor, palette } = useTheme();
+  const { language, setLanguage, languages, t } = useLanguage();
 
   const [showSwitchModal, setShowSwitchModal] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -47,8 +55,8 @@ export const ProfilePage: React.FC = () => {
   const handleShareApp = () => {
     if (navigator.share) {
       navigator.share({
-        title: 'Sauda Book',
-        text: `Manage your commodity brokerage effortlessly on Sauda Book! Use my code ${referralCode}`,
+        title: 'VyaparX',
+        text: `Manage your commodity brokerage effortlessly on VyaparX! Use my code ${referralCode}`,
         url: window.location.origin,
       }).catch(() => {});
     } else {
@@ -65,28 +73,31 @@ export const ProfilePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#F5F7FA] pb-24 md:pb-12">
       {/* Header Replicating Screenshot 15 */}
-      <PageHeader title="My Profile" />
+      <PageHeader title={t('profile.title', 'My Profile')} />
 
       <div className="p-4 md:p-6 max-w-xl mx-auto space-y-4">
         {/* Top Profile Card (Screenshot 15) */}
-        <div className="bg-white rounded-3xl p-6 card-shadow flex flex-col items-center text-center">
+        <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 card-shadow flex flex-col items-center text-center transition-colors">
           {/* Avatar with Edit Icon */}
           <div className="relative mb-3">
-            <div className="w-20 h-20 rounded-full bg-[#FF9800] text-white flex items-center justify-center text-3xl font-black shadow-lg shadow-orange-500/20">
+            <div
+              className="w-20 h-20 rounded-full text-white flex items-center justify-center text-3xl font-black shadow-lg"
+              style={{ backgroundColor: palette.primary }}
+            >
               {userProfile?.name?.charAt(0) || 'J'}
             </div>
             <button
               onClick={() => toast.info('Profile name: ' + userProfile?.name)}
-              className="absolute bottom-0 right-0 w-6 h-6 rounded-full bg-white border border-gray-200 text-gray-700 flex items-center justify-center shadow-sm hover:text-[#FF9800]"
+              className="absolute bottom-0 right-0 w-6 h-6 rounded-full bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200 flex items-center justify-center shadow-sm hover:text-[#FF9800]"
             >
               <Edit2 className="w-3.5 h-3.5" />
             </button>
           </div>
 
-          <h2 className="text-xl font-extrabold text-gray-900 tracking-tight">
+          <h2 className="text-xl font-extrabold text-gray-900 dark:text-white tracking-tight">
             {userProfile?.name || 'JENISH'}
           </h2>
-          <p className="text-xs font-semibold text-gray-500 mt-0.5">
+          <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 mt-0.5">
             {userProfile?.phone || '9574823170'}
           </p>
 
@@ -102,15 +113,15 @@ export const ProfilePage: React.FC = () => {
         </div>
 
         {/* 1. Personal Information Card (Screenshot 15) */}
-        <div className="bg-white rounded-3xl p-5 card-shadow space-y-4">
-          <div className="flex items-center gap-2 text-amber-700 font-bold text-sm">
-            <User className="w-4 h-4 text-[#FF9800]" />
-            <span>Personal Information</span>
+        <div className="bg-white dark:bg-gray-800 rounded-3xl p-5 card-shadow space-y-4 transition-colors">
+          <div className="flex items-center gap-2 font-bold text-sm" style={{ color: palette.primary }}>
+            <User className="w-4 h-4" />
+            <span>{t('profile.personalInfo', 'Personal Information')}</span>
           </div>
 
-          <div className="flex items-center justify-between py-2 border-b border-gray-100 text-sm">
-            <span className="text-gray-600 font-medium">Phone Number:</span>
-            <div className="flex items-center gap-2 font-bold text-gray-900">
+          <div className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700 text-sm">
+            <span className="text-gray-600 dark:text-gray-400 font-medium">{t('profile.phone', 'Phone Number')}:</span>
+            <div className="flex items-center gap-2 font-bold text-gray-900 dark:text-gray-100">
               <span>{userProfile?.phone || '9574823170'}</span>
               <Edit2 className="w-3.5 h-3.5 text-orange-500 cursor-pointer" />
             </div>
@@ -119,20 +130,139 @@ export const ProfilePage: React.FC = () => {
           <button
             type="button"
             onClick={() => setShowSwitchModal(true)}
-            className="w-full flex items-center justify-between py-2 text-sm text-gray-900 font-bold hover:text-[#FF9800] transition-colors"
+            className="w-full flex items-center justify-between py-2 text-sm text-gray-900 dark:text-gray-100 font-bold hover:text-[#FF9800] transition-colors"
           >
             <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded-lg bg-orange-50 text-orange-600 flex items-center justify-center">
+              <div className="w-7 h-7 rounded-lg bg-orange-50 dark:bg-gray-700 text-orange-600 dark:text-orange-300 flex items-center justify-center">
                 <Repeat className="w-4 h-4" />
               </div>
-              <span>Change company / financial year</span>
+              <span>{t('profile.changeCompany', 'Change company / financial year')}</span>
             </div>
             <ChevronRight className="w-4 h-4 text-gray-400" />
           </button>
         </div>
 
+        {/* App Language Card */}
+        <div className="bg-white dark:bg-gray-800 rounded-3xl p-5 card-shadow space-y-4 transition-colors">
+          <div className="flex items-center gap-2 font-bold text-sm" style={{ color: palette.primary }}>
+            <Globe className="w-4 h-4" />
+            <span>{t('profile.appLanguage', 'App Language')}</span>
+          </div>
+
+          <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+            {t('profile.selectLanguageDesc', 'Choose your preferred language for VyaparX')}
+          </p>
+
+          <div className="grid grid-cols-3 gap-2.5">
+            {languages.map(item => {
+              const isSelected = language === item.code;
+              return (
+                <button
+                  key={item.code}
+                  type="button"
+                  onClick={() => {
+                    setLanguage(item.code);
+                    toast.success(`Language set to ${item.nativeLabel}`);
+                  }}
+                  className={`py-3 px-2 rounded-2xl border flex flex-col items-center justify-center text-center transition-all ${
+                    isSelected
+                      ? 'border-gray-900 dark:border-white ring-2 ring-orange-200 dark:ring-gray-600 bg-orange-50/50 dark:bg-gray-700 shadow-xs'
+                      : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750 text-gray-700 dark:text-gray-300'
+                  }`}
+                >
+                  <div className="flex items-center gap-1">
+                    <span className="text-sm font-black text-gray-900 dark:text-white">
+                      {item.nativeLabel}
+                    </span>
+                    {isSelected && <Check className="w-3.5 h-3.5 text-emerald-500 stroke-[3]" />}
+                  </div>
+                  <span className="text-[11px] text-gray-500 dark:text-gray-400 font-semibold mt-0.5">
+                    {item.label}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* App Theme & Appearance Card */}
+        <div className="bg-white dark:bg-gray-800 rounded-3xl p-5 card-shadow space-y-4 transition-colors">
+          <div className="flex items-center gap-2 font-bold text-sm" style={{ color: palette.primary }}>
+            <Palette className="w-4 h-4" />
+            <span>{t('profile.themeAppearance', 'App Theme & Appearance')}</span>
+          </div>
+
+          {/* Dark / Light Mode Selector */}
+          <div>
+            <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+              {t('common.appearance', 'Appearance Mode')}
+            </label>
+            <div className="grid grid-cols-2 gap-2.5">
+              <button
+                type="button"
+                onClick={() => setDarkMode(false)}
+                className={`py-3 px-4 rounded-2xl border flex items-center justify-center gap-2.5 text-xs font-bold transition-all ${
+                  !isDarkMode
+                    ? 'border-gray-900 dark:border-white bg-orange-50 dark:bg-gray-700 text-gray-900 dark:text-white shadow-xs'
+                    : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-100'
+                }`}
+              >
+                <Sun className="w-4 h-4 text-amber-500" />
+                <span>{t('common.lightMode', 'Light Mode')}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setDarkMode(true)}
+                className={`py-3 px-4 rounded-2xl border flex items-center justify-center gap-2.5 text-xs font-bold transition-all ${
+                  isDarkMode
+                    ? 'border-gray-900 dark:border-white bg-gray-700 text-white shadow-xs'
+                    : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-100'
+                }`}
+              >
+                <Moon className="w-4 h-4 text-indigo-400" />
+                <span>{t('common.darkMode', 'Dark Mode')}</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Accent Color Palettes */}
+          <div>
+            <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+              {t('profile.brandAccent', 'Brand Accent Color')}
+            </label>
+            <div className="grid grid-cols-5 gap-2">
+              {(Object.keys(THEME_PALETTES) as ThemeColor[]).map(c => {
+                const item = THEME_PALETTES[c];
+                const isSelected = themeColor === c;
+                return (
+                  <button
+                    key={c}
+                    type="button"
+                    onClick={() => setThemeColor(c)}
+                    className={`p-2 rounded-2xl border flex flex-col items-center gap-1.5 transition-all ${
+                      isSelected
+                        ? 'border-gray-900 dark:border-white ring-2 ring-orange-200 dark:ring-gray-600 bg-gray-50 dark:bg-gray-700'
+                        : 'border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    <span
+                      className="w-6 h-6 rounded-full shadow-xs flex items-center justify-center text-white"
+                      style={{ backgroundColor: item.primary }}
+                    >
+                      {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                    </span>
+                    <span className="text-[10px] font-bold text-gray-700 dark:text-gray-300 truncate max-w-full">
+                      {item.label.split(' ')[0]}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
         {/* 2. Reports Card (Screenshots 15 & 17) */}
-        <div className="bg-white rounded-3xl p-5 card-shadow space-y-3">
+        <div className="bg-white dark:bg-gray-800 rounded-3xl p-5 card-shadow space-y-3 transition-colors">
           <div className="flex items-center gap-2 text-indigo-700 font-bold text-sm">
             <BarChart3 className="w-4 h-4 text-indigo-600" />
             <span>Reports</span>
@@ -316,8 +446,8 @@ export const ProfilePage: React.FC = () => {
 
           <button
             type="button"
-            onClick={() => toast.success('Thank you for rating Sauda Book 5 stars! ⭐⭐⭐⭐⭐')}
-            className="w-full flex items-center justify-between py-2 text-sm text-gray-700 font-medium hover:text-teal-700 transition-colors"
+            onClick={() => toast.success('Thank you for rating VyaparX 5 stars! ⭐⭐⭐⭐⭐')}
+            className="w-full flex items-center justify-between py-2 text-sm text-gray-700 dark:text-gray-300 font-medium hover:text-teal-700 dark:hover:text-teal-400 transition-colors"
           >
             <div className="flex items-center gap-3">
               <Star className="w-4 h-4 text-amber-500" />
@@ -328,8 +458,8 @@ export const ProfilePage: React.FC = () => {
 
           <button
             type="button"
-            onClick={() => toast.info('Sauda Book v1.0. Developed for Commodity & Agro Brokers.')}
-            className="w-full flex items-center justify-between py-2 text-sm text-gray-700 font-medium hover:text-teal-700 transition-colors"
+            onClick={() => toast.info('VyaparX v1.0. Developed for Commodity & Agro Brokers.')}
+            className="w-full flex items-center justify-between py-2 text-sm text-gray-700 dark:text-gray-300 font-medium hover:text-teal-700 dark:hover:text-teal-400 transition-colors"
           >
             <div className="flex items-center gap-3">
               <Info className="w-4 h-4 text-teal-600" />
@@ -340,8 +470,8 @@ export const ProfilePage: React.FC = () => {
 
           <button
             type="button"
-            onClick={() => toast.info('Support: support@saudabook.com | +91 9574823170')}
-            className="w-full flex items-center justify-between py-2 text-sm text-gray-700 font-medium hover:text-teal-700 transition-colors"
+            onClick={() => toast.info('Support: support@vyaparx.com | +91 9574823170')}
+            className="w-full flex items-center justify-between py-2 text-sm text-gray-700 dark:text-gray-300 font-medium hover:text-teal-700 dark:hover:text-teal-400 transition-colors"
           >
             <div className="flex items-center gap-3">
               <Smartphone className="w-4 h-4 text-teal-600" />
@@ -358,7 +488,7 @@ export const ProfilePage: React.FC = () => {
           className="w-full py-4 px-4 bg-[#DC2626] hover:bg-red-700 text-white font-extrabold text-sm uppercase tracking-wider rounded-2xl shadow-md shadow-red-500/20 transition-all flex items-center justify-center gap-2 active:scale-[0.98]"
         >
           <LogOut className="w-5 h-5" />
-          <span>Logout</span>
+          <span>{t('profile.logout', 'Logout')}</span>
         </button>
       </div>
 

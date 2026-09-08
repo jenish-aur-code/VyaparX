@@ -30,7 +30,7 @@ export const PinLockModal: React.FC = () => {
           <Lock className="w-8 h-8 stroke-[2.2]" />
         </div>
         <h2 className="text-2xl font-black text-gray-900 tracking-tight mb-1">
-          Sauda Book Locked
+          VyaparX Locked
         </h2>
         <p className="text-xs text-gray-500 mb-6 font-medium">
           Welcome back {userProfile?.name || 'JENISH'}, enter your security PIN to continue.

@@ -2,6 +2,8 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AppProvider } from './context/AppContext';
 import { ToastProvider } from './context/ToastContext';
+import { ThemeProvider } from './context/ThemeContext';
+import { LanguageProvider } from './context/LanguageContext';
 import { AppShell } from './components/layout/AppShell';
 
 // Pages
@@ -16,7 +18,6 @@ import { AddEditCompanyPage } from './pages/companies/AddEditCompanyPage';
 import { SaudaListPage } from './pages/sauda/SaudaListPage';
 import { CreateSaudaPage } from './pages/sauda/CreateSaudaPage';
 import { EditSaudaPage } from './pages/sauda/EditSaudaPage';
-import { SaudaDispatchPage } from './pages/sauda/SaudaDispatchPage';
 import { SaudaBillsPage } from './pages/sauda/SaudaBillsPage';
 import { ProfilePage } from './pages/profile/ProfilePage';
 import { ReportsPage } from './pages/profile/ReportsPage';
@@ -28,9 +29,11 @@ import { LegalPages } from './pages/legal/LegalPages';
 export function App() {
   return (
     <BrowserRouter>
-      <AppProvider>
-        <ToastProvider>
-          <Routes>
+      <ThemeProvider>
+        <LanguageProvider>
+          <AppProvider>
+            <ToastProvider>
+            <Routes>
             <Route element={<AppShell />}>
               <Route path="/" element={<SplashPage />} />
               <Route path="/splash" element={<SplashPage />} />
@@ -55,7 +58,7 @@ export function App() {
               <Route path="/sauda" element={<SaudaListPage />} />
               <Route path="/sauda/create" element={<CreateSaudaPage />} />
               <Route path="/sauda/edit/:id" element={<EditSaudaPage />} />
-              <Route path="/sauda/dispatch" element={<SaudaDispatchPage />} />
+              <Route path="/sauda/dispatch" element={<Navigate to="/sauda" replace />} />
               <Route path="/sauda/bills" element={<SaudaBillsPage />} />
 
               {/* Profile & Utilities */}
@@ -74,9 +77,11 @@ export function App() {
               <Route path="*" element={<Navigate to="/home" replace />} />
             </Route>
           </Routes>
-        </ToastProvider>
-      </AppProvider>
-    </BrowserRouter>
+          </ToastProvider>
+        </AppProvider>
+      </LanguageProvider>
+    </ThemeProvider>
+  </BrowserRouter>
   );
 }
 

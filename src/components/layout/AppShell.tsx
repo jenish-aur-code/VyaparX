@@ -4,14 +4,16 @@ import { DesktopSidebar } from './DesktopSidebar';
 import { TopHeader } from './TopHeader';
 import { MobileBottomNav } from './MobileBottomNav';
 import { PinLockModal } from '../common/PinLockModal';
+import { useTheme } from '../../context/ThemeContext';
 
 export const AppShell: React.FC = () => {
   const location = useLocation();
+  const { palette } = useTheme();
   const isSplash = location.pathname === '/' || location.pathname === '/splash';
 
   if (isSplash) {
     return (
-      <main className="min-h-screen bg-[#FF9800]">
+      <main className="min-h-screen" style={{ backgroundColor: palette.primary }}>
         <PinLockModal />
         <Outlet />
       </main>
@@ -19,7 +21,7 @@ export const AppShell: React.FC = () => {
   }
 
   return (
-    <div className="flex min-h-screen bg-[#F5F7FA]">
+    <div className="flex min-h-screen bg-[#F5F7FA] dark:bg-[#0B1120] text-gray-900 dark:text-gray-100 transition-colors duration-200">
       <PinLockModal />
       <DesktopSidebar />
 

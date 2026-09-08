@@ -187,7 +187,7 @@ export const SaudaNoteTemplate: React.FC<SaudaNoteProps> = ({
         {/* Signature Block */}
         {showSignature && (
           <div className="mt-8 flex justify-between items-end text-[10px] pt-4">
-            <div className="text-gray-400">Prepared by Sauda Book</div>
+            <div className="text-gray-400">Prepared by VyaparX</div>
             <div className="text-center font-semibold text-gray-800">
               <div className="h-10 border-b border-gray-400 w-36 mb-1"></div>
               <div>Authorized Signatory</div>
@@ -391,7 +391,7 @@ export const SaudaNoteTemplate: React.FC<SaudaNoteProps> = ({
 
       {showSignature && (
         <div className="flex justify-between items-end mt-4 pt-2 border-t border-gray-100 text-[10px]">
-          <div className="text-gray-400">Sauda Book Verified</div>
+          <div className="text-gray-400">VyaparX Verified</div>
           <div className="font-bold text-gray-700">Authorized Signature</div>
         </div>
       )}

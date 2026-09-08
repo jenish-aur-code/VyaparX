@@ -46,7 +46,7 @@ export const SplashPage: React.FC = () => {
 
         {/* Brand Title */}
         <h1 className="text-4xl font-black tracking-tight text-white drop-shadow-sm">
-          Sauda Book
+          VyaparX
         </h1>
 
         <div className="w-full space-y-4 pt-6">

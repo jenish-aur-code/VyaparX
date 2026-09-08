@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, SlidersHorizontal, Plus, Info, X, Printer, Download, Share2 } from 'lucide-react';
+import { Search, SlidersHorizontal, Plus, Info, X, Printer, Share2 } from 'lucide-react';
 import { PageHeader } from '../../components/layout/PageHeader';
 import { SaudaCard } from '../../components/sauda/SaudaCard';
-import { DispatchModal } from '../../components/operations/DispatchModal';
-import { PaymentModal } from '../../components/operations/PaymentModal';
 import { ConfirmDialog } from '../../components/common/ConfirmDialog';
 import { SaudaNoteTemplate } from '../../components/pdf/SaudaNoteTemplate';
 import { saudaService, type SaudaFilters } from '../../services/saudaService';
+import { itemService } from '../../services/itemService';
 import { useApp } from '../../context/AppContext';
 import { useToast } from '../../context/ToastContext';
-import type { SaudaOrder } from '../../types';
+import type { SaudaOrder, Item } from '../../types';
 
 export const SaudaListPage: React.FC = () => {
   const navigate = useNavigate();
@@ -18,18 +17,21 @@ export const SaudaListPage: React.FC = () => {
   const { currentCompany, currentFinancialYear } = useApp();
 
   const [orders, setOrders] = useState<SaudaOrder[]>([]);
+  const [items, setItems] = useState<Item[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
   // Modals
-  const [activeDispatchOrder, setActiveDispatchOrder] = useState<SaudaOrder | null>(null);
-  const [activePaymentOrder, setActivePaymentOrder] = useState<SaudaOrder | null>(null);
   const [orderToDelete, setOrderToDelete] = useState<SaudaOrder | null>(null);
   const [activeShareOrder, setActiveShareOrder] = useState<SaudaOrder | null>(null);
   const [showFilterDrawer, setShowFilterDrawer] = useState(false);
 
   // Filters
-  const [statusFilter, setStatusFilter] = useState<'ALL' | 'Pending' | 'Completed'>('ALL');
+  const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
+
+  useEffect(() => {
+    itemService.getAll().then(setItems);
+  }, []);
 
   const fetchOrders = async () => {
     setIsLoading(true);
@@ -38,13 +40,9 @@ export const SaudaListPage: React.FC = () => {
         companyId: currentCompany?.id,
         financialYear: currentFinancialYear,
         query: searchQuery,
+        itemId: selectedItemId || undefined,
       };
-      let data = await saudaService.getAll(filters);
-
-      if (statusFilter !== 'ALL') {
-        data = data.filter(o => o.dispatchStatus === statusFilter || o.paymentStatus === statusFilter);
-      }
-
+      const data = await saudaService.getAll(filters);
       setOrders(data);
     } catch (err) {
       console.error(err);
@@ -55,7 +53,7 @@ export const SaudaListPage: React.FC = () => {
 
   useEffect(() => {
     fetchOrders();
-  }, [currentCompany?.id, currentFinancialYear, searchQuery, statusFilter]);
+  }, [currentCompany?.id, currentFinancialYear, searchQuery, selectedItemId]);
 
   const handleDeleteOrder = async () => {
     if (orderToDelete?.id) {
@@ -104,7 +102,7 @@ export const SaudaListPage: React.FC = () => {
             type="button"
             onClick={() => setShowFilterDrawer(true)}
             className={`w-12 h-12 rounded-2xl border flex items-center justify-center transition-colors shrink-0 card-shadow ${
-              statusFilter !== 'ALL'
+              selectedItemId !== null
                 ? 'bg-[#FF9800] text-white border-[#FF9800]'
                 : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
             }`}
@@ -122,8 +120,6 @@ export const SaudaListPage: React.FC = () => {
               order={order}
               onShare={o => setActiveShareOrder(o)}
               onDelete={o => setOrderToDelete(o)}
-              onDispatch={o => setActiveDispatchOrder(o)}
-              onPayment={o => setActivePaymentOrder(o)}
             />
           ))}
 
@@ -144,26 +140,6 @@ export const SaudaListPage: React.FC = () => {
       >
         <Plus className="w-7 h-7 stroke-[2.5]" />
       </button>
-
-      {/* Dispatch Modal */}
-      {activeDispatchOrder && (
-        <DispatchModal
-          isOpen={Boolean(activeDispatchOrder)}
-          order={activeDispatchOrder}
-          onClose={() => setActiveDispatchOrder(null)}
-          onSuccess={fetchOrders}
-        />
-      )}
-
-      {/* Payment Modal */}
-      {activePaymentOrder && (
-        <PaymentModal
-          isOpen={Boolean(activePaymentOrder)}
-          order={activePaymentOrder}
-          onClose={() => setActivePaymentOrder(null)}
-          onSuccess={fetchOrders}
-        />
-      )}
 
       {/* Delete Confirmation */}
       <ConfirmDialog
@@ -220,31 +196,44 @@ export const SaudaListPage: React.FC = () => {
       {/* Filter Modal */}
       {showFilterDrawer && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
-          <div className="w-full max-w-sm bg-white rounded-2xl shadow-xl p-5 space-y-4">
+          <div className="w-full max-w-sm bg-white rounded-2xl shadow-xl p-5 space-y-4 max-h-[85vh] flex flex-col">
             <div className="flex justify-between items-center">
-              <h3 className="font-bold text-base text-gray-900">Filter Orders</h3>
+              <h3 className="font-bold text-base text-gray-900">Filter by Item</h3>
               <button onClick={() => setShowFilterDrawer(false)} className="text-gray-400 hover:text-gray-600">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="space-y-2">
-              <label className="block text-xs font-bold text-gray-600 uppercase">Order Status</label>
-              {(['ALL', 'Pending', 'Completed'] as const).map(st => (
+            <div className="space-y-2 overflow-y-auto flex-1 pr-1">
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedItemId(null);
+                  setShowFilterDrawer(false);
+                }}
+                className={`w-full text-left py-2.5 px-3.5 rounded-xl text-xs font-bold transition-colors ${
+                  selectedItemId === null
+                    ? 'bg-orange-100 text-orange-900 border border-orange-300'
+                    : 'hover:bg-gray-100 text-gray-700'
+                }`}
+              >
+                All Commodity Items
+              </button>
+              {items.map(itm => (
                 <button
-                  key={st}
+                  key={itm.id}
                   type="button"
                   onClick={() => {
-                    setStatusFilter(st);
+                    setSelectedItemId(itm.id!);
                     setShowFilterDrawer(false);
                   }}
-                  className={`w-full text-left py-2.5 px-3.5 rounded-xl text-xs font-bold transition-colors ${
-                    statusFilter === st
+                  className={`w-full text-left py-2.5 px-3.5 rounded-xl text-xs font-bold transition-colors uppercase ${
+                    selectedItemId === itm.id
                       ? 'bg-orange-100 text-orange-900 border border-orange-300'
                       : 'hover:bg-gray-100 text-gray-700'
                   }`}
                 >
-                  {st === 'ALL' ? 'All Orders' : `${st} Only`}
+                  {itm.name}
                 </button>
               ))}
             </div>
