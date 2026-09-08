@@ -1,0 +1,128 @@
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import type { Company, FinancialYear, UserProfile } from '../types';
+import { companyService } from '../services/companyService';
+import { profileService } from '../services/profileService';
+import { seedInitialData } from '../db/seedData';
+
+interface AppContextType {
+  currentCompany: Company | null;
+  setCurrentCompany: (company: Company) => void;
+  companies: Company[];
+  currentFinancialYear: string;
+  setCurrentFinancialYear: (fy: string) => void;
+  financialYears: FinancialYear[];
+  userProfile: UserProfile | null;
+  refreshAppContext: () => Promise<void>;
+  isLoading: boolean;
+  isPinLocked: boolean;
+  unlockWithPin: (pin: string) => boolean;
+  lockApp: () => void;
+}
+
+const AppContext = createContext<AppContextType | undefined>(undefined);
+
+export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [currentCompany, setCurrentCompanyState] = useState<Company | null>(null);
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [currentFinancialYear, setCurrentFinancialYearState] = useState<string>('2026-2027');
+  const [financialYears, setFinancialYears] = useState<FinancialYear[]>([]);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isPinLocked, setIsPinLocked] = useState<boolean>(false);
+
+  const refreshAppContext = useCallback(async () => {
+    try {
+      await seedInitialData();
+
+      const [comps, fYears, prof] = await Promise.all([
+        companyService.getAll(),
+        profileService.getFinancialYears(),
+        profileService.getProfile(),
+      ]);
+
+      setCompanies(comps);
+      setFinancialYears(fYears);
+      setUserProfile(prof);
+
+      // Set default company
+      const defaultComp = comps.find(c => c.isDefault) || comps[0] || null;
+      setCurrentCompanyState(prev => {
+        if (prev && comps.some(c => c.id === prev.id)) {
+          return comps.find(c => c.id === prev.id)!;
+        }
+        return defaultComp;
+      });
+
+      // Set financial year
+      const defaultFY = fYears.find(f => f.isCurrent)?.id || '2026-2027';
+      setCurrentFinancialYearState(prev => prev || defaultFY);
+
+      // Check PIN lock
+      if (prof.isPinEnabled && prof.pin) {
+        const sessionUnlocked = sessionStorage.getItem('sauda_pin_unlocked');
+        if (!sessionUnlocked) {
+          setIsPinLocked(true);
+        }
+      }
+    } catch (err) {
+      console.error('Failed to load application context:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    refreshAppContext();
+  }, [refreshAppContext]);
+
+  const setCurrentCompany = (comp: Company) => {
+    setCurrentCompanyState(comp);
+  };
+
+  const setCurrentFinancialYear = (fy: string) => {
+    setCurrentFinancialYearState(fy);
+  };
+
+  const unlockWithPin = (pin: string): boolean => {
+    if (userProfile && userProfile.pin === pin) {
+      setIsPinLocked(false);
+      sessionStorage.setItem('sauda_pin_unlocked', 'true');
+      return true;
+    }
+    return false;
+  };
+
+  const lockApp = () => {
+    sessionStorage.removeItem('sauda_pin_unlocked');
+    setIsPinLocked(true);
+  };
+
+  return (
+    <AppContext.Provider
+      value={{
+        currentCompany,
+        setCurrentCompany,
+        companies,
+        currentFinancialYear,
+        setCurrentFinancialYear,
+        financialYears,
+        userProfile,
+        refreshAppContext,
+        isLoading,
+        isPinLocked,
+        unlockWithPin,
+        lockApp,
+      }}
+    >
+      {children}
+    </AppContext.Provider>
+  );
+};
+
+export function useApp(): AppContextType {
+  const context = useContext(AppContext);
+  if (!context) {
+    throw new Error('useApp must be used within an AppProvider');
+  }
+  return context;
+}

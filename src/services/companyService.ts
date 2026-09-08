@@ -1,0 +1,80 @@
+import { db } from '../db/database';
+import type { Company } from '../types';
+
+export const companyService = {
+  async getAll(): Promise<Company[]> {
+    return await db.companies.toArray();
+  },
+
+  async getById(id: number): Promise<Company | undefined> {
+    return await db.companies.get(id);
+  },
+
+  async getDefault(): Promise<Company | undefined> {
+    const defaultCompany = await db.companies.where('isDefault').equals(1).first();
+    if (!defaultCompany) {
+      return await db.companies.toCollection().first();
+    }
+    return defaultCompany;
+  },
+
+  async create(company: Omit<Company, 'id' | 'createdAt' | 'updatedAt'>): Promise<number> {
+    const now = new Date().toISOString();
+    
+    // If this is set as default, unset existing default
+    if (company.isDefault) {
+      await db.companies.toCollection().modify({ isDefault: false });
+    }
+    
+    // If this is the first company, ensure it's default
+    const count = await db.companies.count();
+    const isDefault = count === 0 ? true : !!company.isDefault;
+
+    const id = await db.companies.add({
+      ...company,
+      isDefault,
+      createdAt: now,
+      updatedAt: now,
+    });
+    return Number(id);
+  },
+
+  async update(id: number, updates: Partial<Company>): Promise<void> {
+    const now = new Date().toISOString();
+    
+    if (updates.isDefault) {
+      await db.companies.toCollection().modify({ isDefault: false });
+    }
+    
+    await db.companies.update(id, {
+      ...updates,
+      updatedAt: now,
+    });
+  },
+
+  async setDefault(id: number): Promise<void> {
+    await db.companies.toCollection().modify({ isDefault: false });
+    await db.companies.update(id, { isDefault: true, updatedAt: new Date().toISOString() });
+  },
+
+  async delete(id: number): Promise<void> {
+    await db.companies.delete(id);
+    // If deleted was default, make another one default if exists
+    const remaining = await db.companies.toArray();
+    if (remaining.length > 0 && !remaining.some(c => c.isDefault)) {
+      await db.companies.update(remaining[0].id!, { isDefault: true });
+    }
+  },
+
+  async search(query: string): Promise<Company[]> {
+    if (!query.trim()) return await this.getAll();
+    const q = query.toLowerCase();
+    return await db.companies
+      .filter(c => 
+        c.name.toLowerCase().includes(q) || 
+        c.city.toLowerCase().includes(q) || 
+        c.contactNumber.includes(q)
+      )
+      .toArray();
+  },
+};
