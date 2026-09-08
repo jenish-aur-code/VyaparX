@@ -74,7 +74,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
           <button
             type="button"
             onClick={onSearchByGst}
-            className="text-sm font-semibold text-[#FF5722] hover:text-red-700 transition-colors py-1 px-2"
+            className="text-sm font-semibold text-[var(--primary)] hover:opacity-80 transition-opacity py-1 px-2"
           >
             Search by GST
           </button>
@@ -83,7 +83,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
           <button
             type="button"
             onClick={onRefresh}
-            className="p-1.5 text-gray-600 hover:text-[#FF9800] rounded-full hover:bg-gray-100 transition-all active:rotate-180 duration-300"
+            className="p-1.5 text-gray-600 dark:text-gray-300 hover:text-[var(--primary)] dark:hover:text-[var(--primary)] rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-all active:rotate-180 duration-300"
             aria-label="Refresh"
           >
             <RefreshCw className="w-5 h-5 stroke-[2]" />

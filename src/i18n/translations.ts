@@ -17,24 +17,24 @@ export const translations: Record<Language, Record<string, string>> = {
   en: {
     // Navigation
     'nav.dashboard': 'Dashboard',
-    'nav.saudaOrders': 'Sauda Orders',
-    'nav.createSauda': 'Create Sauda Order',
+    'nav.saudaOrders': 'Vyapar Orders',
+    'nav.createSauda': 'Create Vyapar Order',
     'nav.items': 'Commodity Items',
     'nav.parties': 'Parties (Buyers/Sellers)',
     'nav.companies': 'Companies',
-    'nav.bills': 'Sauda Bills & PDF',
+    'nav.bills': 'Vyapar Bills & PDF',
     'nav.reports': 'Brokerage Reports',
     'nav.settings': 'Settings & Profile',
     'nav.mainMenu': 'Main Menu',
     'nav.operations': 'Operations & Reports',
     'nav.activeProfile': 'Active Profile',
-    'nav.newSauda': 'New Sauda',
+    'nav.newSauda': 'New Vyapar',
     'nav.home': 'Home',
     'nav.profile': 'Profile',
     'nav.comp': 'Comp.',
     'nav.partiesShort': 'Parties',
     'nav.itemsShort': 'Items',
-    'nav.saudaShort': 'Sauda',
+    'nav.saudaShort': 'Vyapar',
 
     // Header & Common
     'common.search': 'Search...',
@@ -57,17 +57,17 @@ export const translations: Record<Language, Record<string, string>> = {
     'common.company': 'Company',
 
     // Home / Dashboard
-    'home.totalOrders': 'Total Sauda Orders',
+    'home.totalOrders': 'Total Vyapar Orders',
     'home.partyList': 'PARTY LIST',
-    'home.saudaList': 'SAUDA ORDER LIST',
-    'home.createSauda': 'CREATE NEW SAUDA ORDER',
+    'home.saudaList': 'VYAPAR ORDER LIST',
+    'home.createSauda': 'CREATE NEW VYAPAR ORDER',
     'home.itemList': 'ITEM LIST',
     'home.companies': 'COMPANIES',
-    'home.saudaBill': 'SAUDA BILL',
+    'home.saudaBill': 'VYAPAR BILL',
     'home.activeCompany': 'Active Company',
     'home.fy': 'Financial Year',
 
-    // Sauda
+    // Sauda / Vyapar
     'sauda.buyer': 'Buyer',
     'sauda.seller': 'Seller',
     'sauda.rate': 'Rate',
@@ -80,7 +80,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'sauda.active': 'Active',
     'sauda.completed': 'Completed',
     'sauda.cancelled': 'Cancelled',
-    'sauda.saudaNo': 'Sauda No',
+    'sauda.saudaNo': 'Vyapar No',
     'sauda.date': 'Date',
 
     // Settings & Profile
@@ -101,24 +101,24 @@ export const translations: Record<Language, Record<string, string>> = {
   hi: {
     // Navigation
     'nav.dashboard': 'डैशबोर्ड',
-    'nav.saudaOrders': 'सौदा ऑर्डर्स',
-    'nav.createSauda': 'नया सौदा बनाएं',
+    'nav.saudaOrders': 'व्यापार ऑर्डर्स',
+    'nav.createSauda': 'नया व्यापार बनाएं',
     'nav.items': 'कमोडिटी आइटम्स',
     'nav.parties': 'पार्टियां (खरीदार/विक्रेता)',
     'nav.companies': 'कंपनियां',
-    'nav.bills': 'सौदा बिल और पीडीएफ',
+    'nav.bills': 'व्यापार बिल और पीडीएफ',
     'nav.reports': 'दलाली रिपोर्ट्स',
     'nav.settings': 'सेटिंग्स और प्रोफाइल',
     'nav.mainMenu': 'मुख्य मेनू',
     'nav.operations': 'कार्य और रिपोर्ट्स',
     'nav.activeProfile': 'सक्रिय प्रोफ़ाइल',
-    'nav.newSauda': 'नया सौदा',
+    'nav.newSauda': 'नया व्यापार',
     'nav.home': 'होम',
     'nav.profile': 'प्रोफाइल',
     'nav.comp': 'कंपनी',
     'nav.partiesShort': 'पार्टियां',
     'nav.itemsShort': 'आइटम्स',
-    'nav.saudaShort': 'सौदा',
+    'nav.saudaShort': 'व्यापार',
 
     // Header & Common
     'common.search': 'खोजें...',
@@ -141,17 +141,17 @@ export const translations: Record<Language, Record<string, string>> = {
     'common.company': 'कंपनी',
 
     // Home / Dashboard
-    'home.totalOrders': 'कुल सौदा ऑर्डर्स',
+    'home.totalOrders': 'कुल व्यापार ऑर्डर्स',
     'home.partyList': 'पार्टी लिस्ट',
-    'home.saudaList': 'सौदा ऑर्डर लिस्ट',
-    'home.createSauda': 'नया सौदा बनाएं',
+    'home.saudaList': 'व्यापार ऑर्डर लिस्ट',
+    'home.createSauda': 'नया व्यापार बनाएं',
     'home.itemList': 'कमोडिटी आइटम्स',
     'home.companies': 'कंपनियां',
-    'home.saudaBill': 'सौदा बिल',
+    'home.saudaBill': 'व्यापार बिल',
     'home.activeCompany': 'सक्रिय कंपनी',
     'home.fy': 'वित्तीय वर्ष',
 
-    // Sauda
+    // Sauda / Vyapar
     'sauda.buyer': 'खरीदार',
     'sauda.seller': 'विक्रेता',
     'sauda.rate': 'भाव',
@@ -164,7 +164,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'sauda.active': 'सक्रिय',
     'sauda.completed': 'पूर्ण',
     'sauda.cancelled': 'रद्द',
-    'sauda.saudaNo': 'सौदा क्र.',
+    'sauda.saudaNo': 'व्यापार क्र.',
     'sauda.date': 'तारीख',
 
     // Settings & Profile
@@ -185,24 +185,24 @@ export const translations: Record<Language, Record<string, string>> = {
   gu: {
     // Navigation
     'nav.dashboard': 'ડેશબોર્ડ',
-    'nav.saudaOrders': 'સોદા ઓર્ડર્સ',
-    'nav.createSauda': 'નવો સોદો બનાવો',
+    'nav.saudaOrders': 'વેપાર ઓર્ડર્સ',
+    'nav.createSauda': 'નવો વેપાર બનાવો',
     'nav.items': 'કોમોડિટી આઇટમ્સ',
     'nav.parties': 'વેપારીઓ (ખરીદનાર/વેચનાર)',
     'nav.companies': 'કંપનીઓ',
-    'nav.bills': 'સોદા બિલ અને પીડીએફ',
+    'nav.bills': 'વેપાર બિલ અને પીડીએફ',
     'nav.reports': 'દલાલી રિપોર્ટ',
     'nav.settings': 'સેટિંગ્સ અને પ્રોફાઇલ',
     'nav.mainMenu': 'મુખ્ય મેનુ',
     'nav.operations': 'ઓપરેશન્સ અને રિપોર્ટ',
     'nav.activeProfile': 'સક્રિય પ્રોફાઇલ',
-    'nav.newSauda': 'નવો સોદો',
+    'nav.newSauda': 'નવો વેપાર',
     'nav.home': 'હોમ',
     'nav.profile': 'પ્રોફાઇલ',
     'nav.comp': 'કંપની',
     'nav.partiesShort': 'વેપારીઓ',
     'nav.itemsShort': 'આઇટમ્સ',
-    'nav.saudaShort': 'સોદો',
+    'nav.saudaShort': 'વેપાર',
 
     // Header & Common
     'common.search': 'શોધો...',
@@ -225,17 +225,17 @@ export const translations: Record<Language, Record<string, string>> = {
     'common.company': 'કંપની',
 
     // Home / Dashboard
-    'home.totalOrders': 'કુલ સોદા ઓર્ડર્સ',
+    'home.totalOrders': 'કુલ વેપાર ઓર્ડર્સ',
     'home.partyList': 'પાર્ટી લિસ્ટ',
-    'home.saudaList': 'સોદા ઓર્ડર લિસ્ટ',
-    'home.createSauda': 'નવો સોદો બનાવો',
+    'home.saudaList': 'વેપાર ઓર્ડર લિસ્ટ',
+    'home.createSauda': 'નવો વેપાર બનાવો',
     'home.itemList': 'કોમોડિટી આઇટમ્સ',
     'home.companies': 'કંપનીઓ',
-    'home.saudaBill': 'સોદા બિલ',
+    'home.saudaBill': 'વેપાર બિલ',
     'home.activeCompany': 'સક્રિય કંપની',
     'home.fy': 'નાણાકીય વર્ષ',
 
-    // Sauda
+    // Sauda / Vyapar
     'sauda.buyer': 'ખરીદનાર',
     'sauda.seller': 'વેચનાર',
     'sauda.rate': 'ભાવ',
@@ -248,7 +248,7 @@ export const translations: Record<Language, Record<string, string>> = {
     'sauda.active': 'સક્રિય',
     'sauda.completed': 'સંપૂર્ણ',
     'sauda.cancelled': 'રદ કરેલ',
-    'sauda.saudaNo': 'સોદા નં.',
+    'sauda.saudaNo': 'વેપાર નં.',
     'sauda.date': 'તારીખ',
 
     // Settings & Profile

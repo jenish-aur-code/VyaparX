@@ -3,6 +3,7 @@ import { X, Truck } from 'lucide-react';
 import type { SaudaOrder, DispatchRecord } from '../../types';
 import { dispatchService } from '../../services/dispatchService';
 import { useToast } from '../../context/ToastContext';
+import { useTheme } from '../../context/ThemeContext';
 import { formatISODate } from '../../utils/formatters';
 
 interface DispatchModalProps {
@@ -19,6 +20,7 @@ export const DispatchModal: React.FC<DispatchModalProps> = ({
   onSuccess,
 }) => {
   const toast = useToast();
+  const { palette } = useTheme();
   const [history, setHistory] = useState<DispatchRecord[]>([]);
   const [dispatchDate, setDispatchDate] = useState(formatISODate());
   const [quantity, setQuantity] = useState('');
@@ -80,23 +82,26 @@ export const DispatchModal: React.FC<DispatchModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
       <div 
-        className="w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95"
+        className="w-full max-w-lg bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 border border-gray-100 dark:border-gray-700"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="p-4 border-b border-gray-100 flex items-center justify-between bg-orange-50/50">
+        <div className="p-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between bg-gray-50/60 dark:bg-gray-900/60">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-[#FF9800] text-white flex items-center justify-center shadow-xs">
+            <div 
+              className="w-9 h-9 rounded-xl text-white flex items-center justify-center shadow-xs"
+              style={{ backgroundColor: palette.primary }}
+            >
               <Truck className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="font-bold text-gray-900 text-base">Record Dispatch</h2>
-              <p className="text-xs text-gray-500">Sauda #{order.id} • {order.itemName}</p>
+              <h2 className="font-bold text-gray-900 dark:text-gray-100 text-base">Record Dispatch</h2>
+              <p className="text-xs text-gray-500 dark:text-gray-400">Vyapar #{order.id} • {order.itemName}</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 text-gray-400 hover:text-gray-700 rounded-lg hover:bg-white transition-colors"
+            className="p-1.5 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 rounded-lg hover:bg-white dark:hover:bg-gray-700 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -105,25 +110,25 @@ export const DispatchModal: React.FC<DispatchModalProps> = ({
         {/* Content Body */}
         <div className="flex-1 overflow-y-auto p-5 space-y-4">
           {/* Order Summary Status */}
-          <div className="grid grid-cols-3 gap-2 p-3 bg-gray-50 rounded-xl text-center text-xs border border-gray-200">
+          <div className="grid grid-cols-3 gap-2 p-3 bg-gray-50 dark:bg-gray-900 rounded-xl text-center text-xs border border-gray-200 dark:border-gray-700">
             <div>
-              <div className="text-gray-400 font-medium">Order Qty</div>
-              <div className="font-bold text-gray-900 text-sm mt-0.5">{order.quantity} {order.unit}</div>
+              <div className="text-gray-400 dark:text-gray-500 font-medium">Order Qty</div>
+              <div className="font-bold text-gray-900 dark:text-gray-100 text-sm mt-0.5">{order.quantity} {order.unit}</div>
             </div>
             <div>
-              <div className="text-gray-400 font-medium">Dispatched</div>
-              <div className="font-bold text-emerald-600 text-sm mt-0.5">{order.dispatchedQuantity || 0} {order.unit}</div>
+              <div className="text-gray-400 dark:text-gray-500 font-medium">Dispatched</div>
+              <div className="font-bold text-emerald-600 dark:text-emerald-400 text-sm mt-0.5">{order.dispatchedQuantity || 0} {order.unit}</div>
             </div>
             <div>
-              <div className="text-gray-400 font-medium">Remaining</div>
-              <div className="font-bold text-orange-600 text-sm mt-0.5">{remainingQty} {order.unit}</div>
+              <div className="text-gray-400 dark:text-gray-500 font-medium">Remaining</div>
+              <div className="font-bold text-sm mt-0.5" style={{ color: palette.primary }}>{remainingQty} {order.unit}</div>
             </div>
           </div>
 
           <form id="dispatch-form" onSubmit={handleSubmit} className="space-y-3">
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">Dispatch Date *</label>
+                <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Dispatch Date *</label>
                 <input
                   type="date"
                   required
@@ -133,7 +138,7 @@ export const DispatchModal: React.FC<DispatchModalProps> = ({
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">Quantity ({order.unit}) *</label>
+                <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Quantity ({order.unit}) *</label>
                 <input
                   type="number"
                   step="any"
@@ -147,7 +152,7 @@ export const DispatchModal: React.FC<DispatchModalProps> = ({
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1">Vehicle Number *</label>
+              <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Vehicle Number *</label>
               <input
                 type="text"
                 required
@@ -160,7 +165,7 @@ export const DispatchModal: React.FC<DispatchModalProps> = ({
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">Transporter Name</label>
+                <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Transporter Name</label>
                 <input
                   type="text"
                   placeholder="Ex. Maruti Roadways"
@@ -170,7 +175,7 @@ export const DispatchModal: React.FC<DispatchModalProps> = ({
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">Driver Contact</label>
+                <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Driver Contact</label>
                 <input
                   type="text"
                   placeholder="Phone number"
@@ -182,7 +187,7 @@ export const DispatchModal: React.FC<DispatchModalProps> = ({
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1">Remarks</label>
+              <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Remarks</label>
               <input
                 type="text"
                 placeholder="Optional notes or lr no."
@@ -195,17 +200,17 @@ export const DispatchModal: React.FC<DispatchModalProps> = ({
 
           {/* Past History */}
           {history.length > 0 && (
-            <div className="pt-3 border-t border-gray-100">
-              <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Previous Dispatches</h4>
+            <div className="pt-3 border-t border-gray-100 dark:border-gray-700">
+              <h4 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Previous Dispatches</h4>
               <div className="space-y-2">
                 {history.map(item => (
-                  <div key={item.id} className="p-2.5 bg-gray-50 rounded-lg text-xs flex justify-between items-center border border-gray-200">
+                  <div key={item.id} className="p-2.5 bg-gray-50 dark:bg-gray-900 rounded-lg text-xs flex justify-between items-center border border-gray-200 dark:border-gray-700">
                     <div>
-                      <span className="font-bold text-gray-900">{item.quantity} {order.unit}</span>
-                      <span className="text-gray-500 ml-2">({item.vehicleNumber})</span>
+                      <span className="font-bold text-gray-900 dark:text-gray-100">{item.quantity} {order.unit}</span>
+                      <span className="text-gray-500 dark:text-gray-400 ml-2">({item.vehicleNumber})</span>
                       <div className="text-[10px] text-gray-400">{item.dispatchDate} • {item.transporter || 'Self'}</div>
                     </div>
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300">
                       {item.status}
                     </span>
                   </div>
@@ -216,11 +221,11 @@ export const DispatchModal: React.FC<DispatchModalProps> = ({
         </div>
 
         {/* Footer actions */}
-        <div className="p-4 border-t border-gray-100 flex gap-3 bg-gray-50">
+        <div className="p-4 border-t border-gray-100 dark:border-gray-700 flex gap-3 bg-gray-50 dark:bg-gray-900">
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 py-2.5 px-4 border border-gray-200 text-gray-700 font-semibold rounded-xl hover:bg-white text-sm"
+            className="flex-1 py-2.5 px-4 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-semibold rounded-xl hover:bg-white dark:hover:bg-gray-800 text-sm transition-colors"
           >
             Cancel
           </button>
@@ -228,7 +233,8 @@ export const DispatchModal: React.FC<DispatchModalProps> = ({
             type="submit"
             form="dispatch-form"
             disabled={isSubmitting}
-            className="flex-1 py-2.5 px-4 bg-[#FF9800] hover:bg-[#F57C00] text-white font-bold rounded-xl text-sm shadow-sm transition-all disabled:opacity-50"
+            style={{ backgroundColor: palette.primary }}
+            className="flex-1 py-2.5 px-4 text-white font-bold rounded-xl text-sm shadow-sm transition-all disabled:opacity-50 hover:opacity-90"
           >
             {isSubmitting ? 'Saving...' : 'Save Dispatch'}
           </button>

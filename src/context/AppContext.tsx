@@ -4,6 +4,8 @@ import { companyService } from '../services/companyService';
 import { profileService } from '../services/profileService';
 import { seedInitialData } from '../db/seedData';
 
+import { authService } from '../services/authService';
+
 interface AppContextType {
   currentCompany: Company | null;
   setCurrentCompany: (company: Company) => void;
@@ -34,15 +36,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     try {
       await seedInitialData();
 
+      const user = await authService.getCurrentUser();
+      const userEmail = user?.email;
+
       const [comps, fYears, prof] = await Promise.all([
-        companyService.getAll(),
+        userEmail ? companyService.getByUser(userEmail) : companyService.getAll(),
         profileService.getFinancialYears(),
         profileService.getProfile(),
       ]);
 
       setCompanies(comps);
       setFinancialYears(fYears);
-      setUserProfile(prof);
 
       // Set default company
       const defaultComp = comps.find(c => c.isDefault) || comps[0] || null;
@@ -52,6 +56,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }
         return defaultComp;
       });
+
+      // Synchronize active username with active company
+      const activeComp = (currentCompany && comps.some(c => c.id === currentCompany.id))
+        ? currentCompany
+        : defaultComp;
+
+      if (activeComp?.username) {
+        prof.name = activeComp.username;
+      }
+      setUserProfile(prof);
 
       // Set financial year
       const defaultFY = fYears.find(f => f.isCurrent)?.id || '2026-2027';
@@ -69,7 +83,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [currentCompany]);
 
   useEffect(() => {
     refreshAppContext();
@@ -77,6 +91,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const setCurrentCompany = (comp: Company) => {
     setCurrentCompanyState(comp);
+    if (comp.username) {
+      setUserProfile(prev => prev ? { ...prev, name: comp.username! } : null);
+      profileService.updateProfile({ name: comp.username });
+    }
   };
 
   const setCurrentFinancialYear = (fy: string) => {

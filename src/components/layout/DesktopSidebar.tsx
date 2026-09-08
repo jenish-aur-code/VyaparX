@@ -25,24 +25,24 @@ export const DesktopSidebar: React.FC = () => {
 
   const mainNav = [
     { to: '/home', label: t('nav.dashboard', 'Dashboard'), icon: Home },
-    { to: '/sauda', label: t('nav.saudaOrders', 'Sauda Orders'), icon: ReceiptText },
-    { to: '/sauda/create', label: t('nav.createSauda', 'Create Sauda Order'), icon: PlusCircle, isHighlight: true },
+    { to: '/vyapar', label: t('nav.saudaOrders', 'Vyapar Orders'), icon: ReceiptText },
+    { to: '/vyapar/create', label: t('nav.createSauda', 'Create Vyapar Order'), icon: PlusCircle, isHighlight: true },
     { to: '/items', label: t('nav.items', 'Commodity Items'), icon: Package },
     { to: '/parties', label: t('nav.parties', 'Parties (Buyers/Sellers)'), icon: Users },
     { to: '/companies', label: t('nav.companies', 'Companies'), icon: Building2 },
   ];
 
   const quickLinks = [
-    { to: '/sauda/bills', label: t('nav.bills', 'Sauda Bills & PDF'), icon: FileSpreadsheet },
+    { to: '/vyapar/bills', label: t('nav.bills', 'Vyapar Bills & PDF'), icon: FileSpreadsheet },
     { to: '/profile/reports', label: t('nav.reports', 'Brokerage Reports'), icon: BarChart3 },
     { to: '/profile', label: t('nav.settings', 'Settings & Profile'), icon: User },
   ];
 
   const isItemActive = (path: string) => {
     if (path === '/home') return location.pathname === '/home';
-    if (path === '/sauda') return location.pathname === '/sauda';
-    if (path === '/sauda/create') return location.pathname === '/sauda/create';
-    if (path === '/sauda/bills') return location.pathname === '/sauda/bills';
+    if (path === '/vyapar' || path === '/sauda') return location.pathname === '/vyapar' || location.pathname === '/sauda';
+    if (path === '/vyapar/create' || path === '/sauda/create') return location.pathname === '/vyapar/create' || location.pathname === '/sauda/create';
+    if (path === '/vyapar/bills' || path === '/sauda/bills') return location.pathname === '/vyapar/bills' || location.pathname === '/sauda/bills';
     if (path === '/items') return location.pathname.startsWith('/items');
     if (path === '/parties') return location.pathname.startsWith('/parties');
     if (path === '/companies') return location.pathname.startsWith('/companies');

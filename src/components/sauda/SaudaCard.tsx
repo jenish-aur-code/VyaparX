@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Scale, Calendar, Share2, Trash2 } from 'lucide-react';
 import type { SaudaOrder } from '../../types';
 import { formatCurrency, formatDate } from '../../utils/formatters';
+import { useTheme } from '../../context/ThemeContext';
 
 interface SaudaCardProps {
   order: SaudaOrder;
@@ -16,14 +17,18 @@ export const SaudaCard: React.FC<SaudaCardProps> = ({
   onDelete,
 }) => {
   const navigate = useNavigate();
+  const { palette } = useTheme();
 
   return (
     <div 
-      className="bg-white dark:bg-gray-800 rounded-2xl p-4 card-shadow border border-gray-100/80 dark:border-gray-700 transition-all hover:border-orange-200 dark:hover:border-gray-600"
+      className="bg-white dark:bg-gray-800 rounded-2xl p-4 card-shadow border border-gray-100/80 dark:border-gray-700 transition-all hover:border-[var(--primary)]"
     >
       {/* Top Header: Item Name Badge + Bill Rate */}
       <div className="flex items-center justify-between mb-3">
-        <span className="px-3 py-1 bg-amber-100/70 dark:bg-amber-900/40 text-amber-900 dark:text-amber-200 font-bold text-xs rounded-lg uppercase tracking-wider">
+        <span 
+          className="px-3 py-1 font-bold text-xs rounded-lg uppercase tracking-wider border"
+          style={{ backgroundColor: palette.light, color: palette.text, borderColor: palette.primary + '33' }}
+        >
           {order.itemName}
         </span>
         <div className="text-sm font-bold text-gray-900 dark:text-gray-100">
@@ -67,8 +72,8 @@ export const SaudaCard: React.FC<SaudaCardProps> = ({
       {/* Date, ID & Action Buttons Row */}
       <div className="flex items-center justify-between py-1 mb-2">
         <div className="flex items-center gap-4 text-xs font-semibold text-gray-600 dark:text-gray-400">
-          <div className="flex items-center gap-1.5 text-orange-600 dark:text-orange-400 font-bold">
-            <Calendar className="w-4 h-4 text-[#FF9800]" />
+          <div className="flex items-center gap-1.5 font-bold" style={{ color: palette.primary }}>
+            <Calendar className="w-4 h-4" style={{ color: palette.primary }} />
             <span>{formatDate(order.date)}</span>
           </div>
           <span className="text-gray-400 dark:text-gray-500"># ID: {order.id}</span>
@@ -82,7 +87,7 @@ export const SaudaCard: React.FC<SaudaCardProps> = ({
               onShare(order);
             }}
             className="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center transition-colors shadow-xs"
-            title="Share Sauda PDF"
+            title="Share Vyapar PDF"
           >
             <Share2 className="w-4 h-4" />
           </button>
@@ -93,7 +98,7 @@ export const SaudaCard: React.FC<SaudaCardProps> = ({
               onDelete(order);
             }}
             className="w-9 h-9 rounded-xl bg-red-50 dark:bg-red-950/60 hover:bg-red-100 dark:hover:bg-red-900/60 text-red-600 dark:text-red-400 flex items-center justify-center transition-colors shadow-xs"
-            title="Delete Sauda"
+            title="Delete Vyapar"
           >
             <Trash2 className="w-4 h-4" />
           </button>
@@ -102,8 +107,8 @@ export const SaudaCard: React.FC<SaudaCardProps> = ({
 
       {/* Tap to view or edit link */}
       <div 
-        onClick={() => navigate(`/sauda/edit/${order.id}`)}
-        className="text-center text-xs text-gray-400 dark:text-gray-500 italic cursor-pointer hover:text-orange-500 pt-2 border-t border-gray-100 dark:border-gray-700 transition-colors"
+        onClick={() => navigate(`/vyapar/edit/${order.id}`)}
+        className="text-center text-xs text-gray-400 dark:text-gray-500 italic cursor-pointer hover:text-[var(--primary)] pt-2 border-t border-gray-100 dark:border-gray-700 transition-colors"
       >
         Tap to view or edit
       </div>

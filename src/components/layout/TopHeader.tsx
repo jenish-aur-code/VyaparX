@@ -326,15 +326,15 @@ export const TopHeader: React.FC = () => {
             {isDarkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-gray-600" />}
           </button>
 
-          {/* New Sauda Button */}
+          {/* New Vyapar Button */}
           <button
             type="button"
-            onClick={() => navigate('/sauda/create')}
+            onClick={() => navigate('/vyapar/create')}
             style={{ backgroundColor: palette.primary }}
             className="flex items-center gap-1.5 px-3.5 py-2 text-white text-xs font-bold rounded-xl shadow-xs transition-all hover:opacity-90 active:scale-98"
           >
             <Plus className="w-4 h-4 stroke-[2.5]" />
-            <span>{t('nav.newSauda', 'New Sauda')}</span>
+            <span>{t('nav.newSauda', 'New Vyapar')}</span>
           </button>
 
           {/* Profile Pill */}

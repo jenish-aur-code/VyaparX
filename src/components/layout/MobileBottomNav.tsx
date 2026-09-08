@@ -12,7 +12,7 @@ export const MobileBottomNav: React.FC = () => {
     { to: '/home', label: t('nav.home', 'Home'), icon: Home },
     { to: '/items', label: t('nav.itemsShort', 'Items'), icon: Package },
     { to: '/parties', label: t('nav.partiesShort', 'Parties'), icon: Users },
-    { to: '/sauda', label: t('nav.saudaShort', 'Sauda'), icon: ReceiptText },
+    { to: '/vyapar', label: t('nav.saudaShort', 'Vyapar'), icon: ReceiptText },
     { to: '/companies', label: t('nav.comp', 'Comp.'), icon: Building2 },
     { to: '/profile', label: t('nav.profile', 'Profile'), icon: User },
   ];

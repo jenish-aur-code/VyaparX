@@ -9,12 +9,25 @@ import { useTheme } from '../../context/ThemeContext';
 export const AppShell: React.FC = () => {
   const location = useLocation();
   const { palette } = useTheme();
-  const isSplash = location.pathname === '/' || location.pathname === '/splash';
+  const isSplash =
+    location.pathname === '/' ||
+    location.pathname === '/splash' ||
+    location.pathname === '/login' ||
+    location.pathname === '/verify-otp';
 
   if (isSplash) {
     return (
       <main className="min-h-screen" style={{ backgroundColor: palette.primary }}>
         <PinLockModal />
+        <Outlet />
+      </main>
+    );
+  }
+
+  // Standalone Company Setup Screen for New Users (No sidebar, top header, or bottom nav)
+  if (location.pathname === '/create-first-company') {
+    return (
+      <main className="min-h-screen bg-[#F5F7FA] dark:bg-[#0B1120] text-gray-900 dark:text-gray-100">
         <Outlet />
       </main>
     );

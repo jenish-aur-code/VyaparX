@@ -18,6 +18,8 @@ export interface Company {
   pdfTemplate: 1 | 2 | 3 | 4;
   showSignature: boolean;
   isDefault: boolean;
+  userEmail?: string;
+  username?: string;
   createdAt: string;
   updatedAt: string;
 }

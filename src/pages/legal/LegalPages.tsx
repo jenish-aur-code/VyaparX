@@ -46,14 +46,14 @@ export const LegalPages: React.FC = () => {
                 Add parties in the <strong>Parties</strong> tab. You can use the "Search by GST" feature to auto-fill GST and PAN details.
               </p>
 
-              <h3 className="font-bold text-gray-900">3. Creating a Sauda Order</h3>
+              <h3 className="font-bold text-gray-900">3. Creating a Vyapar Order</h3>
               <p className="text-xs text-gray-600">
-                Navigate to <strong>Create Sauda Order</strong>. Complete the 3-step wizard (Item ➔ Seller ➔ Buyer). Amounts and brokerage commissions will be calculated automatically.
+                Navigate to <strong>Create Vyapar Order</strong>. Complete the 3-step wizard (Item ➔ Seller ➔ Buyer). Amounts and brokerage commissions will be calculated automatically.
               </p>
 
               <h3 className="font-bold text-gray-900">4. Share and Print Notes</h3>
               <p className="text-xs text-gray-600">
-                From the <strong>Sauda</strong> list, tap <em>Share</em> to preview, print or download trade confirmation notes.
+                From the <strong>Vyapar</strong> list, tap <em>Share</em> to preview, print or download trade confirmation notes.
               </p>
             </div>
           ) : path.includes('privacy') ? (

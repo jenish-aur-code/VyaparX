@@ -51,9 +51,9 @@ export const HomePage: React.FC = () => {
 
   return (
     <div className="p-4 md:p-6 space-y-4 max-w-4xl mx-auto">
-      {/* Top Banner: Total Sauda Orders (Replicating Screenshot 24) */}
+      {/* Top Banner: Total Vyapar Orders (Replicating Screenshot 24) */}
       <div 
-        onClick={() => navigate('/sauda')}
+        onClick={() => navigate('/vyapar')}
         style={cardStyle}
         className="rounded-2xl p-5 text-white shadow-md shadow-orange-500/10 cursor-pointer hover:opacity-95 transition-all"
       >
@@ -62,7 +62,7 @@ export const HomePage: React.FC = () => {
             <FileText className="w-8 h-8 text-white" />
           </div>
           <div>
-            <div className="text-sm font-semibold text-white/90">{t('home.totalOrders', 'Total Sauda Orders')}</div>
+            <div className="text-sm font-semibold text-white/90">{t('home.totalOrders', 'Total Vyapar Orders')}</div>
             <div className="text-4xl font-black tracking-tight">{stats.totalOrders}</div>
           </div>
         </div>
@@ -83,29 +83,29 @@ export const HomePage: React.FC = () => {
           </span>
         </button>
 
-        {/* 2. Sauda Order List */}
+        {/* 2. Vyapar Order List */}
         <button
           type="button"
-          onClick={() => navigate('/sauda')}
+          onClick={() => navigate('/vyapar')}
           style={cardStyle}
           className="hover:opacity-95 text-white p-5 rounded-2xl flex flex-col items-center justify-center text-center gap-2.5 shadow-md transition-all active:scale-[0.98] min-h-[120px]"
         >
           <ClipboardList className="w-7 h-7 stroke-[2.2]" />
           <span className="font-extrabold text-sm uppercase tracking-wide">
-            {t('home.saudaList', 'SAUDA ORDER LIST')}
+            {t('home.saudaList', 'VYAPAR ORDER LIST')}
           </span>
         </button>
 
-        {/* 3. Create New Sauda Order */}
+        {/* 3. Create New Vyapar Order */}
         <button
           type="button"
-          onClick={() => navigate('/sauda/create')}
+          onClick={() => navigate('/vyapar/create')}
           style={cardStyle}
           className="hover:opacity-95 text-white p-5 rounded-2xl flex flex-col items-center justify-center text-center gap-2.5 shadow-md transition-all active:scale-[0.98] min-h-[120px]"
         >
           <PlusCircle className="w-7 h-7 stroke-[2.2]" />
           <span className="font-extrabold text-sm uppercase tracking-wide leading-tight">
-            {t('home.createSauda', 'CREATE NEW SAUDA ORDER')}
+            {t('home.createSauda', 'CREATE NEW VYAPAR ORDER')}
           </span>
         </button>
 
@@ -135,16 +135,16 @@ export const HomePage: React.FC = () => {
           </span>
         </button>
 
-        {/* 6. Sauda Bill */}
+        {/* 6. Vyapar Bill */}
         <button
           type="button"
-          onClick={() => navigate('/sauda/bills')}
+          onClick={() => navigate('/vyapar/bills')}
           style={cardStyle}
           className="hover:opacity-95 text-white p-5 rounded-2xl flex flex-col items-center justify-center text-center gap-2.5 shadow-md transition-all active:scale-[0.98] min-h-[120px]"
         >
           <Receipt className="w-7 h-7 stroke-[2.2]" />
           <span className="font-extrabold text-sm uppercase tracking-wide">
-            {t('home.saudaBill', 'SAUDA BILL')}
+            {t('home.saudaBill', 'VYAPAR BILL')}
           </span>
         </button>
       </div>

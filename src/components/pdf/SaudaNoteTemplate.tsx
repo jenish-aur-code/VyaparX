@@ -90,7 +90,7 @@ export const SaudaNoteTemplate: React.FC<SaudaNoteProps> = ({
 
         {/* Order Meta */}
         <div className="flex justify-between items-center py-1.5 font-bold text-xs border-b border-gray-200" style={{ color: activeTheme.hex }}>
-          <div>SAUDA ORDER NO: #{orderNo}</div>
+          <div>VYAPAR ORDER NO: #{orderNo}</div>
           <div>DATE: {orderDate}</div>
         </div>
 
@@ -103,7 +103,7 @@ export const SaudaNoteTemplate: React.FC<SaudaNoteProps> = ({
             className="text-center font-bold text-sm uppercase tracking-widest pb-2 mb-3 border-b"
             style={{ borderColor: activeTheme.hex, color: activeTheme.hex }}
           >
-            SAUDA ORDER CONFIRMATION
+            VYAPAR ORDER CONFIRMATION
           </div>
 
           {/* Seller Details */}
@@ -212,7 +212,7 @@ export const SaudaNoteTemplate: React.FC<SaudaNoteProps> = ({
             <p className="text-[10px] opacity-90">{compAddr}, {compCityState}</p>
           </div>
           <div className="text-right text-[10px]">
-            <div className="font-bold text-sm">SAUDA #{orderNo}</div>
+            <div className="font-bold text-sm">VYAPAR #{orderNo}</div>
             <div>{orderDate}</div>
           </div>
         </div>
@@ -285,7 +285,7 @@ export const SaudaNoteTemplate: React.FC<SaudaNoteProps> = ({
           </div>
           <div className="text-right">
             <span className="inline-block px-2 py-1 text-xs font-bold rounded" style={{ backgroundColor: activeTheme.bg, color: activeTheme.hex }}>
-              SAUDA NOTE #{orderNo}
+              VYAPAR NOTE #{orderNo}
             </span>
             <p className="text-[10px] text-gray-400 mt-1">{orderDate}</p>
           </div>
@@ -345,7 +345,7 @@ export const SaudaNoteTemplate: React.FC<SaudaNoteProps> = ({
         </h2>
         <p className="text-[10px] text-gray-500">{compAddr} • {compCityState} • Phone: {compPhone}</p>
         <div className="mt-1 font-bold text-xs uppercase tracking-widest text-gray-800">
-          Brokerage Sauda Voucher #{orderNo} • Date: {orderDate}
+          Brokerage Vyapar Voucher #{orderNo} • Date: {orderDate}
         </div>
       </div>
 

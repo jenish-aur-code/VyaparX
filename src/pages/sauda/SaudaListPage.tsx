@@ -9,12 +9,14 @@ import { saudaService, type SaudaFilters } from '../../services/saudaService';
 import { itemService } from '../../services/itemService';
 import { useApp } from '../../context/AppContext';
 import { useToast } from '../../context/ToastContext';
+import { useTheme } from '../../context/ThemeContext';
 import type { SaudaOrder, Item } from '../../types';
 
 export const SaudaListPage: React.FC = () => {
   const navigate = useNavigate();
   const toast = useToast();
   const { currentCompany, currentFinancialYear } = useApp();
+  const { palette } = useTheme();
 
   const [orders, setOrders] = useState<SaudaOrder[]>([]);
   const [items, setItems] = useState<Item[]>([]);
@@ -59,11 +61,11 @@ export const SaudaListPage: React.FC = () => {
     if (orderToDelete?.id) {
       try {
         await saudaService.delete(orderToDelete.id);
-        toast.success(`Sauda #${orderToDelete.id} deleted`);
+        toast.success(`Vyapar #${orderToDelete.id} deleted`);
         setOrderToDelete(null);
         fetchOrders();
       } catch (err) {
-        toast.error('Failed to delete Sauda order');
+        toast.error('Failed to delete Vyapar order');
       }
     }
   };
@@ -76,7 +78,7 @@ export const SaudaListPage: React.FC = () => {
     <div className="min-h-[calc(100vh-60px)] pb-24 md:pb-12 bg-[#F5F7FA]">
       {/* Header Replicating Screenshot 23 */}
       <PageHeader
-        title={`SAUDA (${orders.length})`}
+        title={`VYAPAR (${orders.length})`}
         companyInfo={{
           financialYear: currentFinancialYear,
           companyName: currentCompany?.name,
@@ -94,17 +96,18 @@ export const SaudaListPage: React.FC = () => {
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder="Search by #ID"
-              className="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-200/90 rounded-2xl text-sm font-medium focus:outline-none focus:border-[#FF9800] transition-all placeholder-gray-400 card-shadow"
+              className="w-full pl-12 pr-4 py-3.5 bg-white dark:bg-gray-800 border border-gray-200/90 dark:border-gray-700 rounded-2xl text-sm font-medium focus:outline-none focus:border-[var(--primary)] text-gray-900 dark:text-gray-100 transition-all placeholder-gray-400 card-shadow"
             />
           </div>
 
           <button
             type="button"
             onClick={() => setShowFilterDrawer(true)}
+            style={selectedItemId !== null ? { backgroundColor: palette.primary, borderColor: palette.primary } : {}}
             className={`w-12 h-12 rounded-2xl border flex items-center justify-center transition-colors shrink-0 card-shadow ${
               selectedItemId !== null
-                ? 'bg-[#FF9800] text-white border-[#FF9800]'
-                : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
+                ? 'text-white'
+                : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700'
             }`}
             title="Filter Orders"
           >
@@ -124,8 +127,8 @@ export const SaudaListPage: React.FC = () => {
           ))}
 
           {/* End of list text matching screenshot 23 */}
-          <div className="text-center py-6 text-gray-400 text-xs font-medium flex items-center justify-center gap-1.5">
-            <Info className="w-4 h-4 text-gray-300" />
+          <div className="text-center py-6 text-gray-400 dark:text-gray-500 text-xs font-medium flex items-center justify-center gap-1.5">
+            <Info className="w-4 h-4 text-gray-300 dark:text-gray-600" />
             <span>No more orders</span>
           </div>
         </div>
@@ -134,9 +137,10 @@ export const SaudaListPage: React.FC = () => {
       {/* Floating Action Button (+) */}
       <button
         type="button"
-        onClick={() => navigate('/sauda/create')}
-        className="fixed bottom-20 md:bottom-8 right-6 z-40 w-14 h-14 bg-[#FF9800] hover:bg-[#F57C00] text-white rounded-2xl shadow-xl shadow-orange-500/30 flex items-center justify-center transition-all active:scale-95"
-        aria-label="Create Sauda"
+        onClick={() => navigate('/vyapar/create')}
+        style={{ backgroundColor: palette.primary }}
+        className="fixed bottom-20 md:bottom-8 right-6 z-40 w-14 h-14 hover:opacity-90 text-white rounded-2xl shadow-xl flex items-center justify-center transition-all active:scale-95"
+        aria-label="Create Vyapar"
       >
         <Plus className="w-7 h-7 stroke-[2.5]" />
       </button>
@@ -144,8 +148,8 @@ export const SaudaListPage: React.FC = () => {
       {/* Delete Confirmation */}
       <ConfirmDialog
         isOpen={Boolean(orderToDelete)}
-        title="Delete Sauda?"
-        message={`Are you sure you want to delete Sauda #${orderToDelete?.id} (${orderToDelete?.itemName})? This action cannot be undone.`}
+        title="Delete Vyapar?"
+        message={`Are you sure you want to delete Vyapar #${orderToDelete?.id} (${orderToDelete?.itemName})? This action cannot be undone.`}
         onConfirm={handleDeleteOrder}
         onCancel={() => setOrderToDelete(null)}
       />
@@ -153,19 +157,20 @@ export const SaudaListPage: React.FC = () => {
       {/* Share / PDF Preview Modal */}
       {activeShareOrder && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in">
-          <div className="w-full max-w-3xl bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
-            <div className="p-4 border-b border-gray-100 flex items-center justify-between bg-orange-50/50">
+          <div className="w-full max-w-3xl bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
+            <div className="p-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between bg-orange-50/50 dark:bg-gray-700/50">
               <div className="flex items-center gap-2">
-                <Share2 className="w-5 h-5 text-orange-600" />
-                <h3 className="font-bold text-gray-900 text-base">
-                  Sauda Note #{activeShareOrder.id} Preview
+                <Share2 className="w-5 h-5 text-orange-600 dark:text-orange-400" />
+                <h3 className="font-bold text-gray-900 dark:text-white text-base">
+                  Vyapar Note #{activeShareOrder.id} Preview
                 </h3>
               </div>
               <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={handlePrintPdf}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-[#FF9800] hover:bg-[#F57C00] text-white text-xs font-bold rounded-xl shadow-xs"
+                  style={{ backgroundColor: palette.primary }}
+                  className="flex items-center gap-1.5 px-3 py-1.5 hover:opacity-90 text-white text-xs font-bold rounded-xl shadow-xs"
                 >
                   <Printer className="w-4 h-4" />
                   <span>Print Note</span>
