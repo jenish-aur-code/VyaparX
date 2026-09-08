@@ -1,8 +1,16 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
 import { AppProvider } from './context/AppContext';
 import { ToastProvider } from './context/ToastContext';
+import { ThemeProvider } from './context/ThemeContext';
+import { LanguageProvider } from './context/LanguageContext';
 import { AppShell } from './components/layout/AppShell';
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
+
+// Auth Pages
+import { EmailLoginPage } from './pages/auth/EmailLoginPage';
+import { OtpVerificationPage } from './pages/auth/OtpVerificationPage';
 
 // Pages
 import { SplashPage } from './pages/SplashPage';
@@ -16,7 +24,6 @@ import { AddEditCompanyPage } from './pages/companies/AddEditCompanyPage';
 import { SaudaListPage } from './pages/sauda/SaudaListPage';
 import { CreateSaudaPage } from './pages/sauda/CreateSaudaPage';
 import { EditSaudaPage } from './pages/sauda/EditSaudaPage';
-import { SaudaDispatchPage } from './pages/sauda/SaudaDispatchPage';
 import { SaudaBillsPage } from './pages/sauda/SaudaBillsPage';
 import { ProfilePage } from './pages/profile/ProfilePage';
 import { ReportsPage } from './pages/profile/ReportsPage';
@@ -28,54 +35,79 @@ import { LegalPages } from './pages/legal/LegalPages';
 export function App() {
   return (
     <BrowserRouter>
-      <AppProvider>
-        <ToastProvider>
-          <Routes>
-            <Route element={<AppShell />}>
-              <Route path="/" element={<SplashPage />} />
-              <Route path="/splash" element={<SplashPage />} />
-              <Route path="/home" element={<HomePage />} />
+      <ThemeProvider>
+        <LanguageProvider>
+          <AuthProvider>
+            <AppProvider>
+              <ToastProvider>
+                <Routes>
+                  {/* Public Auth Routes */}
+                  <Route element={<AppShell />}>
+                    <Route path="/login" element={<EmailLoginPage />} />
+                    <Route path="/verify-otp" element={<OtpVerificationPage />} />
+                  </Route>
 
-              {/* Items */}
-              <Route path="/items" element={<ItemsListPage />} />
-              <Route path="/items/new" element={<AddEditItemPage />} />
-              <Route path="/items/edit/:id" element={<AddEditItemPage />} />
+                  {/* Protected Application Routes */}
+                  <Route element={<ProtectedRoute />}>
+                    <Route element={<AppShell />}>
+                      <Route path="/create-first-company" element={<AddEditCompanyPage />} />
+                      <Route path="/" element={<SplashPage />} />
+                      <Route path="/splash" element={<SplashPage />} />
+                      <Route path="/home" element={<HomePage />} />
 
-              {/* Parties */}
-              <Route path="/parties" element={<PartiesListPage />} />
-              <Route path="/parties/new" element={<AddEditPartyPage />} />
-              <Route path="/parties/edit/:id" element={<AddEditPartyPage />} />
+                      {/* Items */}
+                      <Route path="/items" element={<ItemsListPage />} />
+                      <Route path="/items/new" element={<AddEditItemPage />} />
+                      <Route path="/items/edit/:id" element={<AddEditItemPage />} />
 
-              {/* Companies */}
-              <Route path="/companies" element={<CompaniesListPage />} />
-              <Route path="/companies/new" element={<AddEditCompanyPage />} />
-              <Route path="/companies/edit/:id" element={<AddEditCompanyPage />} />
+                      {/* Parties */}
+                      <Route path="/parties" element={<PartiesListPage />} />
+                      <Route path="/parties/new" element={<AddEditPartyPage />} />
+                      <Route path="/parties/edit/:id" element={<AddEditPartyPage />} />
 
-              {/* Sauda Orders */}
-              <Route path="/sauda" element={<SaudaListPage />} />
-              <Route path="/sauda/create" element={<CreateSaudaPage />} />
-              <Route path="/sauda/edit/:id" element={<EditSaudaPage />} />
-              <Route path="/sauda/dispatch" element={<SaudaDispatchPage />} />
-              <Route path="/sauda/bills" element={<SaudaBillsPage />} />
+                      {/* Companies */}
+                      <Route path="/companies" element={<CompaniesListPage />} />
+                      <Route path="/companies/new" element={<AddEditCompanyPage />} />
+                      <Route path="/companies/edit/:id" element={<AddEditCompanyPage />} />
 
-              {/* Profile & Utilities */}
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/profile/reports" element={<ReportsPage />} />
-              <Route path="/profile/quick-values" element={<QuickValuesPage />} />
-              <Route path="/profile/security" element={<PinSecurityPage />} />
-              <Route path="/profile/referrals" element={<ReferralsPage />} />
+                      {/* Vyapar Orders (with backward-compatible /sauda aliases) */}
+                      <Route path="/vyapar" element={<SaudaListPage />} />
+                      <Route path="/vyapar/create" element={<CreateSaudaPage />} />
+                      <Route path="/vyapar/edit/:id" element={<EditSaudaPage />} />
+                      <Route path="/vyapar/dispatch" element={<Navigate to="/vyapar" replace />} />
+                      <Route path="/vyapar/bills" element={<SaudaBillsPage />} />
 
-              {/* Legal & Support */}
-              <Route path="/legal/terms" element={<LegalPages />} />
-              <Route path="/legal/privacy" element={<LegalPages />} />
-              <Route path="/legal/how-to-use" element={<LegalPages />} />
+                      <Route path="/sauda" element={<Navigate to="/vyapar" replace />} />
+                      <Route path="/sauda/create" element={<Navigate to="/vyapar/create" replace />} />
+                      <Route path="/sauda/edit/:id" element={<EditSaudaPage />} />
+                      <Route path="/sauda/dispatch" element={<Navigate to="/vyapar" replace />} />
+                      <Route path="/sauda/bills" element={<Navigate to="/vyapar/bills" replace />} />
 
-              {/* Fallback */}
-              <Route path="*" element={<Navigate to="/home" replace />} />
-            </Route>
-          </Routes>
-        </ToastProvider>
-      </AppProvider>
+                      {/* Profile & Utilities */}
+                      <Route path="/profile" element={<ProfilePage />} />
+                      <Route path="/profile/reports" element={<ReportsPage />} />
+                      <Route path="/profile/quick-values" element={<QuickValuesPage />} />
+                      <Route path="/profile/security" element={<PinSecurityPage />} />
+                      <Route path="/profile/referrals" element={<ReferralsPage />} />
+
+                      {/* Legal & Support */}
+                      <Route path="/legal/terms" element={<LegalPages />} />
+                      <Route path="/legal/privacy" element={<LegalPages />} />
+                      <Route path="/legal/how-to-use" element={<LegalPages />} />
+
+                      {/* Fallback */}
+                      <Route path="*" element={<Navigate to="/home" replace />} />
+                    </Route>
+                  </Route>
+
+                  {/* Root Fallback */}
+                  <Route path="*" element={<Navigate to="/login" replace />} />
+                </Routes>
+              </ToastProvider>
+            </AppProvider>
+          </AuthProvider>
+        </LanguageProvider>
+      </ThemeProvider>
     </BrowserRouter>
   );
 }

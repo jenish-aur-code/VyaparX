@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Info, Trash2, Search, CheckCircle } from 'lucide-react';
+import { useNavigate, useParams, useSearchParams, useLocation } from 'react-router-dom';
+import { Info, Trash2, Search, CheckCircle, LogOut } from 'lucide-react';
 import { PageHeader } from '../../components/layout/PageHeader';
 import { companyService } from '../../services/companyService';
+import { authService } from '../../services/authService';
+import { profileService } from '../../services/profileService';
 import type { Company } from '../../types';
 import { useToast } from '../../context/ToastContext';
 import { useApp } from '../../context/AppContext';
+import { useAuth } from '../../context/AuthContext';
 import { ConfirmDialog } from '../../components/common/ConfirmDialog';
 import { SaudaNoteTemplate } from '../../components/pdf/SaudaNoteTemplate';
+import { useTheme } from '../../context/ThemeContext';
 
 const INDIAN_STATES = [
   'GUJARAT',
@@ -34,12 +38,18 @@ const COLOR_OPTIONS = [
 
 export const AddEditCompanyPage: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { palette } = useTheme();
   const { id } = useParams<{ id: string }>();
+  const [searchParams] = useSearchParams();
+  const isFirstCompany = searchParams.get('firstCompany') === 'true' || location.pathname === '/create-first-company';
   const isEdit = Boolean(id);
   const toast = useToast();
-  const { refreshAppContext } = useApp();
+  const { refreshAppContext, setCurrentCompany } = useApp();
+  const { currentUser, logout } = useAuth();
 
   const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
   const [contactNumber, setContactNumber] = useState('');
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
@@ -68,6 +78,7 @@ export const AddEditCompanyPage: React.FC = () => {
       companyService.getById(Number(id)).then(comp => {
         if (comp) {
           setName(comp.name);
+          setUsername(comp.username || '');
           setContactNumber(comp.contactNumber);
           setEmail(comp.email || '');
           setAddress(comp.address);
@@ -90,8 +101,12 @@ export const AddEditCompanyPage: React.FC = () => {
           navigate('/companies');
         }
       });
+    } else {
+      if (currentUser?.email && !email) {
+        setEmail(currentUser.email);
+      }
     }
-  }, [id, isEdit]);
+  }, [id, isEdit, currentUser]);
 
   const handleApplyGst = () => {
     const gst = gstInput.trim().toUpperCase();
@@ -114,6 +129,15 @@ export const AddEditCompanyPage: React.FC = () => {
       toast.error('Company Name is required');
       return;
     }
+    const trimmedUsername = username.trim();
+    if (!trimmedUsername) {
+      toast.error('Username is required');
+      return;
+    }
+    if (trimmedUsername.length < 2 || trimmedUsername.length > 30) {
+      toast.error('Username must be between 2 and 30 characters');
+      return;
+    }
     if (!contactNumber.trim()) {
       toast.error('Contact Number is required');
       return;
@@ -129,10 +153,13 @@ export const AddEditCompanyPage: React.FC = () => {
 
     try {
       setIsSubmitting(true);
+      const userEmail = currentUser?.email || email.trim() || 'krishnafibers@gmail.com';
       const companyData = {
         name: name.trim().toUpperCase(),
+        username: trimmedUsername,
+        userEmail: userEmail.toLowerCase(),
         contactNumber: contactNumber.trim(),
-        email: email.trim(),
+        email: email.trim() || userEmail,
         address: address.trim().toUpperCase(),
         state: state.trim().toUpperCase(),
         city: city.trim().toUpperCase() || 'BOTAD',
@@ -147,18 +174,40 @@ export const AddEditCompanyPage: React.FC = () => {
         saudaNoteColor,
         pdfTemplate,
         showSignature,
-        isDefault,
+        isDefault: isFirstCompany ? true : isDefault,
       };
 
+      let activeCompanyId: number;
       if (isEdit && id) {
-        await companyService.update(Number(id), companyData);
+        activeCompanyId = Number(id);
+        await companyService.update(activeCompanyId, companyData);
         toast.success('Company updated successfully');
       } else {
-        await companyService.create(companyData);
+        activeCompanyId = await companyService.create(companyData);
         toast.success('Company created successfully');
       }
+
+      // Register association on backend
+      await authService.registerCompanyOnBackend({
+        id: activeCompanyId,
+        name: companyData.name,
+        username: trimmedUsername,
+      });
+
+      // Update userProfile name to match active username
+      await profileService.updateProfile({ name: trimmedUsername });
+
       await refreshAppContext();
-      navigate('/companies');
+
+      if (isFirstCompany) {
+        const savedComp = await companyService.getById(activeCompanyId);
+        if (savedComp) {
+          setCurrentCompany(savedComp);
+        }
+        navigate('/home', { replace: true });
+      } else {
+        navigate('/companies');
+      }
     } catch (err) {
       toast.error('Failed to save company');
     } finally {
@@ -179,16 +228,32 @@ export const AddEditCompanyPage: React.FC = () => {
     COLOR_OPTIONS.find(c => c.label === saudaNoteColor)?.hex || '#DC2626';
 
   return (
-    <div className="min-h-screen bg-[#F5F7FA] pb-24 md:pb-12">
+    <div className="min-h-screen bg-[#F5F7FA] dark:bg-[#0B1120] pb-24 md:pb-12 transition-colors">
       <PageHeader
-        title={isEdit ? 'Edit Company' : 'Add Company'}
+        title={isFirstCompany ? 'Create Your First Company' : (isEdit ? 'Edit Company' : 'Add Company')}
+        subtitle={isFirstCompany ? 'Add company details to unlock VyaparX application' : undefined}
+        showBack={!isFirstCompany}
         onSearchByGst={() => setShowGstModal(true)}
         rightAction={
-          isEdit ? (
+          isFirstCompany ? (
+            <button
+              type="button"
+              onClick={() => {
+                logout();
+                navigate('/login');
+                toast.info('Logged out');
+              }}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-gray-200 dark:border-gray-700 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+              title="Sign out"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span>Logout</span>
+            </button>
+          ) : isEdit ? (
             <button
               type="button"
               onClick={() => setShowDeleteConfirm(true)}
-              className="p-2 text-red-500 hover:bg-red-50 rounded-xl transition-colors"
+              className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition-colors"
               title="Delete Company"
             >
               <Trash2 className="w-5 h-5" />
@@ -198,9 +263,22 @@ export const AddEditCompanyPage: React.FC = () => {
       />
 
       <div className="p-4 md:p-6 max-w-2xl mx-auto space-y-6">
+        {/* First Company Welcome Banner */}
+        {isFirstCompany && (
+          <div 
+            className="p-4 border-2 rounded-2xl flex items-center gap-3 text-sm font-bold shadow-xs animate-in fade-in"
+            style={{ backgroundColor: palette.light, borderColor: palette.primary, color: palette.text }}
+          >
+            <span>👋 Let's create your first company to get started.</span>
+          </div>
+        )}
+
         {/* Info Banner */}
-        <div className="p-4 bg-[#FFF8E1] border border-[#FFE082] rounded-2xl flex items-start gap-3 text-xs text-[#E65100] font-medium leading-relaxed shadow-xs">
-          <Info className="w-5 h-5 text-[#FB8C00] shrink-0 mt-0.5" />
+        <div 
+          className="p-4 rounded-2xl flex items-start gap-3 text-xs font-medium leading-relaxed shadow-xs border"
+          style={{ backgroundColor: palette.light, borderColor: palette.primary + '44', color: palette.text }}
+        >
+          <Info className="w-5 h-5 shrink-0 mt-0.5" style={{ color: palette.primary }} />
           <span>
             Fields marked with a red <span className="text-red-500 font-bold">*</span> are mandatory. Other details are optional and can be added later.
           </span>
@@ -209,7 +287,7 @@ export const AddEditCompanyPage: React.FC = () => {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Basic Information */}
           <div className="space-y-4">
-            <h2 className="text-xl font-bold text-[#1E293B] tracking-tight">
+            <h2 className="text-xl font-bold text-[#1E293B] dark:text-gray-100 tracking-tight">
               Basic Information
             </h2>
 
@@ -225,6 +303,23 @@ export const AddEditCompanyPage: React.FC = () => {
                 onChange={e => setName(e.target.value)}
                 className="input-sauda uppercase font-bold"
               />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+                USERNAME <span className="text-red-500 font-bold">*</span>
+              </label>
+              <input
+                type="text"
+                required
+                placeholder="USERNAME"
+                value={username}
+                onChange={e => setUsername(e.target.value)}
+                className="input-sauda uppercase font-bold"
+              />
+              <p className="text-[11px] text-gray-500 mt-1 font-medium">
+                Your profile username for this company.
+              </p>
             </div>
 
             <div>
@@ -419,16 +514,16 @@ export const AddEditCompanyPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Sauda Note Customization (Screenshots 13 & 14) */}
+          {/* Vyapar Note Customization (Screenshots 13 & 14) */}
           <div className="space-y-4 pt-2 border-t border-gray-200">
             <h2 className="text-xl font-bold text-[#1E293B] tracking-tight">
-              Sauda Note Customization
+              Vyapar Note Customization
             </h2>
 
-            {/* Sauda Note Color with Swatch */}
+            {/* Vyapar Note Color with Swatch */}
             <div>
               <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
-                SAUDA NOTE COLOR
+                VYAPAR NOTE COLOR
               </label>
               <div className="flex items-center gap-3">
                 <select
@@ -448,20 +543,21 @@ export const AddEditCompanyPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Sauda Note PDF Template Selector */}
+            {/* Vyapar Note PDF Template Selector */}
             <div>
               <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-2">
-                SAUDA NOTE PDF TEMPLATE
+                VYAPAR NOTE PDF TEMPLATE
               </label>
               <div className="flex items-center gap-6 py-1">
                 {[1, 2, 3, 4].map(num => (
-                  <label key={num} className="flex items-center gap-2 cursor-pointer text-sm font-bold text-gray-800">
+                  <label key={num} className="flex items-center gap-2 cursor-pointer text-sm font-bold text-gray-800 dark:text-gray-200">
                     <input
                       type="radio"
                       name="pdfTemplate"
                       checked={pdfTemplate === num}
                       onChange={() => setPdfTemplate(num as 1 | 2 | 3 | 4)}
-                      className="w-4 h-4 text-[#FF9800] focus:ring-[#FF9800]"
+                      style={{ accentColor: palette.primary }}
+                      className="w-4 h-4 cursor-pointer"
                     />
                     <span>{num}</span>
                   </label>
@@ -476,10 +572,11 @@ export const AddEditCompanyPage: React.FC = () => {
                 id="showSignature"
                 checked={showSignature}
                 onChange={e => setShowSignature(e.target.checked)}
-                className="w-5 h-5 text-[#FF9800] rounded focus:ring-[#FF9800]"
+                style={{ accentColor: palette.primary }}
+                className="w-5 h-5 rounded cursor-pointer"
               />
-              <label htmlFor="showSignature" className="text-sm font-semibold text-gray-800 cursor-pointer">
-                Show signature in Sauda Note PDF
+              <label htmlFor="showSignature" className="text-sm font-semibold text-gray-800 dark:text-gray-200 cursor-pointer">
+                Show signature in Vyapar Note PDF
               </label>
             </div>
 
@@ -490,19 +587,20 @@ export const AddEditCompanyPage: React.FC = () => {
                 id="isDefaultCompany"
                 checked={isDefault}
                 onChange={e => setIsDefault(e.target.checked)}
-                className="w-5 h-5 text-[#FF9800] rounded focus:ring-[#FF9800]"
+                style={{ accentColor: palette.primary }}
+                className="w-5 h-5 rounded cursor-pointer"
               />
-              <label htmlFor="isDefaultCompany" className="text-sm font-semibold text-gray-800 cursor-pointer">
+              <label htmlFor="isDefaultCompany" className="text-sm font-semibold text-gray-800 dark:text-gray-200 cursor-pointer">
                 Set as Default Business Profile
               </label>
             </div>
 
             {/* Live PDF Template Preview Container matching Screenshot 14 */}
             <div className="pt-2">
-              <div className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">
+              <div className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
                 Live PDF Template Preview:
               </div>
-              <div className="border border-gray-200 rounded-2xl p-3 bg-gray-50 overflow-x-auto shadow-inner">
+              <div className="border border-gray-200 dark:border-gray-700 rounded-2xl p-3 bg-gray-50 dark:bg-gray-800/60 overflow-x-auto shadow-inner">
                 <SaudaNoteTemplate
                   order={{
                     id: 13,
@@ -542,9 +640,16 @@ export const AddEditCompanyPage: React.FC = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full py-4 px-4 bg-[#FF9800] hover:bg-[#F57C00] text-white font-extrabold text-sm uppercase tracking-wider rounded-xl shadow-md shadow-orange-500/20 transition-all duration-150 active:scale-[0.98] disabled:opacity-50 mt-6"
+            style={{ backgroundColor: palette.primary }}
+            className="w-full py-4 px-4 text-white font-extrabold text-sm uppercase tracking-wider rounded-xl shadow-md transition-all duration-150 active:scale-[0.98] hover:opacity-90 disabled:opacity-50 mt-6"
           >
-            {isSubmitting ? 'SAVING...' : isEdit ? 'UPDATE COMPANY' : 'CREATE COMPANY'}
+            {isSubmitting
+              ? 'SAVING...'
+              : isFirstCompany
+              ? 'CREATE COMPANY & ENTER APPLICATION'
+              : isEdit
+              ? 'UPDATE COMPANY'
+              : 'CREATE COMPANY'}
           </button>
         </form>
       </div>
@@ -552,12 +657,12 @@ export const AddEditCompanyPage: React.FC = () => {
       {/* GST Search Modal */}
       {showGstModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
-          <div className="w-full max-w-sm bg-white rounded-2xl shadow-xl p-5 space-y-4">
-            <h3 className="text-base font-bold text-gray-900 flex items-center gap-2">
-              <Search className="w-5 h-5 text-orange-600" />
+          <div className="w-full max-w-sm bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-5 space-y-4 border border-gray-100 dark:border-gray-700">
+            <h3 className="text-base font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+              <Search className="w-5 h-5" style={{ color: palette.primary }} />
               <span>Search by GST</span>
             </h3>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-gray-500 dark:text-gray-400">
               Enter 15-digit GSTIN to auto-fill GST & PAN:
             </p>
             <input
@@ -571,14 +676,15 @@ export const AddEditCompanyPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowGstModal(false)}
-                className="flex-1 py-2.5 px-3 border border-gray-200 text-gray-600 text-xs font-bold rounded-xl"
+                className="flex-1 py-2.5 px-3 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 text-xs font-bold rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={handleApplyGst}
-                className="flex-1 py-2.5 px-3 bg-[#FF9800] hover:bg-[#F57C00] text-white text-xs font-bold rounded-xl"
+                style={{ backgroundColor: palette.primary }}
+                className="flex-1 py-2.5 px-3 text-white text-xs font-bold rounded-xl hover:opacity-90 transition-opacity"
               >
                 Apply
               </button>

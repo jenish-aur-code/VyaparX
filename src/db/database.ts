@@ -35,6 +35,19 @@ export class SaudaBookDB extends Dexie {
       quickValues: '++id, category, value',
       userProfile: 'id',
     });
+
+    this.version(2).stores({
+      companies: '++id, name, isDefault, state, city, userEmail, username',
+    }).upgrade(tx => {
+      return tx.table('companies').toCollection().modify((comp: any) => {
+        if (!comp.userEmail) {
+          comp.userEmail = comp.email || 'krishnafibers@gmail.com';
+        }
+        if (!comp.username) {
+          comp.username = 'JENISH';
+        }
+      });
+    });
   }
 }
 

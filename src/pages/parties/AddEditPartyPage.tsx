@@ -5,6 +5,7 @@ import { PageHeader } from '../../components/layout/PageHeader';
 import { partyService } from '../../services/partyService';
 import { useToast } from '../../context/ToastContext';
 import { ConfirmDialog } from '../../components/common/ConfirmDialog';
+import { useTheme } from '../../context/ThemeContext';
 
 const INDIAN_STATES = [
   'GUJARAT',
@@ -24,6 +25,7 @@ const INDIAN_STATES = [
 
 export const AddEditPartyPage: React.FC = () => {
   const navigate = useNavigate();
+  const { palette } = useTheme();
   const { id } = useParams<{ id: string }>();
   const isEdit = Boolean(id);
   const toast = useToast();
@@ -146,7 +148,7 @@ export const AddEditPartyPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F7FA] pb-24 md:pb-12">
+    <div className="min-h-screen bg-[#F5F7FA] dark:bg-[#0B1120] pb-24 md:pb-12 transition-colors">
       {/* Header Replicating Screenshots 6, 7 */}
       <PageHeader
         title={isEdit ? 'Edit Party' : 'Add Party'}
@@ -156,7 +158,7 @@ export const AddEditPartyPage: React.FC = () => {
             <button
               type="button"
               onClick={() => setShowDeleteConfirm(true)}
-              className="p-2 text-red-500 hover:bg-red-50 rounded-xl transition-colors"
+              className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition-colors"
               title="Delete Party"
             >
               <Trash2 className="w-5 h-5" />
@@ -167,8 +169,11 @@ export const AddEditPartyPage: React.FC = () => {
 
       <div className="p-4 md:p-6 max-w-xl mx-auto space-y-6">
         {/* Info Banner */}
-        <div className="p-4 bg-[#FFF8E1] border border-[#FFE082] rounded-2xl flex items-start gap-3 text-xs text-[#E65100] font-medium leading-relaxed shadow-xs">
-          <Info className="w-5 h-5 text-[#FB8C00] shrink-0 mt-0.5" />
+        <div 
+          className="p-4 rounded-2xl flex items-start gap-3 text-xs font-medium leading-relaxed shadow-xs border"
+          style={{ backgroundColor: palette.light, borderColor: palette.primary + '44', color: palette.text }}
+        >
+          <Info className="w-5 h-5 shrink-0 mt-0.5" style={{ color: palette.primary }} />
           <span>
             Fields marked with a red <span className="text-red-500 font-bold">*</span> are mandatory. Other details are optional and can be added later.
           </span>
@@ -177,12 +182,12 @@ export const AddEditPartyPage: React.FC = () => {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* 1. Basic Information */}
           <div className="space-y-4">
-            <h2 className="text-xl font-bold text-[#1E293B] tracking-tight">
+            <h2 className="text-xl font-bold text-[#1E293B] dark:text-gray-100 tracking-tight">
               Basic Information
             </h2>
 
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 PARTY NAME <span className="text-red-500 font-bold">*</span>
               </label>
               <input
@@ -196,7 +201,7 @@ export const AddEditPartyPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 MOBILE NUMBER
               </label>
               <div className="relative">
@@ -207,14 +212,17 @@ export const AddEditPartyPage: React.FC = () => {
                   onChange={e => setMobileNumber(e.target.value)}
                   className="input-sauda pr-12 font-medium"
                 />
-                <div className="w-8 h-8 rounded-lg bg-orange-100/70 text-orange-600 flex items-center justify-center absolute right-2.5 top-1/2 -translate-y-1/2">
+                <div 
+                  className="w-8 h-8 rounded-lg flex items-center justify-center absolute right-2.5 top-1/2 -translate-y-1/2"
+                  style={{ backgroundColor: palette.light, color: palette.primary }}
+                >
                   <Contact className="w-5 h-5" />
                 </div>
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 EMAIL
               </label>
               <input
@@ -227,7 +235,7 @@ export const AddEditPartyPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 ADDRESS
               </label>
               <input
@@ -241,7 +249,7 @@ export const AddEditPartyPage: React.FC = () => {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+                <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                   STATE <span className="text-red-500 font-bold">*</span>
                 </label>
                 <select
@@ -256,7 +264,7 @@ export const AddEditPartyPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+                <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                   CITY <span className="text-red-500 font-bold">*</span>
                 </label>
                 <input
@@ -271,13 +279,13 @@ export const AddEditPartyPage: React.FC = () => {
           </div>
 
           {/* 2. Business Details */}
-          <div className="space-y-4 pt-2 border-t border-gray-200">
-            <h2 className="text-xl font-bold text-[#1E293B] tracking-tight">
+          <div className="space-y-4 pt-2 border-t border-gray-200 dark:border-gray-700">
+            <h2 className="text-xl font-bold text-[#1E293B] dark:text-gray-100 tracking-tight">
               Business Details
             </h2>
 
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 LICENSE NUMBER
               </label>
               <input
@@ -290,7 +298,7 @@ export const AddEditPartyPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 GST NUMBER
               </label>
               <input
@@ -303,7 +311,7 @@ export const AddEditPartyPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 PAN NUMBER
               </label>
               <input
@@ -317,13 +325,13 @@ export const AddEditPartyPage: React.FC = () => {
           </div>
 
           {/* 3. Banking Details */}
-          <div className="space-y-4 pt-2 border-t border-gray-200">
-            <h2 className="text-xl font-bold text-[#1E293B] tracking-tight">
+          <div className="space-y-4 pt-2 border-t border-gray-200 dark:border-gray-700">
+            <h2 className="text-xl font-bold text-[#1E293B] dark:text-gray-100 tracking-tight">
               Banking Details
             </h2>
 
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 BANK NAME
               </label>
               <input
@@ -336,7 +344,7 @@ export const AddEditPartyPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 ACCOUNT NUMBER
               </label>
               <input
@@ -349,7 +357,7 @@ export const AddEditPartyPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 IFSC CODE
               </label>
               <input
@@ -362,7 +370,7 @@ export const AddEditPartyPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 UPI ID
               </label>
               <input
@@ -379,7 +387,8 @@ export const AddEditPartyPage: React.FC = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full py-4 px-4 bg-[#FF9800] hover:bg-[#F57C00] text-white font-extrabold text-sm uppercase tracking-wider rounded-xl shadow-md shadow-orange-500/20 transition-all duration-150 active:scale-[0.98] disabled:opacity-50 mt-6"
+            style={{ backgroundColor: palette.primary }}
+            className="w-full py-4 px-4 text-white font-extrabold text-sm uppercase tracking-wider rounded-xl shadow-md transition-all duration-150 active:scale-[0.98] hover:opacity-90 disabled:opacity-50 mt-6"
           >
             {isSubmitting ? 'SAVING...' : isEdit ? 'UPDATE PARTY' : 'CREATE PARTY'}
           </button>
@@ -389,12 +398,12 @@ export const AddEditPartyPage: React.FC = () => {
       {/* GST Search Modal */}
       {showGstModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
-          <div className="w-full max-w-sm bg-white rounded-2xl shadow-xl p-5 space-y-4">
-            <h3 className="text-base font-bold text-gray-900 flex items-center gap-2">
-              <Search className="w-5 h-5 text-orange-600" />
+          <div className="w-full max-w-sm bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-5 space-y-4 border border-gray-100 dark:border-gray-700">
+            <h3 className="text-base font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+              <Search className="w-5 h-5" style={{ color: palette.primary }} />
               <span>Search by GST</span>
             </h3>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-gray-500 dark:text-gray-400">
               Enter 15-digit GSTIN to auto-fill GST & PAN:
             </p>
             <input
@@ -408,14 +417,15 @@ export const AddEditPartyPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowGstModal(false)}
-                className="flex-1 py-2.5 px-3 border border-gray-200 text-gray-600 text-xs font-bold rounded-xl"
+                className="flex-1 py-2.5 px-3 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 text-xs font-bold rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={handleApplyGst}
-                className="flex-1 py-2.5 px-3 bg-[#FF9800] hover:bg-[#F57C00] text-white text-xs font-bold rounded-xl"
+                style={{ backgroundColor: palette.primary }}
+                className="flex-1 py-2.5 px-3 text-white text-xs font-bold rounded-xl hover:opacity-90 transition-opacity"
               >
                 Apply
               </button>

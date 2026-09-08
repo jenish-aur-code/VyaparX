@@ -4,9 +4,11 @@ import { Search, Package, Plus } from 'lucide-react';
 import { itemService } from '../../services/itemService';
 import type { Item } from '../../types';
 import { PageHeader } from '../../components/layout/PageHeader';
+import { useTheme } from '../../context/ThemeContext';
 
 export const ItemsListPage: React.FC = () => {
   const navigate = useNavigate();
+  const { palette } = useTheme();
   const [items, setItems] = useState<Item[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -28,7 +30,7 @@ export const ItemsListPage: React.FC = () => {
   }, [searchQuery]);
 
   return (
-    <div className="min-h-[calc(100vh-60px)] pb-24 md:pb-12 bg-[#F5F7FA]">
+    <div className="min-h-[calc(100vh-60px)] pb-24 md:pb-12 bg-[#F5F7FA] dark:bg-[#0B1120] transition-colors">
       {/* Header Replicating Screenshot 4 */}
       <PageHeader
         title={`ITEM DETAIL (${items.length})`}
@@ -45,7 +47,7 @@ export const ItemsListPage: React.FC = () => {
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             placeholder="Search items..."
-            className="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-200/90 rounded-2xl text-sm font-medium focus:outline-none focus:border-[#FF9800] transition-all placeholder-gray-400 card-shadow"
+            className="w-full pl-12 pr-4 py-3.5 bg-white dark:bg-gray-800 border border-gray-200/90 dark:border-gray-700 rounded-2xl text-sm font-medium text-gray-900 dark:text-gray-100 focus:outline-none focus:border-[var(--primary)] transition-all placeholder-gray-400 dark:placeholder-gray-500 card-shadow"
           />
         </div>
 
@@ -55,25 +57,28 @@ export const ItemsListPage: React.FC = () => {
             <div
               key={item.id}
               onClick={() => navigate(`/items/edit/${item.id}`)}
-              className="bg-white rounded-2xl p-4 card-shadow border border-gray-100/80 cursor-pointer hover:border-orange-200 transition-all flex items-start gap-3.5 group"
+              className="bg-white dark:bg-gray-800 rounded-2xl p-4 card-shadow border border-gray-100/80 dark:border-gray-700 cursor-pointer hover:border-[var(--primary)] transition-all flex items-start gap-3.5 group"
             >
-              {/* Box Icon in Soft Orange Circle */}
-              <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 mt-0.5 border border-amber-100">
+              {/* Box Icon in Theme Circle */}
+              <div 
+                className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 mt-0.5 border"
+                style={{ backgroundColor: palette.light, borderColor: palette.primary + '33', color: palette.primary }}
+              >
                 <Package className="w-6 h-6 stroke-[2.2]" />
               </div>
 
               {/* Details matching screenshot 4 */}
               <div className="flex-1 min-w-0">
-                <h3 className="font-extrabold text-base text-gray-900 uppercase tracking-wide">
+                <h3 className="font-extrabold text-base text-gray-900 dark:text-gray-100 uppercase tracking-wide">
                   {item.name}
                 </h3>
-                <div className="text-xs font-semibold text-gray-600 mt-1">
+                <div className="text-xs font-semibold text-gray-600 dark:text-gray-400 mt-1">
                   UNIT: {item.unit}
                 </div>
-                <div className="text-xs font-semibold text-gray-700 mt-0.5">
+                <div className="text-xs font-semibold text-gray-700 dark:text-gray-300 mt-0.5">
                   RATE: {item.sellerCommissionRate} (Seller) | {item.buyerCommissionRate} (Buyer)
                 </div>
-                <div className="text-xs text-gray-400 italic mt-1 group-hover:text-[#FF9800] transition-colors">
+                <div className="text-xs text-gray-400 italic mt-1 group-hover:text-[var(--primary)] transition-colors">
                   Tap to view or edit
                 </div>
               </div>
@@ -81,9 +86,9 @@ export const ItemsListPage: React.FC = () => {
           ))}
 
           {!isLoading && items.length === 0 && (
-            <div className="text-center py-12 bg-white rounded-2xl p-6 border border-gray-200">
-              <Package className="w-12 h-12 text-gray-300 mx-auto mb-2" />
-              <div className="font-bold text-gray-700">No commodity items found</div>
+            <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-200 dark:border-gray-700">
+              <Package className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-2" />
+              <div className="font-bold text-gray-700 dark:text-gray-200">No commodity items found</div>
               <p className="text-xs text-gray-400 mt-1">Click the + button below to add your first item.</p>
             </div>
           )}
@@ -94,7 +99,8 @@ export const ItemsListPage: React.FC = () => {
       <button
         type="button"
         onClick={() => navigate('/items/new')}
-        className="fixed bottom-20 md:bottom-8 right-6 z-40 w-14 h-14 bg-[#FF9800] hover:bg-[#F57C00] text-white rounded-2xl shadow-xl shadow-orange-500/30 flex items-center justify-center transition-all active:scale-95"
+        style={{ backgroundColor: palette.primary }}
+        className="fixed bottom-20 md:bottom-8 right-6 z-40 w-14 h-14 text-white rounded-2xl shadow-xl flex items-center justify-center transition-all active:scale-95 hover:opacity-90"
         aria-label="Add Item"
       >
         <Plus className="w-7 h-7 stroke-[2.5]" />

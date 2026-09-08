@@ -4,11 +4,13 @@ import { PageHeader } from '../../components/layout/PageHeader';
 import { DispatchModal } from '../../components/operations/DispatchModal';
 import { saudaService } from '../../services/saudaService';
 import { useApp } from '../../context/AppContext';
+import { useTheme } from '../../context/ThemeContext';
 import type { SaudaOrder } from '../../types';
 import { formatDate } from '../../utils/formatters';
 
 export const SaudaDispatchPage: React.FC = () => {
   const { currentCompany, currentFinancialYear } = useApp();
+  const { palette } = useTheme();
   const [orders, setOrders] = useState<SaudaOrder[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedOrder, setSelectedOrder] = useState<SaudaOrder | null>(null);
@@ -27,9 +29,9 @@ export const SaudaDispatchPage: React.FC = () => {
   }, [currentCompany?.id, currentFinancialYear, searchQuery]);
 
   return (
-    <div className="min-h-screen bg-[#F5F7FA] pb-24 md:pb-12">
+    <div className="min-h-screen bg-[#F5F7FA] dark:bg-[#0B1120] pb-24 md:pb-12 transition-colors">
       <PageHeader
-        title="Sauda Dispatch"
+        title="Vyapar Dispatch"
         subtitle="Manage dispatch tracking, vehicle numbers, and delivery status"
         onRefresh={fetchOrders}
       />
@@ -43,7 +45,7 @@ export const SaudaDispatchPage: React.FC = () => {
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             placeholder="Search by #ID, party or item..."
-            className="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-200/90 rounded-2xl text-sm font-medium focus:outline-none focus:border-[#FF9800] transition-all placeholder-gray-400 card-shadow"
+            className="w-full pl-12 pr-4 py-3.5 bg-white dark:bg-gray-800 border border-gray-200/90 dark:border-gray-700 rounded-2xl text-sm font-medium text-gray-900 dark:text-gray-100 focus:outline-none focus:border-[var(--primary)] transition-all placeholder-gray-400 dark:placeholder-gray-500 card-shadow"
           />
         </div>
 
@@ -57,25 +59,28 @@ export const SaudaDispatchPage: React.FC = () => {
             return (
               <div
                 key={order.id}
-                className="bg-white rounded-2xl p-4 card-shadow border border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-4"
+                className="bg-white dark:bg-gray-800 rounded-2xl p-4 card-shadow border border-gray-100 dark:border-gray-700 flex flex-col md:flex-row md:items-center justify-between gap-4"
               >
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-black px-2.5 py-0.5 rounded-lg bg-orange-100 text-orange-900">
+                    <span 
+                      className="text-xs font-black px-2.5 py-0.5 rounded-lg"
+                      style={{ backgroundColor: palette.light, color: palette.text }}
+                    >
                       #{order.id}
                     </span>
-                    <span className="font-extrabold text-base text-gray-900">{order.itemName}</span>
-                    <span className="text-xs text-gray-500 font-medium">({order.itemQuality})</span>
+                    <span className="font-extrabold text-base text-gray-900 dark:text-gray-100">{order.itemName}</span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">({order.itemQuality})</span>
                   </div>
 
-                  <div className="text-xs text-gray-600">
+                  <div className="text-xs text-gray-600 dark:text-gray-300">
                     <strong>Seller:</strong> {order.sellerName} ➔ <strong>Buyer:</strong> {order.buyerName}
                   </div>
 
                   <div className="flex items-center gap-3 text-xs pt-1">
-                    <span className="text-gray-500">Order: <strong>{order.quantity} {order.unit}</strong></span>
-                    <span className="text-emerald-700 font-bold">Dispatched: {dispatched}</span>
-                    <span className="text-orange-700 font-bold">Remaining: {remaining}</span>
+                    <span className="text-gray-500 dark:text-gray-400">Order: <strong>{order.quantity} {order.unit}</strong></span>
+                    <span className="text-emerald-700 dark:text-emerald-400 font-bold">Dispatched: {dispatched}</span>
+                    <span className="text-orange-700 dark:text-orange-400 font-bold">Remaining: {remaining}</span>
                   </div>
                 </div>
 
@@ -83,10 +88,10 @@ export const SaudaDispatchPage: React.FC = () => {
                   <span
                     className={`px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5 ${
                       isCompleted
-                        ? 'bg-emerald-100 text-emerald-800'
+                        ? 'bg-emerald-100 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300'
                         : dispatched > 0
-                        ? 'bg-blue-100 text-blue-800'
-                        : 'bg-amber-100 text-amber-800'
+                        ? 'bg-blue-100 dark:bg-blue-950/40 text-blue-800 dark:text-blue-300'
+                        : 'bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300'
                     }`}
                   >
                     {isCompleted ? (
@@ -100,7 +105,8 @@ export const SaudaDispatchPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setSelectedOrder(order)}
-                    className="py-2 px-3.5 bg-[#FF9800] hover:bg-[#F57C00] text-white font-bold text-xs rounded-xl shadow-xs flex items-center gap-1.5 transition-all"
+                    style={{ backgroundColor: palette.primary }}
+                    className="py-2 px-3.5 text-white font-bold text-xs rounded-xl shadow-xs flex items-center gap-1.5 transition-all hover:opacity-90"
                   >
                     <Truck className="w-4 h-4" />
                     <span>Dispatch</span>

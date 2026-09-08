@@ -84,7 +84,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
             </div>
             <div>
               <h2 className="font-bold text-gray-900 text-base">Record Payment</h2>
-              <p className="text-xs text-gray-500">Sauda #{order.id} • {order.itemName}</p>
+              <p className="text-xs text-gray-500">Vyapar #{order.id} • {order.itemName}</p>
             </div>
           </div>
           <button

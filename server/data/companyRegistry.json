@@ -1,0 +1,52 @@
+{
+  "krishnafibers@gmail.com": [
+    {
+      "id": 1,
+      "name": "KRISHNA FIBERS",
+      "username": "JENISH",
+      "userEmail": "krishnafibers@gmail.com",
+      "createdAt": "2026-09-08T10:08:34.739Z"
+    }
+  ],
+  "patel_traders_1788862109640@example.com": [
+    {
+      "id": 101,
+      "name": "PATEL COTTON TRADERS",
+      "username": "patel_admin",
+      "userEmail": "patel_traders_1788862109640@example.com",
+      "createdAt": "2026-09-08T10:08:34.761Z"
+    },
+    {
+      "id": 102,
+      "name": "PATEL ENTERPRISE",
+      "username": "patel_enterprise_user",
+      "userEmail": "patel_traders_1788862109640@example.com",
+      "createdAt": "2026-09-08T10:08:34.771Z"
+    }
+  ],
+  "patel_traders_1788862801158@example.com": [
+    {
+      "id": 101,
+      "name": "PATEL COTTON TRADERS",
+      "username": "patel_admin",
+      "userEmail": "patel_traders_1788862801158@example.com",
+      "createdAt": "2026-09-08T10:20:06.360Z"
+    },
+    {
+      "id": 102,
+      "name": "PATEL ENTERPRISE",
+      "username": "patel_enterprise_user",
+      "userEmail": "patel_traders_1788862801158@example.com",
+      "createdAt": "2026-09-08T10:20:06.376Z"
+    }
+  ],
+  "jenigaming8080@gmail.com": [
+    {
+      "id": 2,
+      "name": "HANUMANT",
+      "username": "jenish 07",
+      "userEmail": "jenigaming8080@gmail.com",
+      "createdAt": "2026-09-08T10:23:49.767Z"
+    }
+  ]
+}

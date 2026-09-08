@@ -6,6 +6,18 @@ export const companyService = {
     return await db.companies.toArray();
   },
 
+  async getByUser(userEmail?: string): Promise<Company[]> {
+    if (!userEmail) return await this.getAll();
+    const emailLower = userEmail.toLowerCase().trim();
+    const all = await db.companies.toArray();
+    // Return companies specifically associated with this userEmail
+    // For backward compatibility, if company has email matching or userEmail matching
+    return all.filter(c => 
+      (c.userEmail && c.userEmail.toLowerCase() === emailLower) ||
+      (!c.userEmail && c.email && c.email.toLowerCase() === emailLower)
+    );
+  },
+
   async getById(id: number): Promise<Company | undefined> {
     return await db.companies.get(id);
   },
@@ -66,15 +78,14 @@ export const companyService = {
     }
   },
 
-  async search(query: string): Promise<Company[]> {
-    if (!query.trim()) return await this.getAll();
+  async search(query: string, userEmail?: string): Promise<Company[]> {
+    const base = userEmail ? await this.getByUser(userEmail) : await this.getAll();
+    if (!query.trim()) return base;
     const q = query.toLowerCase();
-    return await db.companies
-      .filter(c => 
-        c.name.toLowerCase().includes(q) || 
-        c.city.toLowerCase().includes(q) || 
-        c.contactNumber.includes(q)
-      )
-      .toArray();
+    return base.filter(c => 
+      c.name.toLowerCase().includes(q) || 
+      c.city.toLowerCase().includes(q) || 
+      c.contactNumber.includes(q)
+    );
   },
 };

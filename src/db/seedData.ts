@@ -34,6 +34,8 @@ export async function seedInitialData(): Promise<void> {
     pdfTemplate: 1,
     showSignature: true,
     isDefault: true,
+    userEmail: 'krishnafibers@gmail.com',
+    username: 'JENISH',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   });
