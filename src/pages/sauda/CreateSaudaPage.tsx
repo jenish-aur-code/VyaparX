@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { Check, CheckCircle2, ChevronDown } from 'lucide-react';
 import { PageHeader } from '../../components/layout/PageHeader';
 import { SearchSelectModal, type SelectOption } from '../../components/common/SearchSelectModal';
+import { QuickAddItemModal } from '../../components/common/QuickAddItemModal';
+import { QuickAddPartyModal } from '../../components/common/QuickAddPartyModal';
 import { useApp } from '../../context/AppContext';
 import { useToast } from '../../context/ToastContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -61,6 +63,11 @@ export const CreateSaudaPage: React.FC = () => {
   const [isItemModalOpen, setIsItemModalOpen] = useState(false);
   const [isSellerModalOpen, setIsSellerModalOpen] = useState(false);
   const [isBuyerModalOpen, setIsBuyerModalOpen] = useState(false);
+
+  // Quick creation modal states
+  const [isQuickAddItemOpen, setIsQuickAddItemOpen] = useState(false);
+  const [isQuickAddPartyOpen, setIsQuickAddPartyOpen] = useState(false);
+  const [quickAddPartyContext, setQuickAddPartyContext] = useState<'seller' | 'buyer'>('seller');
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -700,6 +707,8 @@ export const CreateSaudaPage: React.FC = () => {
         title="Select Commodity Item"
         placeholder="Search items..."
         options={itemOptions}
+        onAddNew={() => setIsQuickAddItemOpen(true)}
+        addNewButtonText="ADD ITEM"
         onSelect={opt => {
           const itm = opt.raw as Item;
           setSelectedItemId(itm.id!);
@@ -717,6 +726,11 @@ export const CreateSaudaPage: React.FC = () => {
         title="Select Seller Party"
         placeholder="Search..."
         options={sellerPartyOptions}
+        onAddNew={() => {
+          setQuickAddPartyContext('seller');
+          setIsQuickAddPartyOpen(true);
+        }}
+        addNewButtonText="ADD PARTY"
         onSelect={opt => {
           const p = opt.raw as Party;
           setSelectedSellerId(p.id!);
@@ -735,6 +749,11 @@ export const CreateSaudaPage: React.FC = () => {
         title="Select Buyer Party"
         placeholder="Search..."
         options={buyerPartyOptions}
+        onAddNew={() => {
+          setQuickAddPartyContext('buyer');
+          setIsQuickAddPartyOpen(true);
+        }}
+        addNewButtonText="ADD PARTY"
         onSelect={opt => {
           const p = opt.raw as Party;
           setSelectedBuyerId(p.id!);
@@ -742,6 +761,48 @@ export const CreateSaudaPage: React.FC = () => {
           if (selectedSellerId === p.id) {
             setSelectedSellerId(null);
             setSellerName('');
+          }
+        }}
+      />
+
+      {/* Quick Add Item Modal */}
+      <QuickAddItemModal
+        isOpen={isQuickAddItemOpen}
+        onClose={() => setIsQuickAddItemOpen(false)}
+        onItemCreated={newItem => {
+          setItems(prev => [newItem, ...prev.filter(i => i.id !== newItem.id)]);
+          setSelectedItemId(newItem.id!);
+          setItemName(newItem.name);
+          setUnit(newItem.unit || '100');
+          setSellerCommRate(String(newItem.sellerCommissionRate || 2.8));
+          setBuyerCommRate(String(newItem.buyerCommissionRate || 2.6));
+          setIsItemModalOpen(false);
+        }}
+      />
+
+      {/* Quick Add Party Modal */}
+      <QuickAddPartyModal
+        isOpen={isQuickAddPartyOpen}
+        onClose={() => setIsQuickAddPartyOpen(false)}
+        defaultPartyType={quickAddPartyContext === 'seller' ? 'seller' : 'buyer'}
+        onPartyCreated={newParty => {
+          setParties(prev => [newParty, ...prev.filter(p => p.id !== newParty.id)]);
+          if (quickAddPartyContext === 'seller') {
+            setSelectedSellerId(newParty.id!);
+            setSellerName(newParty.name);
+            if (selectedBuyerId === newParty.id) {
+              setSelectedBuyerId(null);
+              setBuyerName('');
+            }
+            setIsSellerModalOpen(false);
+          } else {
+            setSelectedBuyerId(newParty.id!);
+            setBuyerName(newParty.name);
+            if (selectedSellerId === newParty.id) {
+              setSelectedSellerId(null);
+              setSellerName('');
+            }
+            setIsBuyerModalOpen(false);
           }
         }}
       />
