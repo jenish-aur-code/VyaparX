@@ -1,14 +1,12 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
 import nodemailer, { type Transporter } from 'nodemailer';
 import dotenv from 'dotenv';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Ensure .env is loaded from project root
-dotenv.config({ path: path.resolve(__dirname, '../.env') });
-dotenv.config(); // fallback
+// Safely load .env in development
+try {
+  dotenv.config();
+} catch {
+  // Ignored in serverless production
+}
 
 let cachedTransporter: Transporter | null = null;
 let lastConfigHash: string = '';

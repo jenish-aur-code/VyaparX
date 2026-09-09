@@ -3,11 +3,7 @@ import cors from 'cors';
 import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import { sendOtpEmail, getSmtpStatus, verifySmtpConnection, isSmtpConfigured } from './emailService.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 export const apiApp = express();
 
@@ -25,7 +21,7 @@ apiApp.use((req: Request, _res: Response, next: NextFunction) => {
 const JWT_SECRET = process.env.JWT_SECRET || 'vyaparx_secret_session_key_change_in_production_2026';
 
 // Persistent Company Registry Path
-const DATA_DIR = path.join(__dirname, 'data');
+const DATA_DIR = path.join(process.cwd(), 'server', 'data');
 const REGISTRY_FILE = path.join(DATA_DIR, 'companyRegistry.json');
 
 function getRegistryFilePath(): string {
