@@ -4,7 +4,7 @@ import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { sendOtpEmail } from './emailService.js';
+import { sendOtpEmail, getSmtpStatus, verifySmtpConnection, isSmtpConfigured } from './emailService.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -193,32 +193,31 @@ async function handleSendOtp(req: Request, res: Response): Promise<void> {
   history.push(Date.now());
   sendHistory.set(normalizedEmail, history);
 
-  // In non-production mode, log OTP clearly for easy local testing
-  if (process.env.NODE_ENV !== 'production') {
-    console.log(`\n=================================================`);
-    console.log(`[DEV OTP] To: ${normalizedEmail}`);
-    console.log(`[DEV OTP] Code: ${otp}`);
-    console.log(`[DEV OTP] Expires in: 5 minutes`);
-    console.log(`=================================================\n`);
+  // Check if SMTP is configured
+  if (!isSmtpConfigured()) {
+    console.warn(
+      `\n⚠️  [SMTP CONFIGURATION REQUIRED] Cannot send real email to ${normalizedEmail}.\n` +
+      `   Please open your .env file and set EMAIL_USER & EMAIL_PASSWORD (e.g., Gmail + 16-character App Password).\n`
+    );
+    res.status(503).json({
+      success: false,
+      message: 'Email service is not configured. Please add EMAIL_USER and EMAIL_PASSWORD (Gmail App Password) in your .env file to receive OTP in your inbox.',
+    });
+    return;
   }
 
   try {
     await sendOtpEmail(normalizedEmail, otp);
     res.json({
       success: true,
-      message: 'Verification code sent to your email.',
+      message: `Verification code sent to ${normalizedEmail}. Please check your inbox.`,
     });
-  } catch (err) {
-    console.error('Failed to send OTP email:', err);
-    // If SMTP failed, still allow testing if in dev mode
-    if (process.env.NODE_ENV !== 'production') {
-      res.json({
-        success: true,
-        message: 'Verification code generated (Check server console in development).',
-      });
-      return;
-    }
-    res.status(500).json({ success: false, message: 'Unable to send OTP. Please try again.' });
+  } catch (err: any) {
+    console.error('Failed to send OTP email:', err.message || err);
+    res.status(500).json({
+      success: false,
+      message: `Failed to deliver email: ${err.message || 'Please check your SMTP credentials in .env.'}`,
+    });
   }
 }
 
@@ -290,6 +289,16 @@ apiApp.post('/api/auth/verify-otp', handleVerifyOtp);
 apiApp.post('/api/auth/verify-email-otp', handleVerifyOtp);
 apiApp.post('/auth/verify-otp', handleVerifyOtp);
 apiApp.post('/auth/verify-email-otp', handleVerifyOtp);
+
+// SMTP Service Status & Verification Diagnostics
+apiApp.get(['/api/auth/smtp-status', '/auth/smtp-status'], (_req: Request, res: Response) => {
+  res.json(getSmtpStatus());
+});
+
+apiApp.post(['/api/auth/verify-smtp', '/auth/verify-smtp'], async (_req: Request, res: Response) => {
+  const result = await verifySmtpConnection();
+  res.json(result);
+});
 
 // Check Session / Current User
 apiApp.get(['/api/auth/me', '/auth/me'], requireAuth, (req: Request, res: Response) => {

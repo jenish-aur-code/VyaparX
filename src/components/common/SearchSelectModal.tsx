@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Search, X } from 'lucide-react';
+import { Search, X, Plus } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 
 export interface SelectOption {
@@ -17,6 +17,8 @@ interface SearchSelectModalProps {
   placeholder?: string;
   options: SelectOption[];
   selectedValue?: string | number;
+  onAddNew?: () => void;
+  addNewButtonText?: string;
 }
 
 export const SearchSelectModal: React.FC<SearchSelectModalProps> = ({
@@ -25,6 +27,8 @@ export const SearchSelectModal: React.FC<SearchSelectModalProps> = ({
   onSelect,
   placeholder = 'Search...',
   options,
+  onAddNew,
+  addNewButtonText = 'Add New',
 }) => {
   const { palette } = useTheme();
   const [searchTerm, setSearchTerm] = useState('');
@@ -39,6 +43,8 @@ export const SearchSelectModal: React.FC<SearchSelectModalProps> = ({
     );
   }, [options, searchTerm]);
 
+  const cleanButtonText = (addNewButtonText || 'Add New').replace(/^\+\s*/, '').trim().toUpperCase();
+
   if (!isOpen) return null;
 
   return (
@@ -48,8 +54,8 @@ export const SearchSelectModal: React.FC<SearchSelectModalProps> = ({
         onClick={e => e.stopPropagation()}
       >
         {/* Search Input Box */}
-        <div className="p-4 border-b border-gray-100 dark:border-gray-700">
-          <div className="relative flex items-center">
+        <div className="p-4 border-b border-gray-100 dark:border-gray-700 flex items-center gap-2">
+          <div className="relative flex-1 flex items-center">
             <Search className="w-5 h-5 text-gray-400 absolute left-3.5" />
             <input
               type="text"
@@ -60,22 +66,24 @@ export const SearchSelectModal: React.FC<SearchSelectModalProps> = ({
               style={{ borderColor: palette.primary }}
               className="w-full pl-11 pr-10 py-3 bg-white dark:bg-gray-900 border-2 rounded-xl text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none text-base"
             />
-            {searchTerm ? (
+            {searchTerm && (
               <button
+                type="button"
                 onClick={() => setSearchTerm('')}
                 className="absolute right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 p-1"
               >
                 <X className="w-4 h-4" />
               </button>
-            ) : (
-              <button
-                onClick={onClose}
-                className="absolute right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 p-1"
-              >
-                <X className="w-5 h-5" />
-              </button>
             )}
           </div>
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 p-2 shrink-0"
+          >
+            <X className="w-5 h-5" />
+          </button>
         </div>
 
         {/* Options List */}
@@ -102,16 +110,33 @@ export const SearchSelectModal: React.FC<SearchSelectModalProps> = ({
               </button>
             ))
           ) : (
-            <div className="p-8 text-center text-gray-400 text-sm">
-              No matching records found
+            <div className="p-8 text-center text-gray-400 text-sm space-y-3">
+              <div>No matching records found</div>
             </div>
           )}
 
           {/* End of list text matching screenshot */}
-          <div className="py-4 text-center text-xs text-gray-400 font-medium">
-            No more items to load
-          </div>
+          {filteredOptions.length > 0 && (
+            <div className="py-4 text-center text-xs text-gray-400 font-medium">
+              No more items to load
+            </div>
+          )}
         </div>
+
+        {/* Bottom Bar "+ Add" Button with single big plus icon */}
+        {onAddNew && (
+          <div className="p-3 border-t border-gray-100 dark:border-gray-700 bg-gray-50/80 dark:bg-gray-900/60">
+            <button
+              type="button"
+              onClick={onAddNew}
+              style={{ backgroundColor: palette.primary }}
+              className="w-full py-3.5 px-4 text-white font-bold rounded-xl flex items-center justify-center gap-2 shadow-md hover:opacity-90 active:scale-[0.98] transition-all text-sm tracking-wider uppercase"
+            >
+              <Plus className="w-5 h-5 stroke-[2.5]" />
+              <span>{cleanButtonText}</span>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
