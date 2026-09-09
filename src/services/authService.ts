@@ -33,7 +33,25 @@ export const authService = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email }),
     });
+
+    const contentType = res.headers.get('content-type') || '';
+    if (!contentType.includes('application/json')) {
+      const text = await res.text();
+      if (text.includes('<!DOCTYPE html>') || text.includes('<html')) {
+        throw new Error(
+          'API server is not reachable on Netlify. Please ensure your Netlify environment variables (EMAIL_USER and EMAIL_PASSWORD) are set in Site configuration.'
+        );
+      }
+      throw new Error(`Server returned unexpected response: ${text.slice(0, 100)}`);
+    }
+
     const data = await res.json();
+    if (data.otpToken) {
+      sessionStorage.setItem('sauda_otp_token', data.otpToken);
+      if (data.expiresAt) {
+        sessionStorage.setItem('sauda_otp_expires', String(data.expiresAt));
+      }
+    }
     if (!res.ok || !data.success) {
       throw new Error(data.message || 'Unable to send OTP. Please try again.');
     }
@@ -41,11 +59,26 @@ export const authService = {
   },
 
   async verifyOtp(email: string, otp: string): Promise<VerifyOtpResponse> {
+    const otpToken = sessionStorage.getItem('sauda_otp_token') || undefined;
+    const expiresAt = sessionStorage.getItem('sauda_otp_expires')
+      ? Number(sessionStorage.getItem('sauda_otp_expires'))
+      : undefined;
+
     const res = await fetch('/api/auth/verify-otp', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, otp }),
+      body: JSON.stringify({ email, otp, otpToken, expiresAt }),
     });
+
+    const contentType = res.headers.get('content-type') || '';
+    if (!contentType.includes('application/json')) {
+      const text = await res.text();
+      if (text.includes('<!DOCTYPE html>') || text.includes('<html')) {
+        throw new Error('API server is not reachable on Netlify. Please check Netlify Functions configuration.');
+      }
+      throw new Error(`Server returned unexpected response: ${text.slice(0, 100)}`);
+    }
+
     const data = await res.json();
     if (!res.ok || !data.success) {
       throw new Error(data.message || 'Invalid verification code. Please try again.');
@@ -53,6 +86,8 @@ export const authService = {
     if (data.token) {
       this.setToken(data.token);
     }
+    sessionStorage.removeItem('sauda_otp_token');
+    sessionStorage.removeItem('sauda_otp_expires');
     return data;
   },
 
@@ -62,7 +97,25 @@ export const authService = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email }),
     });
+
+    const contentType = res.headers.get('content-type') || '';
+    if (!contentType.includes('application/json')) {
+      const text = await res.text();
+      if (text.includes('<!DOCTYPE html>') || text.includes('<html')) {
+        throw new Error(
+          'API server is not reachable on Netlify. Please ensure your Netlify environment variables are set.'
+        );
+      }
+      throw new Error(`Server returned unexpected response: ${text.slice(0, 100)}`);
+    }
+
     const data = await res.json();
+    if (data.otpToken) {
+      sessionStorage.setItem('sauda_otp_token', data.otpToken);
+      if (data.expiresAt) {
+        sessionStorage.setItem('sauda_otp_expires', String(data.expiresAt));
+      }
+    }
     if (!res.ok || !data.success) {
       throw new Error(data.message || 'Unable to resend OTP. Please try again.');
     }

@@ -14,11 +14,26 @@ export const apiApp = express();
 apiApp.use(cors());
 apiApp.use(express.json());
 
+// Handle Netlify functions path rewriting
+apiApp.use((req: Request, _res: Response, next: NextFunction) => {
+  if (req.url.startsWith('/.netlify/functions/api')) {
+    req.url = req.url.replace('/.netlify/functions/api', '') || '/';
+  }
+  next();
+});
+
 const JWT_SECRET = process.env.JWT_SECRET || 'vyaparx_secret_session_key_change_in_production_2026';
 
 // Persistent Company Registry Path
 const DATA_DIR = path.join(__dirname, 'data');
 const REGISTRY_FILE = path.join(DATA_DIR, 'companyRegistry.json');
+
+function getRegistryFilePath(): string {
+  if (process.env.NETLIFY || process.env.AWS_LAMBDA_FUNCTION_NAME) {
+    return path.join('/tmp', 'companyRegistry.json');
+  }
+  return REGISTRY_FILE;
+}
 
 interface RegisteredCompany {
   id: number;
@@ -29,11 +44,18 @@ interface RegisteredCompany {
 }
 
 function loadCompanyRegistry(): Record<string, RegisteredCompany[]> {
+  const filePath = getRegistryFilePath();
   try {
-    if (!fs.existsSync(DATA_DIR)) {
-      fs.mkdirSync(DATA_DIR, { recursive: true });
+    const dir = path.dirname(filePath);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
     }
-    if (fs.existsSync(REGISTRY_FILE)) {
+    if (fs.existsSync(filePath)) {
+      const data = fs.readFileSync(filePath, 'utf-8');
+      return JSON.parse(data);
+    }
+    // Also check default file if in /tmp
+    if (filePath !== REGISTRY_FILE && fs.existsSync(REGISTRY_FILE)) {
       const data = fs.readFileSync(REGISTRY_FILE, 'utf-8');
       return JSON.parse(data);
     }
@@ -57,11 +79,13 @@ function loadCompanyRegistry(): Record<string, RegisteredCompany[]> {
 }
 
 function saveCompanyRegistry(registry: Record<string, RegisteredCompany[]>): void {
+  const filePath = getRegistryFilePath();
   try {
-    if (!fs.existsSync(DATA_DIR)) {
-      fs.mkdirSync(DATA_DIR, { recursive: true });
+    const dir = path.dirname(filePath);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
     }
-    fs.writeFileSync(REGISTRY_FILE, JSON.stringify(registry, null, 2), 'utf-8');
+    fs.writeFileSync(filePath, JSON.stringify(registry, null, 2), 'utf-8');
   } catch (err) {
     console.error('Failed to save company registry file:', err);
   }
@@ -113,6 +137,19 @@ function verifyToken(token: string): { email: string } | null {
   } catch {
     return null;
   }
+}
+
+// Stateless OTP signature for serverless environments (Netlify / Lambda)
+function signOtpToken(email: string, otp: string, expiresAt: number): string {
+  const data = `${email.toLowerCase().trim()}:${otp}:${expiresAt}`;
+  return crypto.createHmac('sha256', JWT_SECRET).update(data).digest('base64url');
+}
+
+function verifyOtpToken(email: string, otp: string, expiresAt: number, signature: string): boolean {
+  if (Date.now() > expiresAt) return false;
+  const expectedSignature = signOtpToken(email, otp, expiresAt);
+  if (signature.length !== expectedSignature.length) return false;
+  return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expectedSignature));
 }
 
 // Auth Middleware
@@ -208,9 +245,12 @@ async function handleSendOtp(req: Request, res: Response): Promise<void> {
 
   try {
     await sendOtpEmail(normalizedEmail, otp);
+    const otpToken = signOtpToken(normalizedEmail, otp, expiresAt);
     res.json({
       success: true,
       message: `Verification code sent to ${normalizedEmail}. Please check your inbox.`,
+      otpToken,
+      expiresAt,
     });
   } catch (err: any) {
     console.error('Failed to send OTP email:', err.message || err);
@@ -222,7 +262,7 @@ async function handleSendOtp(req: Request, res: Response): Promise<void> {
 }
 
 async function handleVerifyOtp(req: Request, res: Response): Promise<void> {
-  const { email, otp } = req.body;
+  const { email, otp, otpToken, expiresAt } = req.body;
   if (!email || !isValidEmail(email)) {
     res.status(400).json({ success: false, message: 'Please enter a valid email address.' });
     return;
@@ -234,34 +274,42 @@ async function handleVerifyOtp(req: Request, res: Response): Promise<void> {
 
   const normalizedEmail = email.toLowerCase().trim();
   const record = otpStore.get(normalizedEmail);
+  let isVerified = false;
 
-  if (!record) {
-    res.status(400).json({ success: false, message: 'No verification code requested for this email.' });
-    return;
+  // 1. Check in-memory store
+  if (record) {
+    if (Date.now() > record.expiresAt) {
+      otpStore.delete(normalizedEmail);
+      res.status(400).json({ success: false, message: 'This verification code has expired. Please request a new code.' });
+      return;
+    }
+
+    record.attempts += 1;
+    if (record.attempts > 5) {
+      otpStore.delete(normalizedEmail);
+      res.status(429).json({ success: false, message: 'Too many failed attempts. Please request a new OTP.' });
+      return;
+    }
+
+    if (record.code === otp.trim()) {
+      isVerified = true;
+      otpStore.delete(normalizedEmail);
+    }
   }
 
-  if (Date.now() > record.expiresAt) {
-    otpStore.delete(normalizedEmail);
-    res.status(400).json({ success: false, message: 'This verification code has expired. Please request a new code.' });
-    return;
+  // 2. Stateless verification fallback (for serverless instances/cold starts on Netlify/Vercel)
+  if (!isVerified && otpToken && expiresAt) {
+    if (verifyOtpToken(normalizedEmail, otp.trim(), Number(expiresAt), String(otpToken))) {
+      isVerified = true;
+    }
   }
 
-  record.attempts += 1;
-  if (record.attempts > 5) {
-    otpStore.delete(normalizedEmail);
-    res.status(429).json({ success: false, message: 'Too many failed attempts. Please request a new OTP.' });
-    return;
-  }
-
-  if (record.code !== otp.trim()) {
+  if (!isVerified) {
     res.status(400).json({ success: false, message: 'Invalid verification code. Please try again.' });
     return;
   }
 
-  // Correct OTP! Invalidate OTP immediately so it cannot be reused
-  otpStore.delete(normalizedEmail);
-
-  // Generate authenticated session token
+  // Correct OTP! Generate authenticated session token
   const token = generateToken(normalizedEmail);
 
   res.json({

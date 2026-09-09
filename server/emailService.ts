@@ -15,7 +15,7 @@ let lastConfigHash: string = '';
 
 export function isSmtpConfigured(): boolean {
   const user = process.env.EMAIL_USER?.trim();
-  const pass = process.env.EMAIL_PASSWORD?.trim();
+  const pass = (process.env.EMAIL_PASSWORD || process.env.EMAIL_PASS)?.trim();
   return Boolean(user && pass);
 }
 
@@ -40,7 +40,7 @@ export function getSmtpStatus(): { configured: boolean; user?: string; serviceOr
 
 function getTransporter(): Transporter {
   const rawUser = process.env.EMAIL_USER?.trim() || '';
-  const rawPass = process.env.EMAIL_PASSWORD?.trim() || '';
+  const rawPass = (process.env.EMAIL_PASSWORD || process.env.EMAIL_PASS)?.trim() || '';
   const rawHost = process.env.EMAIL_HOST?.trim() || '';
   const rawPort = Number(process.env.EMAIL_PORT?.trim() || 587);
   const rawSecure = process.env.EMAIL_SECURE?.trim() === 'true' || rawPort === 465;
@@ -48,7 +48,7 @@ function getTransporter(): Transporter {
 
   if (!rawUser || !rawPass) {
     throw new Error(
-      'EMAIL_NOT_CONFIGURED: Sender email credentials are not set in .env. Please configure EMAIL_USER and EMAIL_PASSWORD to send real emails.'
+      'EMAIL_NOT_CONFIGURED: Sender email credentials are not set. Please configure EMAIL_USER and EMAIL_PASSWORD (or EMAIL_PASS) in your environment variables.'
     );
   }
 
