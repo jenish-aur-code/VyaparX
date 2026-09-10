@@ -76,17 +76,17 @@ export const ProfilePage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F7FA] pb-24 md:pb-12">
+    <div className="min-h-screen pb-24 md:pb-12 transition-colors">
       {/* Header Replicating Screenshot 15 */}
       <PageHeader title={t('profile.title', 'My Profile')} />
 
       <div className="p-4 md:p-6 max-w-xl mx-auto space-y-4">
         {/* Top Profile Card */}
-        <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 card-shadow flex flex-col items-center text-center transition-colors">
+        <div className="glass-card rounded-3xl p-6 flex flex-col items-center text-center transition-all shadow-glass-card">
           {/* Avatar with Edit Icon linking to Company Edit */}
           <div className="relative mb-3">
             <div
-              className="w-20 h-20 rounded-full text-white flex items-center justify-center text-3xl font-black shadow-lg uppercase"
+              className="w-20 h-20 rounded-full text-white flex items-center justify-center text-3xl font-black shadow-glass uppercase backdrop-blur-sm"
               style={{ backgroundColor: palette.primary }}
             >
               {currentCompany?.name?.charAt(0) || userProfile?.name?.charAt(0) || 'C'}
@@ -100,7 +100,7 @@ export const ProfilePage: React.FC = () => {
                   navigate('/companies');
                 }
               }}
-              className="absolute bottom-0 right-0 w-6 h-6 rounded-full bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200 flex items-center justify-center shadow-sm hover:text-[var(--primary)] transition-colors"
+              className="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-white/90 dark:bg-gray-800/90 border border-white/60 dark:border-white/20 text-gray-700 dark:text-gray-200 flex items-center justify-center shadow-glass hover:text-[var(--primary)] backdrop-blur-xs transition-colors"
               title="Edit Company Details"
             >
               <Edit2 className="w-3.5 h-3.5" />
@@ -119,22 +119,22 @@ export const ProfilePage: React.FC = () => {
         </div>
 
         {/* 1. Personal Information Card */}
-        <div className="bg-white dark:bg-gray-800 rounded-3xl p-5 card-shadow space-y-4 transition-colors">
+        <div className="glass-card rounded-3xl p-5 space-y-4 transition-all shadow-glass-card">
           <div className="flex items-center gap-2 font-bold text-sm" style={{ color: palette.primary }}>
             <User className="w-4 h-4" />
             <span>{t('profile.personalInfo', 'Personal Information')}</span>
           </div>
 
-          <div className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700 text-sm">
+          <div className="flex items-center justify-between py-2 border-b border-gray-200/50 dark:border-white/10 text-sm">
             <span className="text-gray-600 dark:text-gray-400 font-medium">{t('profile.phone', 'Phone Number')}:</span>
             <span className="font-bold text-gray-900 dark:text-gray-100">
               {currentCompany?.contactNumber || userProfile?.phone || '9574823170'}
             </span>
           </div>
 
-          <div className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700 text-sm">
-            <span className="text-gray-600 dark:text-gray-400 font-medium">Email:</span>
-            <span className="font-bold text-gray-900 dark:text-gray-100 text-xs lowercase">
+          <div className="flex items-center justify-between py-2 border-b border-gray-200/50 dark:border-white/10 text-sm min-w-0 gap-2">
+            <span className="text-gray-600 dark:text-gray-400 font-medium shrink-0">Email:</span>
+            <span className="font-bold text-gray-900 dark:text-gray-100 text-xs lowercase truncate max-w-[190px] sm:max-w-xs text-right" title={currentCompany?.email || currentCompany?.userEmail || currentUser?.email || 'krishnafibers@gmail.com'}>
               {currentCompany?.email || currentCompany?.userEmail || currentUser?.email || 'krishnafibers@gmail.com'}
             </span>
           </div>
@@ -142,23 +142,23 @@ export const ProfilePage: React.FC = () => {
           <button
             type="button"
             onClick={() => setShowSwitchModal(true)}
-            className="w-full flex items-center justify-between py-2 text-sm text-gray-900 dark:text-gray-100 font-bold hover:text-[var(--primary)] dark:hover:text-[var(--primary)] transition-colors"
+            className="w-full flex items-center justify-between py-2 text-sm text-gray-900 dark:text-gray-100 font-bold hover:text-[var(--primary)] dark:hover:text-[var(--primary)] transition-colors min-w-0 gap-2"
           >
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-2.5 min-w-0 flex-1">
               <div 
-                className="w-7 h-7 rounded-lg flex items-center justify-center"
+                className="w-8 h-8 rounded-xl flex items-center justify-center backdrop-blur-xs shrink-0"
                 style={{ backgroundColor: palette.light, color: palette.primary }}
               >
                 <Repeat className="w-4 h-4" />
               </div>
-              <span>{t('profile.changeCompany', 'Change company / financial year')}</span>
+              <span className="truncate">{t('profile.changeCompany', 'Change company / financial year')}</span>
             </div>
-            <ChevronRight className="w-4 h-4 text-gray-400" />
+            <ChevronRight className="w-4 h-4 text-gray-400 shrink-0" />
           </button>
         </div>
 
         {/* App Language Card */}
-        <div className="bg-white dark:bg-gray-800 rounded-3xl p-5 card-shadow space-y-4 transition-colors">
+        <div className="glass-card rounded-3xl p-5 space-y-4 transition-all shadow-glass-card">
           <div className="flex items-center gap-2 font-bold text-sm" style={{ color: palette.primary }}>
             <Globe className="w-4 h-4" />
             <span>{t('profile.appLanguage', 'App Language')}</span>
@@ -181,8 +181,8 @@ export const ProfilePage: React.FC = () => {
                   }}
                   className={`py-3 px-2 rounded-2xl border flex flex-col items-center justify-center text-center transition-all ${
                     isSelected
-                      ? 'border-gray-900 dark:border-white ring-2 ring-orange-200 dark:ring-gray-600 bg-orange-50/50 dark:bg-gray-700 shadow-xs'
-                      : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750 text-gray-700 dark:text-gray-300'
+                      ? 'border-gray-900 dark:border-white ring-2 ring-orange-200 dark:ring-gray-600 bg-orange-500/10 dark:bg-white/10 shadow-glass backdrop-blur-md'
+                      : 'border-white/40 dark:border-white/10 bg-white/40 dark:bg-white/5 hover:bg-white/60 dark:hover:bg-white/10 text-gray-700 dark:text-gray-300'
                   }`}
                 >
                   <div className="flex items-center gap-1">
@@ -201,7 +201,7 @@ export const ProfilePage: React.FC = () => {
         </div>
 
         {/* App Theme & Appearance Card */}
-        <div className="bg-white dark:bg-gray-800 rounded-3xl p-5 card-shadow space-y-4 transition-colors">
+        <div className="glass-card rounded-3xl p-5 space-y-4 transition-all shadow-glass-card">
           <div className="flex items-center gap-2 font-bold text-sm" style={{ color: palette.primary }}>
             <Palette className="w-4 h-4" />
             <span>{t('profile.themeAppearance', 'App Theme & Appearance')}</span>
@@ -218,8 +218,8 @@ export const ProfilePage: React.FC = () => {
                 onClick={() => setDarkMode(false)}
                 className={`py-3 px-4 rounded-2xl border flex items-center justify-center gap-2.5 text-xs font-bold transition-all ${
                   !isDarkMode
-                    ? 'border-gray-900 dark:border-white bg-orange-50 dark:bg-gray-700 text-gray-900 dark:text-white shadow-xs'
-                    : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-100'
+                    ? 'border-gray-900 dark:border-white bg-orange-500/15 dark:bg-white/10 text-gray-900 dark:text-white shadow-glass backdrop-blur-md'
+                    : 'border-white/40 dark:border-white/10 bg-white/40 dark:bg-white/5 text-gray-600 dark:text-gray-400 hover:bg-white/60 dark:hover:bg-white/10'
                 }`}
               >
                 <Sun className="w-4 h-4 text-amber-500" />
@@ -230,8 +230,8 @@ export const ProfilePage: React.FC = () => {
                 onClick={() => setDarkMode(true)}
                 className={`py-3 px-4 rounded-2xl border flex items-center justify-center gap-2.5 text-xs font-bold transition-all ${
                   isDarkMode
-                    ? 'border-gray-900 dark:border-white bg-gray-700 text-white shadow-xs'
-                    : 'border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-100'
+                    ? 'border-gray-900 dark:border-white bg-white/15 text-white shadow-glass backdrop-blur-md'
+                    : 'border-white/40 dark:border-white/10 bg-white/40 dark:bg-white/5 text-gray-600 dark:text-gray-400 hover:bg-white/60 dark:hover:bg-white/10'
                 }`}
               >
                 <Moon className="w-4 h-4 text-indigo-400" />
@@ -256,12 +256,12 @@ export const ProfilePage: React.FC = () => {
                     onClick={() => setThemeColor(c)}
                     className={`p-2 rounded-2xl border flex flex-col items-center gap-1.5 transition-all ${
                       isSelected
-                        ? 'border-gray-900 dark:border-white ring-2 ring-orange-200 dark:ring-gray-600 bg-gray-50 dark:bg-gray-700'
-                        : 'border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
+                        ? 'border-gray-900 dark:border-white ring-2 ring-orange-200 dark:ring-gray-600 bg-orange-500/10 dark:bg-white/10 shadow-glass'
+                        : 'border-white/40 dark:border-white/10 bg-white/40 dark:bg-white/5 hover:bg-white/60 dark:hover:bg-white/10'
                     }`}
                   >
                     <span
-                      className="w-6 h-6 rounded-full shadow-xs flex items-center justify-center text-white"
+                      className="w-6 h-6 rounded-full shadow-glass flex items-center justify-center text-white"
                       style={{ backgroundColor: item.primary }}
                     >
                       {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
@@ -277,43 +277,43 @@ export const ProfilePage: React.FC = () => {
         </div>
 
         {/* 2. Reports Card (Screenshots 15 & 17) */}
-        <div className="bg-white dark:bg-gray-800 rounded-3xl p-5 card-shadow space-y-3 transition-colors">
-          <div className="flex items-center gap-2 text-indigo-700 font-bold text-sm">
-            <BarChart3 className="w-4 h-4 text-indigo-600" />
+        <div className="glass-card rounded-3xl p-5 space-y-3 transition-all shadow-glass-card">
+          <div className="flex items-center gap-2 text-indigo-700 dark:text-indigo-400 font-bold text-sm">
+            <BarChart3 className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
             <span>Reports</span>
           </div>
 
           <button
             type="button"
             onClick={() => navigate('/profile/reports')}
-            className="w-full flex items-center justify-between py-2.5 border-b border-gray-100 dark:border-gray-700 text-sm text-gray-800 dark:text-gray-200 font-semibold hover:text-[var(--primary)] dark:hover:text-[var(--primary)] transition-colors"
+            className="w-full flex items-center justify-between py-2.5 border-b border-gray-200/50 dark:border-white/10 text-sm text-gray-800 dark:text-gray-200 font-semibold hover:text-[var(--primary)] dark:hover:text-[var(--primary)] transition-colors min-w-0 gap-2"
           >
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+            <div className="flex items-center gap-3 min-w-0 flex-1">
+              <div className="w-8 h-8 rounded-xl bg-indigo-500/10 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center backdrop-blur-xs shrink-0">
                 <BarChart3 className="w-4 h-4" />
               </div>
-              <span>Brok.Total Amt Party Wise Report</span>
+              <span className="truncate">Brok.Total Amt Party Wise Report</span>
             </div>
-            <ChevronRight className="w-4 h-4 text-gray-400" />
+            <ChevronRight className="w-4 h-4 text-gray-400 shrink-0" />
           </button>
 
           <button
             type="button"
             onClick={() => navigate('/vyapar/bills')}
-            className="w-full flex items-center justify-between py-2.5 text-sm text-gray-800 dark:text-gray-200 font-semibold hover:text-[var(--primary)] dark:hover:text-[var(--primary)] transition-colors"
+            className="w-full flex items-center justify-between py-2.5 text-sm text-gray-800 dark:text-gray-200 font-semibold hover:text-[var(--primary)] dark:hover:text-[var(--primary)] transition-colors min-w-0 gap-2"
           >
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+            <div className="flex items-center gap-3 min-w-0 flex-1">
+              <div className="w-8 h-8 rounded-xl bg-indigo-500/10 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center backdrop-blur-xs shrink-0">
                 <FileText className="w-4 h-4" />
               </div>
-              <span>Generated Brok. Bills</span>
+              <span className="truncate">Generated Brok. Bills</span>
             </div>
-            <ChevronRight className="w-4 h-4 text-gray-400" />
+            <ChevronRight className="w-4 h-4 text-gray-400 shrink-0" />
           </button>
         </div>
 
         {/* 3. Quick Values Card (Screenshot 17) */}
-        <div className="bg-white dark:bg-gray-800 rounded-3xl p-5 card-shadow space-y-3 transition-colors">
+        <div className="glass-card rounded-3xl p-5 space-y-3 transition-all shadow-glass-card">
           <div className="flex items-center gap-2 font-bold text-sm" style={{ color: palette.primary }}>
             <Zap className="w-4 h-4" style={{ color: palette.primary }} />
             <span>Quick Values</span>
@@ -330,7 +330,7 @@ export const ProfilePage: React.FC = () => {
           >
             <div className="flex items-center gap-3">
               <div 
-                className="w-8 h-8 rounded-lg flex items-center justify-center"
+                className="w-8 h-8 rounded-xl flex items-center justify-center backdrop-blur-xs"
                 style={{ backgroundColor: palette.light, color: palette.primary }}
               >
                 <Settings className="w-4 h-4" />
@@ -342,7 +342,7 @@ export const ProfilePage: React.FC = () => {
         </div>
 
         {/* 4. Legal & Support */}
-        <div className="bg-white dark:bg-gray-800 rounded-3xl p-5 card-shadow space-y-3 transition-colors">
+        <div className="glass-card rounded-3xl p-5 space-y-3 transition-all shadow-glass-card">
           <div className="flex items-center gap-2 text-teal-700 dark:text-teal-400 font-bold text-sm">
             <HelpCircle className="w-4 h-4 text-teal-600 dark:text-teal-400" />
             <span>Legal & Support</span>
@@ -434,11 +434,11 @@ export const ProfilePage: React.FC = () => {
           </button>
         </div>
 
-        {/* Logout Red Button matching Screenshot 16 */}
+        {/* Logout Red Button */}
         <button
           type="button"
           onClick={handleLogout}
-          className="w-full py-4 px-4 bg-[#DC2626] hover:bg-red-700 text-white font-extrabold text-sm uppercase tracking-wider rounded-2xl shadow-md shadow-red-500/20 transition-all flex items-center justify-center gap-2 active:scale-[0.98]"
+          className="w-full py-4 px-4 bg-red-600/90 hover:bg-red-600 text-white font-extrabold text-sm uppercase tracking-wider rounded-2xl shadow-glass-card hover:shadow-glass-hover backdrop-blur-md transition-all flex items-center justify-center gap-2 active:scale-[0.98]"
         >
           <LogOut className="w-5 h-5" />
           <span>{t('profile.logout', 'Logout')}</span>
@@ -455,12 +455,12 @@ export const ProfilePage: React.FC = () => {
 
       {/* Selected Company Contact Us Popup Modal */}
       {showContactModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-md animate-in fade-in">
           <div
-            className="w-full max-w-sm bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-6 space-y-4 animate-in zoom-in-95"
+            className="w-full max-w-sm bg-white/85 dark:bg-gray-900/85 backdrop-blur-2xl rounded-3xl shadow-glass-hover p-6 space-y-4 border border-white/60 dark:border-white/10 animate-in zoom-in-95"
             onClick={e => e.stopPropagation()}
           >
-            <div className="flex justify-between items-start border-b border-gray-100 dark:border-gray-700 pb-3">
+            <div className="flex justify-between items-start border-b border-gray-200/50 dark:border-white/10 pb-3">
               <div>
                 <h3 className="font-extrabold text-base text-gray-900 dark:text-white uppercase tracking-tight">
                   {currentCompany?.name || 'Company Contact'}
@@ -474,7 +474,7 @@ export const ProfilePage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowContactModal(false)}
-                className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
+                className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 rounded-xl hover:bg-white/60 dark:hover:bg-white/10 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -482,9 +482,9 @@ export const ProfilePage: React.FC = () => {
 
             <div className="space-y-2.5">
               {/* Phone / Mobile */}
-              <div className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-2xl flex items-center justify-between">
+              <div className="p-3.5 glass-card-subtle rounded-2xl flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center shrink-0">
+                  <div className="w-8 h-8 rounded-xl bg-orange-500/15 text-orange-600 dark:text-orange-400 flex items-center justify-center shrink-0">
                     <Smartphone className="w-4 h-4" />
                   </div>
                   <div>
@@ -498,7 +498,7 @@ export const ProfilePage: React.FC = () => {
                   <a
                     href={`tel:${currentCompany?.contactNumber || userProfile?.phone}`}
                     style={{ backgroundColor: palette.primary }}
-                    className="px-3 py-1.5 text-white text-xs font-bold rounded-xl transition-opacity hover:opacity-90"
+                    className="px-3.5 py-1.5 text-white text-xs font-bold rounded-xl shadow-glass transition-opacity hover:opacity-90"
                   >
                     Call
                   </a>
@@ -506,9 +506,9 @@ export const ProfilePage: React.FC = () => {
               </div>
 
               {/* Email */}
-              <div className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-2xl flex items-center justify-between">
+              <div className="p-3.5 glass-card-subtle rounded-2xl flex items-center justify-between">
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="w-8 h-8 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+                  <div className="w-8 h-8 rounded-xl bg-blue-500/15 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
                     <Mail className="w-4 h-4" />
                   </div>
                   <div className="min-w-0">
@@ -521,7 +521,7 @@ export const ProfilePage: React.FC = () => {
                 {(currentCompany?.email || currentCompany?.userEmail || currentUser?.email) && (
                   <a
                     href={`mailto:${currentCompany?.email || currentCompany?.userEmail || currentUser?.email}`}
-                    className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition-colors shrink-0"
+                    className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-glass transition-colors shrink-0"
                   >
                     Email
                   </a>
@@ -529,7 +529,7 @@ export const ProfilePage: React.FC = () => {
               </div>
 
               {/* Address */}
-              <div className="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-2xl text-xs space-y-1">
+              <div className="p-3.5 glass-card-subtle rounded-2xl text-xs space-y-1">
                 <div className="text-[10px] font-bold uppercase text-gray-400">Business Address</div>
                 <div className="font-semibold text-gray-800 dark:text-gray-200 uppercase leading-relaxed">
                   {currentCompany?.address || 'PALIYAD ROAD BOTAD'}
@@ -543,7 +543,7 @@ export const ProfilePage: React.FC = () => {
             <button
               type="button"
               onClick={() => setShowContactModal(false)}
-              className="w-full py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 font-bold text-xs rounded-2xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+              className="w-full py-3 bg-white/60 dark:bg-white/10 text-gray-700 dark:text-gray-200 font-bold text-xs rounded-2xl hover:bg-white/80 dark:hover:bg-white/20 transition-colors"
             >
               Close
             </button>

@@ -51,7 +51,7 @@ export const QuickValuesPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#F5F7FA] dark:bg-[#0B1120] pb-24 md:pb-12 transition-colors">
+    <div className="min-h-screen pb-24 md:pb-12 transition-colors">
       <PageHeader
         title="Manage Quick Values"
         subtitle="Shortcuts for repetitive order fields"
@@ -59,7 +59,7 @@ export const QuickValuesPage: React.FC = () => {
 
       <div className="p-4 md:p-6 max-w-xl mx-auto space-y-5">
         {/* Category Tabs */}
-        <div className="flex overflow-x-auto gap-2 pb-2 scrollbar-none">
+        <div className="flex overflow-x-auto gap-2 pb-2 scrollbar-none p-1 glass-panel rounded-2xl">
           {tabs.map(tab => (
             <button
               key={tab.key}
@@ -68,8 +68,8 @@ export const QuickValuesPage: React.FC = () => {
               style={activeTab === tab.key ? { backgroundColor: palette.primary, color: '#fff' } : undefined}
               className={`py-2 px-3.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
                 activeTab === tab.key
-                  ? 'shadow-xs'
-                  : 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                  ? 'shadow-glass backdrop-blur-md'
+                  : 'bg-white/40 dark:bg-white/5 border border-white/40 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-white/60 dark:hover:bg-white/10'
               }`}
             >
               {tab.label}
@@ -85,12 +85,12 @@ export const QuickValuesPage: React.FC = () => {
             placeholder={`Add new ${activeTab}...`}
             value={newValue}
             onChange={e => setNewValue(e.target.value)}
-            className="input-sauda uppercase text-xs flex-1"
+            className="input-vyapar uppercase text-xs flex-1"
           />
           <button
             type="submit"
             style={{ backgroundColor: palette.primary }}
-            className="px-4 py-3 text-white font-bold rounded-xl text-xs flex items-center gap-1 shrink-0 hover:opacity-90 transition-opacity"
+            className="px-5 py-3 text-white font-bold rounded-2xl text-xs flex items-center gap-1 shrink-0 hover:opacity-90 transition-opacity shadow-glass-card hover:shadow-glass-hover"
           >
             <Plus className="w-4 h-4" />
             <span>Add</span>
@@ -98,17 +98,22 @@ export const QuickValuesPage: React.FC = () => {
         </form>
 
         {/* List of shortcuts */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 card-shadow divide-y divide-gray-100 dark:divide-gray-700 overflow-hidden">
+        <div className="glass-card rounded-3xl divide-y divide-gray-200/50 dark:divide-white/10 overflow-hidden shadow-glass-card">
           {items.map(item => (
-            <div key={item.id} className="p-3.5 flex items-center justify-between hover:bg-gray-50/50 dark:hover:bg-gray-700/50">
-              <div className="flex items-center gap-2">
-                <Zap className="w-4 h-4" style={{ color: palette.primary }} />
-                <span className="text-xs font-bold text-gray-800 dark:text-gray-200 uppercase">{item.value}</span>
+            <div key={item.id} className="p-4 flex items-center justify-between hover:bg-white/40 dark:hover:bg-white/5 transition-colors gap-2">
+              <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                <div 
+                  className="w-7 h-7 rounded-lg flex items-center justify-center backdrop-blur-xs shrink-0"
+                  style={{ backgroundColor: palette.light, color: palette.primary }}
+                >
+                  <Zap className="w-4 h-4" />
+                </div>
+                <span className="text-xs font-bold text-gray-800 dark:text-gray-200 uppercase truncate">{item.value}</span>
               </div>
               <button
                 type="button"
                 onClick={() => handleDelete(item.id!)}
-                className="text-gray-400 hover:text-red-600 dark:hover:text-red-400 p-1 transition-colors"
+                className="text-gray-400 hover:text-red-600 dark:hover:text-red-400 p-1.5 rounded-xl hover:bg-red-500/10 transition-colors shrink-0"
                 title="Delete"
               >
                 <Trash2 className="w-4 h-4" />

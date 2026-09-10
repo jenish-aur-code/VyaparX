@@ -61,7 +61,7 @@ export const SaudaBillsPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F7FA] dark:bg-[#0B1120] pb-24 md:pb-12 transition-colors">
+    <div className="min-h-screen pb-24 md:pb-12 transition-colors">
       <PageHeader
         title="Vyapar Bills & Notes"
         subtitle="Manage and generate printable trade confirmation notes"
@@ -69,7 +69,7 @@ export const SaudaBillsPage: React.FC = () => {
 
       <div className="p-4 md:p-6 max-w-5xl mx-auto space-y-6">
         {/* Template & Color Selector Bar */}
-        <div className="p-4 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 card-shadow flex flex-wrap items-center justify-between gap-4">
+        <div className="p-4 md:p-5 glass-panel rounded-3xl shadow-glass-card flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <span className="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase">PDF Template:</span>
             <div className="flex gap-2">
@@ -79,10 +79,10 @@ export const SaudaBillsPage: React.FC = () => {
                   type="button"
                   onClick={() => setActiveTemplate(num as 1 | 2 | 3 | 4)}
                   style={activeTemplate === num ? { backgroundColor: palette.primary, color: '#fff' } : undefined}
-                  className={`w-8 h-8 rounded-lg font-bold text-xs transition-colors ${
+                  className={`w-8 h-8 rounded-xl font-bold text-xs transition-all ${
                     activeTemplate === num
-                      ? 'shadow-xs'
-                      : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                      ? 'shadow-glass backdrop-blur-md'
+                      : 'bg-white/50 dark:bg-white/10 text-gray-700 dark:text-gray-300 hover:bg-white/80 dark:hover:bg-white/20'
                   }`}
                 >
                   {num}
@@ -135,7 +135,7 @@ export const SaudaBillsPage: React.FC = () => {
               type="button"
               onClick={handlePrint}
               style={{ backgroundColor: palette.primary }}
-              className="flex items-center gap-1.5 px-4 py-2 text-white text-xs font-bold rounded-xl shadow-sm transition-all hover:opacity-90"
+              className="flex items-center gap-1.5 px-4 py-2 text-white text-xs font-bold rounded-xl shadow-glass-card hover:shadow-glass-hover transition-all"
             >
               <Printer className="w-4 h-4" />
               <span>Print / Save PDF</span>
@@ -147,7 +147,7 @@ export const SaudaBillsPage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Orders List (1 Col) */}
           <div className="space-y-2.5">
-            <div className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider px-1">
+            <div className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider px-1">
               Select Vyapar Order ({orders.length})
             </div>
             <div className="space-y-2 max-h-[600px] overflow-y-auto">
@@ -156,25 +156,31 @@ export const SaudaBillsPage: React.FC = () => {
                   key={order.id}
                   onClick={() => setSelectedOrder(order)}
                   style={selectedOrder?.id === order.id ? { borderColor: palette.primary } : undefined}
-                  className={`p-3.5 rounded-xl border cursor-pointer transition-all ${
+                  className={`p-3 sm:p-3.5 rounded-2xl cursor-pointer transition-all min-w-0 overflow-hidden ${
                     selectedOrder?.id === order.id
-                      ? 'border-2 shadow-sm bg-orange-50/50 dark:bg-gray-700/80'
-                      : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                      ? 'border-2 shadow-glass-hover bg-orange-500/10 dark:bg-orange-500/20 backdrop-blur-md'
+                      : 'glass-card-interactive'
                   }`}
                 >
-                  <div className="flex justify-between items-center text-xs font-bold">
-                    <span className="text-gray-900 dark:text-gray-100">#{order.id} • {order.itemName}</span>
-                    <span style={{ color: palette.primary }}>{formatCurrency(order.totalBillAmount)}</span>
+                  <div className="flex justify-between items-center text-xs font-bold gap-2 min-w-0">
+                    <span className="text-gray-900 dark:text-gray-100 truncate flex-1" title={`#${order.id} • ${order.itemName}`}>
+                      #{order.id} • {order.itemName}
+                    </span>
+                    <span className="shrink-0 font-extrabold" style={{ color: palette.primary }}>
+                      {formatCurrency(order.totalBillAmount)}
+                    </span>
                   </div>
-                  <div className="text-[11px] text-gray-500 dark:text-gray-400 mt-1 flex justify-between">
-                    <span>{order.sellerName} ➔ {order.buyerName}</span>
-                    <span>{formatDate(order.date)}</span>
+                  <div className="text-[11px] text-gray-500 dark:text-gray-400 mt-1 flex justify-between items-center gap-2 min-w-0">
+                    <span className="truncate flex-1" title={`${order.sellerName} ➔ ${order.buyerName}`}>
+                      {order.sellerName} ➔ {order.buyerName}
+                    </span>
+                    <span className="shrink-0">{formatDate(order.date)}</span>
                   </div>
                 </div>
               ))}
 
               {orders.length === 0 && (
-                <div className="p-8 text-center bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-400 text-xs">
+                <div className="p-8 text-center glass-card rounded-2xl text-gray-400 text-xs">
                   No Vyapar orders found for selected company & financial year.
                 </div>
               )}
@@ -182,9 +188,9 @@ export const SaudaBillsPage: React.FC = () => {
           </div>
 
           {/* Active Order Live PDF Preview (2 Cols) */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 min-w-0">
             {selectedOrder ? (
-              <div className="bg-white dark:bg-gray-800 p-4 rounded-2xl border border-gray-200 dark:border-gray-700 card-shadow">
+              <div className="glass-panel p-3 sm:p-4 md:p-6 rounded-3xl shadow-glass-card overflow-x-auto">
                 <SaudaNoteTemplate
                   order={selectedOrder}
                   company={currentCompany || undefined}
@@ -194,7 +200,7 @@ export const SaudaBillsPage: React.FC = () => {
                 />
               </div>
             ) : (
-              <div className="p-16 text-center bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 text-gray-400 text-sm">
+              <div className="p-16 text-center glass-card rounded-3xl text-gray-400 text-sm">
                 Select an order from the left list to view its Vyapar Note
               </div>
             )}

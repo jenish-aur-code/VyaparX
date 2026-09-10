@@ -78,14 +78,17 @@ export const QuickAddPartyModal: React.FC<QuickAddPartyModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
+    <div 
+      className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 dark:bg-black/70 backdrop-blur-xl animate-in fade-in"
+      style={{ backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}
+    >
       <div 
-        className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] border border-gray-100 dark:border-gray-700 animate-in zoom-in-95 duration-150"
+        className="w-full max-w-md bg-white/95 dark:bg-gray-900/95 backdrop-blur-3xl rounded-3xl shadow-glass-hover overflow-hidden flex flex-col max-h-[90vh] border border-white/70 dark:border-white/15 animate-in zoom-in-95 duration-150"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
         <div 
-          className="px-5 py-4 text-white flex items-center justify-between shadow-xs"
+          className="px-6 py-4 text-white flex items-center justify-between shadow-glass"
           style={{ backgroundColor: palette.primary }}
         >
           <div className="flex items-center gap-2.5">
@@ -95,14 +98,14 @@ export const QuickAddPartyModal: React.FC<QuickAddPartyModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded-lg hover:bg-black/20 text-white transition-colors"
+            className="p-1.5 rounded-xl hover:bg-black/20 text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-5 space-y-4 overflow-y-auto">
+        <form onSubmit={handleSubmit} className="p-6 space-y-4 overflow-y-auto">
           {/* PARTY NAME */}
           <div>
             <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
@@ -115,7 +118,7 @@ export const QuickAddPartyModal: React.FC<QuickAddPartyModalProps> = ({
               placeholder="e.g. SHREE RAM TRADERS, SKY GINNING"
               value={name}
               onChange={e => setName(e.target.value)}
-              className="w-full px-3.5 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl font-bold uppercase text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:border-[var(--primary)]"
+              className="w-full px-3.5 py-2.5 bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 rounded-xl font-bold uppercase text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:bg-white dark:focus:bg-gray-900 focus:ring-2 focus:ring-[var(--primary)] transition-all shadow-2xs placeholder-gray-400"
             />
           </div>
 
@@ -131,13 +134,13 @@ export const QuickAddPartyModal: React.FC<QuickAddPartyModalProps> = ({
               placeholder="e.g. 9876543210"
               value={mobileNumber}
               onChange={e => setMobileNumber(e.target.value.replace(/\D/g, ''))}
-              className="w-full px-3.5 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl font-semibold text-xs text-gray-900 dark:text-gray-100 focus:outline-none focus:border-[var(--primary)]"
+              className="w-full px-3.5 py-2.5 bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 rounded-xl font-semibold text-xs text-gray-900 dark:text-gray-100 focus:outline-none focus:bg-white dark:focus:bg-gray-900 focus:ring-2 focus:ring-[var(--primary)] transition-all shadow-2xs placeholder-gray-400"
             />
           </div>
 
           {/* CITY & STATE */}
-          <div className="grid grid-cols-2 gap-3">
-            <div>
+          <div className="grid grid-cols-2 gap-3 min-w-0">
+            <div className="min-w-0">
               <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 CITY
               </label>
@@ -146,10 +149,10 @@ export const QuickAddPartyModal: React.FC<QuickAddPartyModalProps> = ({
                 placeholder="BOTAD"
                 value={city}
                 onChange={e => setCity(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl font-semibold uppercase text-xs text-gray-900 dark:text-gray-100 focus:outline-none focus:border-[var(--primary)]"
+                className="w-full px-3.5 py-2.5 bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 rounded-xl font-semibold uppercase text-xs text-gray-900 dark:text-gray-100 focus:outline-none focus:bg-white dark:focus:bg-gray-900 focus:ring-2 focus:ring-[var(--primary)] transition-all shadow-2xs placeholder-gray-400"
               />
             </div>
-            <div>
+            <div className="min-w-0">
               <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 STATE
               </label>
@@ -158,7 +161,7 @@ export const QuickAddPartyModal: React.FC<QuickAddPartyModalProps> = ({
                 placeholder="GUJARAT"
                 value={state}
                 onChange={e => setState(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl font-semibold uppercase text-xs text-gray-900 dark:text-gray-100 focus:outline-none focus:border-[var(--primary)]"
+                className="w-full px-3.5 py-2.5 bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 rounded-xl font-semibold uppercase text-xs text-gray-900 dark:text-gray-100 focus:outline-none focus:bg-white dark:focus:bg-gray-900 focus:ring-2 focus:ring-[var(--primary)] transition-all shadow-2xs placeholder-gray-400"
               />
               <div className="flex flex-wrap gap-1 mt-1.5">
                 {COMMON_STATES.slice(0, 3).map(s => (
@@ -166,7 +169,7 @@ export const QuickAddPartyModal: React.FC<QuickAddPartyModalProps> = ({
                     key={s}
                     type="button"
                     onClick={() => setState(s)}
-                    className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200"
+                    className="text-[9px] font-bold px-2 py-0.5 rounded-lg bg-white/60 dark:bg-white/10 border border-white/80 dark:border-white/10 text-gray-700 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-800 transition-all shadow-2xs"
                   >
                     {s}
                   </button>
@@ -186,7 +189,7 @@ export const QuickAddPartyModal: React.FC<QuickAddPartyModalProps> = ({
               placeholder="e.g. 24AAAAA0000A1Z5"
               value={gstNumber}
               onChange={e => setGstNumber(e.target.value.toUpperCase())}
-              className="w-full px-3.5 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl font-mono uppercase text-xs text-gray-900 dark:text-gray-100 focus:outline-none focus:border-[var(--primary)]"
+              className="w-full px-3.5 py-2.5 bg-white/60 dark:bg-white/5 border border-white/80 dark:border-white/10 rounded-xl font-mono uppercase text-xs text-gray-900 dark:text-gray-100 focus:outline-none focus:bg-white dark:focus:bg-gray-900 focus:ring-2 focus:ring-[var(--primary)] transition-all shadow-2xs placeholder-gray-400"
             />
           </div>
 
@@ -195,7 +198,7 @@ export const QuickAddPartyModal: React.FC<QuickAddPartyModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-3 px-4 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-bold rounded-xl text-xs hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              className="flex-1 py-3 px-4 border border-white/60 dark:border-white/10 bg-white/50 dark:bg-white/5 hover:bg-white/80 dark:hover:bg-white/10 text-gray-700 dark:text-gray-300 font-bold rounded-2xl text-xs transition-all shadow-xs"
             >
               Cancel
             </button>
@@ -203,7 +206,7 @@ export const QuickAddPartyModal: React.FC<QuickAddPartyModalProps> = ({
               type="submit"
               disabled={!name.trim() || !mobileNumber.trim() || isSubmitting}
               style={{ backgroundColor: palette.primary }}
-              className="flex-2 py-3 px-4 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-md hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50"
+              className="flex-2 py-3 px-4 text-white font-bold rounded-2xl text-xs flex items-center justify-center gap-1.5 shadow-glass hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50"
             >
               <Check className="w-4 h-4 stroke-[3]" />
               <span>{isSubmitting ? 'Saving...' : 'Save Party'}</span>

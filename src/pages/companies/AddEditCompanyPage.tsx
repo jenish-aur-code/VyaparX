@@ -228,7 +228,7 @@ export const AddEditCompanyPage: React.FC = () => {
     COLOR_OPTIONS.find(c => c.label === saudaNoteColor)?.hex || '#DC2626';
 
   return (
-    <div className="min-h-screen bg-[#F5F7FA] dark:bg-[#0B1120] pb-24 md:pb-12 transition-colors">
+    <div className="min-h-screen pb-24 md:pb-12 transition-colors">
       <PageHeader
         title={isFirstCompany ? 'Create Your First Company' : (isEdit ? 'Edit Company' : 'Add Company')}
         subtitle={isFirstCompany ? 'Add company details to unlock VyaparX application' : undefined}
@@ -253,7 +253,7 @@ export const AddEditCompanyPage: React.FC = () => {
             <button
               type="button"
               onClick={() => setShowDeleteConfirm(true)}
-              className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition-colors"
+              className="p-2 text-red-500 hover:bg-red-500/10 rounded-xl transition-colors"
               title="Delete Company"
             >
               <Trash2 className="w-5 h-5" />
@@ -266,7 +266,7 @@ export const AddEditCompanyPage: React.FC = () => {
         {/* First Company Welcome Banner */}
         {isFirstCompany && (
           <div 
-            className="p-4 border-2 rounded-2xl flex items-center gap-3 text-sm font-bold shadow-xs animate-in fade-in"
+            className="p-4 border-2 rounded-2xl flex items-center gap-3 text-sm font-bold shadow-glass-card backdrop-blur-md animate-in fade-in"
             style={{ backgroundColor: palette.light, borderColor: palette.primary, color: palette.text }}
           >
             <span>👋 Let's create your first company to get started.</span>
@@ -275,8 +275,8 @@ export const AddEditCompanyPage: React.FC = () => {
 
         {/* Info Banner */}
         <div 
-          className="p-4 rounded-2xl flex items-start gap-3 text-xs font-medium leading-relaxed shadow-xs border"
-          style={{ backgroundColor: palette.light, borderColor: palette.primary + '44', color: palette.text }}
+          className="p-4 rounded-2xl flex items-start gap-3 text-xs font-medium leading-relaxed glass-card-subtle"
+          style={{ borderColor: palette.primary + '33', color: palette.text }}
         >
           <Info className="w-5 h-5 shrink-0 mt-0.5" style={{ color: palette.primary }} />
           <span>
@@ -286,8 +286,9 @@ export const AddEditCompanyPage: React.FC = () => {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Basic Information */}
-          <div className="space-y-4">
-            <h2 className="text-xl font-bold text-[#1E293B] dark:text-gray-100 tracking-tight">
+          <div className="glass-card p-5 md:p-6 rounded-3xl space-y-4">
+            <h2 className="text-lg font-black text-gray-900 dark:text-gray-100 tracking-tight flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: palette.primary }}></span>
               Basic Information
             </h2>
 
@@ -410,13 +411,14 @@ export const AddEditCompanyPage: React.FC = () => {
           </div>
 
           {/* Business Details */}
-          <div className="space-y-4 pt-2 border-t border-gray-200">
-            <h2 className="text-xl font-bold text-[#1E293B] tracking-tight">
+          <div className="glass-card p-5 md:p-6 rounded-3xl space-y-4">
+            <h2 className="text-lg font-black text-gray-900 dark:text-gray-100 tracking-tight flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: palette.primary }}></span>
               Business Details
             </h2>
 
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 GST NUMBER
               </label>
               <input
@@ -429,7 +431,7 @@ export const AddEditCompanyPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 PAN NUMBER
               </label>
               <input
@@ -443,13 +445,14 @@ export const AddEditCompanyPage: React.FC = () => {
           </div>
 
           {/* Bank Details */}
-          <div className="space-y-4 pt-2 border-t border-gray-200">
-            <h2 className="text-xl font-bold text-[#1E293B] tracking-tight">
+          <div className="glass-card p-5 md:p-6 rounded-3xl space-y-4">
+            <h2 className="text-lg font-black text-gray-900 dark:text-gray-100 tracking-tight flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: palette.primary }}></span>
               Bank Details
             </h2>
 
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 BANK NAME
               </label>
               <input
@@ -462,7 +465,7 @@ export const AddEditCompanyPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 ACCOUNT NUMBER
               </label>
               <input
@@ -475,7 +478,7 @@ export const AddEditCompanyPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 ACCOUNT HOLDER NAME
               </label>
               <input
@@ -488,7 +491,7 @@ export const AddEditCompanyPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 IFSC CODE
               </label>
               <input
@@ -501,7 +504,7 @@ export const AddEditCompanyPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 UPI ID
               </label>
               <input
@@ -515,14 +518,15 @@ export const AddEditCompanyPage: React.FC = () => {
           </div>
 
           {/* Vyapar Note Customization (Screenshots 13 & 14) */}
-          <div className="space-y-4 pt-2 border-t border-gray-200">
-            <h2 className="text-xl font-bold text-[#1E293B] tracking-tight">
+          <div className="glass-card p-5 md:p-6 rounded-3xl space-y-4">
+            <h2 className="text-lg font-black text-gray-900 dark:text-gray-100 tracking-tight flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: palette.primary }}></span>
               Vyapar Note Customization
             </h2>
 
             {/* Vyapar Note Color with Swatch */}
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 VYAPAR NOTE COLOR
               </label>
               <div className="flex items-center gap-3">
@@ -536,7 +540,7 @@ export const AddEditCompanyPage: React.FC = () => {
                   ))}
                 </select>
                 <div
-                  className="w-12 h-12 rounded-xl shadow-xs border border-gray-300 shrink-0"
+                  className="w-12 h-12 rounded-2xl shadow-glass border border-white/40 dark:border-white/10 shrink-0"
                   style={{ backgroundColor: currentColorHex }}
                   title={`Color Preview: ${saudaNoteColor}`}
                 />
@@ -545,7 +549,7 @@ export const AddEditCompanyPage: React.FC = () => {
 
             {/* Vyapar Note PDF Template Selector */}
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-2">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-2">
                 VYAPAR NOTE PDF TEMPLATE
               </label>
               <div className="flex items-center gap-6 py-1">
@@ -600,7 +604,7 @@ export const AddEditCompanyPage: React.FC = () => {
               <div className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
                 Live PDF Template Preview:
               </div>
-              <div className="border border-gray-200 dark:border-gray-700 rounded-2xl p-3 bg-gray-50 dark:bg-gray-800/60 overflow-x-auto shadow-inner">
+              <div className="border border-white/60 dark:border-white/10 rounded-2xl p-4 bg-white/40 dark:bg-white/5 backdrop-blur-xs overflow-x-auto shadow-glass-card">
                 <SaudaNoteTemplate
                   order={{
                     id: 13,
@@ -641,7 +645,7 @@ export const AddEditCompanyPage: React.FC = () => {
             type="submit"
             disabled={isSubmitting}
             style={{ backgroundColor: palette.primary }}
-            className="w-full py-4 px-4 text-white font-extrabold text-sm uppercase tracking-wider rounded-xl shadow-md transition-all duration-150 active:scale-[0.98] hover:opacity-90 disabled:opacity-50 mt-6"
+            className="w-full py-4 px-4 text-white font-extrabold text-sm uppercase tracking-wider rounded-2xl shadow-glass-card hover:shadow-glass-hover transition-all duration-150 active:scale-[0.98] hover:opacity-90 disabled:opacity-50 mt-6"
           >
             {isSubmitting
               ? 'SAVING...'
@@ -656,8 +660,8 @@ export const AddEditCompanyPage: React.FC = () => {
 
       {/* GST Search Modal */}
       {showGstModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
-          <div className="w-full max-w-sm bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-5 space-y-4 border border-gray-100 dark:border-gray-700">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-md animate-in fade-in">
+          <div className="w-full max-w-sm bg-white/85 dark:bg-gray-900/85 backdrop-blur-2xl rounded-3xl shadow-glass-hover p-6 space-y-4 border border-white/60 dark:border-white/10">
             <h3 className="text-base font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
               <Search className="w-5 h-5" style={{ color: palette.primary }} />
               <span>Search by GST</span>
@@ -672,11 +676,11 @@ export const AddEditCompanyPage: React.FC = () => {
               onChange={e => setGstInput(e.target.value)}
               className="input-sauda uppercase font-bold text-xs"
             />
-            <div className="flex gap-2">
+            <div className="flex gap-2 pt-2">
               <button
                 type="button"
                 onClick={() => setShowGstModal(false)}
-                className="flex-1 py-2.5 px-3 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 text-xs font-bold rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700"
+                className="flex-1 py-2.5 px-3 border border-gray-200/80 dark:border-white/10 text-gray-600 dark:text-gray-300 text-xs font-bold rounded-2xl hover:bg-white/60 dark:hover:bg-white/10"
               >
                 Cancel
               </button>
@@ -684,7 +688,7 @@ export const AddEditCompanyPage: React.FC = () => {
                 type="button"
                 onClick={handleApplyGst}
                 style={{ backgroundColor: palette.primary }}
-                className="flex-1 py-2.5 px-3 text-white text-xs font-bold rounded-xl hover:opacity-90 transition-opacity"
+                className="flex-1 py-2.5 px-3 text-white text-xs font-bold rounded-2xl shadow-glass-card hover:shadow-glass-hover hover:opacity-90 transition-opacity"
               >
                 Apply
               </button>

@@ -27,13 +27,13 @@ export const PinLockModal: React.FC = () => {
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-md"
-      style={{ backgroundColor: palette.primary + 'E6' }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-2xl"
+      style={{ backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}
     >
-      <div className="w-full max-w-sm bg-white dark:bg-gray-800 rounded-3xl p-8 shadow-2xl flex flex-col items-center text-center animate-in zoom-in-95 border border-gray-100 dark:border-gray-700">
+      <div className="w-full max-w-sm bg-white/95 dark:bg-gray-900/95 backdrop-blur-3xl rounded-3xl p-8 shadow-glass-hover flex flex-col items-center text-center animate-in zoom-in-95 border border-white/70 dark:border-white/15">
         <div 
-          className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 shadow-inner border"
-          style={{ backgroundColor: palette.light, color: palette.primary, borderColor: palette.primary + '33' }}
+          className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 shadow-md border border-white/60 dark:border-white/10"
+          style={{ backgroundColor: palette.light, color: palette.primary }}
         >
           <Lock className="w-8 h-8 stroke-[2.2]" />
         </div>

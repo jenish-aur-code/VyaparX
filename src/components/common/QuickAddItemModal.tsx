@@ -68,14 +68,17 @@ export const QuickAddItemModal: React.FC<QuickAddItemModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
+    <div 
+      className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 dark:bg-black/70 backdrop-blur-xl animate-in fade-in"
+      style={{ backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}
+    >
       <div 
-        className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] border border-gray-100 dark:border-gray-700 animate-in zoom-in-95 duration-150"
+        className="w-full max-w-md bg-white/95 dark:bg-gray-900/95 backdrop-blur-3xl rounded-3xl shadow-glass-hover overflow-hidden flex flex-col max-h-[90vh] border border-white/70 dark:border-white/15 animate-in zoom-in-95 duration-150"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
         <div 
-          className="px-5 py-4 text-white flex items-center justify-between shadow-xs"
+          className="px-6 py-4 text-white flex items-center justify-between shadow-glass"
           style={{ backgroundColor: palette.primary }}
         >
           <div className="flex items-center gap-2.5">
@@ -85,14 +88,14 @@ export const QuickAddItemModal: React.FC<QuickAddItemModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded-lg hover:bg-black/20 text-white transition-colors"
+            className="p-1 rounded-xl hover:bg-black/20 text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-5 space-y-4 overflow-y-auto">
+        <form onSubmit={handleSubmit} className="p-6 space-y-4 overflow-y-auto">
           {/* ITEM NAME */}
           <div>
             <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
@@ -105,7 +108,7 @@ export const QuickAddItemModal: React.FC<QuickAddItemModalProps> = ({
               placeholder="e.g. KAPAS, COTTON, KHOL"
               value={name}
               onChange={e => setName(e.target.value)}
-              className="w-full px-3.5 py-3 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl font-bold uppercase text-sm text-gray-900 dark:text-gray-100 focus:outline-none focus:border-[var(--primary)]"
+              className="input-vyapar uppercase font-bold text-sm"
             />
           </div>
 
@@ -119,7 +122,7 @@ export const QuickAddItemModal: React.FC<QuickAddItemModalProps> = ({
               placeholder="100"
               value={unit}
               onChange={e => setUnit(e.target.value)}
-              className="w-full px-3.5 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl font-semibold text-xs text-gray-900 dark:text-gray-100 focus:outline-none focus:border-[var(--primary)]"
+              className="input-vyapar font-semibold text-xs"
             />
             <div className="flex flex-wrap gap-1.5 mt-2">
               {COMMON_UNITS.map(u => (
@@ -127,10 +130,10 @@ export const QuickAddItemModal: React.FC<QuickAddItemModalProps> = ({
                   key={u}
                   type="button"
                   onClick={() => setUnit(u)}
-                  className={`text-[10px] font-bold px-2 py-1 rounded-lg transition-colors border ${
+                  className={`text-[10px] font-bold px-2.5 py-1 rounded-xl transition-all border ${
                     unit === u
-                      ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-200 border-amber-300 dark:border-amber-700'
-                      : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-transparent hover:bg-gray-200'
+                      ? 'bg-orange-500/15 text-orange-800 dark:text-orange-200 border-orange-500/30 shadow-glass'
+                      : 'bg-white/40 dark:bg-white/5 text-gray-600 dark:text-gray-400 border-white/40 dark:border-white/10 hover:bg-white/60 dark:hover:bg-white/10'
                   }`}
                 >
                   {u}
@@ -140,9 +143,9 @@ export const QuickAddItemModal: React.FC<QuickAddItemModalProps> = ({
           </div>
 
           {/* COMMISSION RATES */}
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
+          <div className="grid grid-cols-2 gap-3 min-w-0">
+            <div className="min-w-0">
+              <label className="block text-[11px] sm:text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5 truncate" title="SELLER COMM. RATE">
                 SELLER COMM. RATE
               </label>
               <input
@@ -151,11 +154,11 @@ export const QuickAddItemModal: React.FC<QuickAddItemModalProps> = ({
                 placeholder="2.8"
                 value={sellerRate}
                 onChange={e => setSellerRate(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl font-semibold text-xs text-gray-900 dark:text-gray-100 focus:outline-none focus:border-[var(--primary)]"
+                className="input-vyapar font-semibold text-xs"
               />
             </div>
-            <div>
-              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
+            <div className="min-w-0">
+              <label className="block text-[11px] sm:text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5 truncate" title="BUYER COMM. RATE">
                 BUYER COMM. RATE
               </label>
               <input
@@ -164,7 +167,7 @@ export const QuickAddItemModal: React.FC<QuickAddItemModalProps> = ({
                 placeholder="2.6"
                 value={buyerRate}
                 onChange={e => setBuyerRate(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl font-semibold text-xs text-gray-900 dark:text-gray-100 focus:outline-none focus:border-[var(--primary)]"
+                className="input-vyapar font-semibold text-xs"
               />
             </div>
           </div>
@@ -174,7 +177,7 @@ export const QuickAddItemModal: React.FC<QuickAddItemModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-3 px-4 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-bold rounded-xl text-xs hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              className="flex-1 py-3 px-4 border border-gray-200/80 dark:border-white/10 text-gray-700 dark:text-gray-300 font-bold rounded-2xl text-xs hover:bg-white/60 dark:hover:bg-white/10 transition-colors"
             >
               Cancel
             </button>
@@ -182,7 +185,7 @@ export const QuickAddItemModal: React.FC<QuickAddItemModalProps> = ({
               type="submit"
               disabled={!name.trim() || isSubmitting}
               style={{ backgroundColor: palette.primary }}
-              className="flex-2 py-3 px-4 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-md hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-50"
+              className="flex-2 py-3 px-4 text-white font-bold rounded-2xl text-xs flex items-center justify-center gap-1.5 shadow-glass-card hover:shadow-glass-hover active:scale-[0.98] transition-all disabled:opacity-50"
             >
               <Check className="w-4 h-4 stroke-[3]" />
               <span>{isSubmitting ? 'Saving...' : 'Save Item'}</span>

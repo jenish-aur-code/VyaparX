@@ -237,82 +237,143 @@ export const CreateSaudaPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F7FA] pb-24 md:pb-12">
+    <div className="min-h-screen pb-24 md:pb-12 transition-colors">
       {/* Header Replicating Screenshot 18/19 */}
       <PageHeader title="Create Vyapar Order" />
 
       <div className="p-4 md:p-6 max-w-xl mx-auto space-y-5">
-        {/* 3-Step Indicator Bar Replicating Screenshots 18, 19, 20 */}
-        <div className="grid grid-cols-3 gap-2">
-          {/* Step 1: Item */}
-          <button
-            type="button"
-            onClick={() => setStep(1)}
-            style={step === 1 ? { backgroundColor: palette.primary } : {}}
-            className={`py-2.5 px-3 rounded-xl flex items-center justify-center gap-2 font-bold text-xs transition-all ${
-              step === 1
-                ? 'text-white shadow-xs'
-                : 'bg-emerald-50 text-emerald-800 border border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800'
-            }`}
-          >
-            {step > 1 ? (
-              <CheckCircle2 className="w-4 h-4 fill-emerald-500 text-white" />
-            ) : (
-              <div className="w-3.5 h-3.5 rounded-full border-2 border-white flex items-center justify-center text-[9px]"></div>
-            )}
-            <span>Item</span>
-          </button>
+        {/* 3-Step Wizard Indicator matching Image 4 */}
+        <div className="liquid-glass-card p-4 sm:p-5 rounded-3xl shadow-glass-card">
+          <div className="relative flex items-center justify-between max-w-sm sm:max-w-md mx-auto px-2">
+            {/* Step 1: Item */}
+            <button
+              type="button"
+              onClick={() => setStep(1)}
+              className="relative z-10 flex flex-col items-center group focus:outline-none transition-transform active:scale-95"
+            >
+              <div
+                style={step >= 1 ? { backgroundColor: palette.primary } : {}}
+                className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-bold text-xs sm:text-sm transition-all duration-300 shadow-md ${
+                  step >= 1
+                    ? 'text-white shadow-glass'
+                    : 'bg-white/60 dark:bg-card-dark text-gray-400 border-2 border-gray-300 dark:border-gray-600'
+                }`}
+              >
+                {step > 1 ? (
+                  <Check className="w-4 h-4 sm:w-5 sm:h-5 stroke-[3]" />
+                ) : (
+                  <span>1</span>
+                )}
+              </div>
+              <span
+                style={step === 1 ? { color: palette.primary } : {}}
+                className={`mt-1.5 text-xs sm:text-sm font-bold tracking-tight transition-colors ${
+                  step === 1
+                    ? 'font-extrabold'
+                    : step > 1
+                    ? 'text-gray-700 dark:text-gray-300'
+                    : 'text-gray-400 dark:text-gray-500'
+                }`}
+              >
+                Item
+              </span>
+            </button>
 
-          {/* Step 2: Seller */}
-          <button
-            type="button"
-            onClick={() => {
-              if (quantity && billRate) setStep(2);
-            }}
-            style={step === 2 ? { backgroundColor: palette.primary } : {}}
-            className={`py-2.5 px-3 rounded-xl flex items-center justify-center gap-2 font-bold text-xs transition-all ${
-              step === 2
-                ? 'text-white shadow-xs'
-                : step > 2
-                ? 'bg-emerald-50 text-emerald-800 border border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800'
-                : 'bg-white text-gray-400 border border-gray-200 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400'
-            }`}
-          >
-            {step > 2 ? (
-              <CheckCircle2 className="w-4 h-4 fill-emerald-500 text-white" />
-            ) : step === 2 ? (
-              <Check className="w-4 h-4 stroke-[3]" />
-            ) : (
-              <div className="w-3.5 h-3.5 rounded-full border-2 border-gray-300 dark:border-gray-600"></div>
-            )}
-            <span>Seller</span>
-          </button>
+            {/* Connecting Track 1 -> 2 */}
+            <div className="flex-1 h-[2.5px] mx-2 -mt-5 bg-gray-200 dark:bg-white/10 relative rounded-full overflow-hidden">
+              <div
+                className="h-full transition-all duration-300 rounded-full"
+                style={{
+                  backgroundColor: palette.primary,
+                  width: step >= 2 ? '100%' : '0%',
+                }}
+              />
+            </div>
 
-          {/* Step 3: Buyer */}
-          <button
-            type="button"
-            onClick={() => {
-              if (quantity && billRate && sellerName) setStep(3);
-            }}
-            style={step === 3 ? { backgroundColor: palette.primary } : {}}
-            className={`py-2.5 px-3 rounded-xl flex items-center justify-center gap-2 font-bold text-xs transition-all ${
-              step === 3
-                ? 'text-white shadow-xs'
-                : 'bg-white text-gray-400 border border-gray-200 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400'
-            }`}
-          >
-            {step === 3 ? (
-              <Check className="w-4 h-4 stroke-[3]" />
-            ) : (
-              <div className="w-3.5 h-3.5 rounded-full border-2 border-gray-300 dark:border-gray-600"></div>
-            )}
-            <span>Buyer</span>
-          </button>
+            {/* Step 2: Seller */}
+            <button
+              type="button"
+              onClick={() => {
+                if (quantity && billRate) setStep(2);
+              }}
+              disabled={!quantity || !billRate}
+              className="relative z-10 flex flex-col items-center group focus:outline-none transition-transform active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <div
+                style={step >= 2 ? { backgroundColor: palette.primary } : {}}
+                className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-bold text-xs sm:text-sm transition-all duration-300 shadow-md ${
+                  step >= 2
+                    ? 'text-white shadow-glass'
+                    : 'bg-white/60 dark:bg-card-dark text-gray-400 border-2 border-gray-300 dark:border-gray-600'
+                }`}
+              >
+                {step > 2 ? (
+                  <Check className="w-4 h-4 sm:w-5 sm:h-5 stroke-[3]" />
+                ) : (
+                  <span>2</span>
+                )}
+              </div>
+              <span
+                style={step === 2 ? { color: palette.primary } : {}}
+                className={`mt-1.5 text-xs sm:text-sm font-bold tracking-tight transition-colors ${
+                  step === 2
+                    ? 'font-extrabold'
+                    : step > 2
+                    ? 'text-gray-700 dark:text-gray-300'
+                    : 'text-gray-400 dark:text-gray-500'
+                }`}
+              >
+                Seller
+              </span>
+            </button>
+
+            {/* Connecting Track 2 -> 3 */}
+            <div className="flex-1 h-[2.5px] mx-2 -mt-5 bg-gray-200 dark:bg-white/10 relative rounded-full overflow-hidden">
+              <div
+                className="h-full transition-all duration-300 rounded-full"
+                style={{
+                  backgroundColor: palette.primary,
+                  width: step >= 3 ? '100%' : '0%',
+                }}
+              />
+            </div>
+
+            {/* Step 3: Buyer */}
+            <button
+              type="button"
+              onClick={() => {
+                if (quantity && billRate && sellerName) setStep(3);
+              }}
+              disabled={!quantity || !billRate || !sellerName}
+              className="relative z-10 flex flex-col items-center group focus:outline-none transition-transform active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <div
+                style={step === 3 ? { backgroundColor: palette.primary } : {}}
+                className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-bold text-xs sm:text-sm transition-all duration-300 shadow-md ${
+                  step === 3
+                    ? 'text-white shadow-glass'
+                    : 'bg-white/60 dark:bg-card-dark text-gray-400 border-2 border-gray-300 dark:border-gray-600'
+                }`}
+              >
+                <span>3</span>
+              </div>
+              <span
+                style={step === 3 ? { color: palette.primary } : {}}
+                className={`mt-1.5 text-xs sm:text-sm font-bold tracking-tight transition-colors ${
+                  step === 3
+                    ? 'font-extrabold'
+                    : 'text-gray-400 dark:text-gray-500'
+                }`}
+              >
+                Buyer
+              </span>
+            </button>
+          </div>
         </div>
 
         {/* STEP 1: ITEM FORM (Replicating Screenshots 19 & 20) */}
         {step === 1 && (
-          <div className="space-y-4">
+          <div className="liquid-glass-card p-5 md:p-6 rounded-3xl space-y-4 shadow-glass-card">
             {/* DATE */}
             <div>
               <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
@@ -418,9 +479,9 @@ export const CreateSaudaPage: React.FC = () => {
 
             {/* Total Bill Amount Calculated Box (Matching Screenshot 20: ₹18,62,496.00) */}
             {quantity && billRate && (
-              <div className="p-3.5 bg-[#E8F5E9] dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-2xl flex items-center justify-between text-sm font-bold text-emerald-800 dark:text-emerald-300 shadow-xs animate-in fade-in">
-                <span>Total Bill Amount:</span>
-                <span className="text-lg font-black">{formatCurrency(totalBillAmount)}</span>
+              <div className="p-3.5 sm:p-4 bg-emerald-500/10 dark:bg-emerald-500/15 border border-emerald-500/30 rounded-2xl flex flex-wrap items-center justify-between gap-2 text-sm font-bold text-emerald-800 dark:text-emerald-300 shadow-glass-card backdrop-blur-md animate-in fade-in">
+                <span className="text-[11px] sm:text-xs uppercase tracking-wider font-extrabold text-emerald-700 dark:text-emerald-300">Total Bill Amount:</span>
+                <span className="text-base sm:text-xl font-black text-emerald-600 dark:text-emerald-400 break-all">{formatCurrency(totalBillAmount)}</span>
               </div>
             )}
 
@@ -439,13 +500,13 @@ export const CreateSaudaPage: React.FC = () => {
             </div>
 
             {withGST && (
-              <div className="p-3 bg-gray-50 border border-gray-200 rounded-xl space-y-2 text-xs">
+              <div className="p-4 glass-card-subtle rounded-2xl space-y-2 text-xs">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600 font-medium">GST Percentage:</span>
+                  <span className="text-gray-600 dark:text-gray-300 font-medium">GST Percentage:</span>
                   <select
                     value={gstPercent}
                     onChange={e => setGstPercent(e.target.value)}
-                    className="p-1.5 bg-white border border-gray-300 rounded-lg font-bold"
+                    className="p-1.5 bg-white/70 dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 rounded-lg font-bold backdrop-blur-xs text-gray-800 dark:text-gray-100"
                   >
                     <option value="5">5% (Commodity/Cotton)</option>
                     <option value="12">12%</option>
@@ -453,9 +514,9 @@ export const CreateSaudaPage: React.FC = () => {
                     <option value="28">28%</option>
                   </select>
                 </div>
-                <div className="flex justify-between font-bold text-gray-800 pt-1 border-t border-gray-200">
+                <div className="flex justify-between font-bold text-gray-800 dark:text-gray-100 pt-2 border-t border-gray-200/60 dark:border-white/10">
                   <span>GST Amount:</span>
-                  <span>{formatCurrency(gstAmount)}</span>
+                  <span className="text-emerald-600 dark:text-emerald-400">{formatCurrency(gstAmount)}</span>
                 </div>
               </div>
             )}
@@ -539,29 +600,35 @@ export const CreateSaudaPage: React.FC = () => {
               />
             </div>
 
-            {/* Next Button */}
-            <button
-              type="button"
-              onClick={handleNextFromItem}
-              disabled={!quantity || !billRate}
-              className="btn-primary mt-6 disabled:opacity-50 disabled:bg-gray-300"
-            >
-              Next
-            </button>
+            {/* Step 1 Footer matching Image 4 */}
+            <div className="flex items-center justify-between pt-4 mt-6 border-t border-gray-200/50 dark:border-white/10">
+              <span className="text-sm font-semibold text-gray-500 dark:text-gray-400">
+                Step 1 of 3
+              </span>
+              <button
+                type="button"
+                onClick={handleNextFromItem}
+                disabled={!quantity || !billRate}
+                style={{ backgroundColor: palette.primary }}
+                className="px-7 py-2.5 rounded-xl text-white font-bold text-sm shadow-glass-card hover:shadow-glass-hover hover:opacity-95 active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                Next
+              </button>
+            </div>
           </div>
         )}
 
         {/* STEP 2: SELLER FORM (Replicating Screenshot 18) */}
         {step === 2 && (
-          <div className="space-y-4 animate-in fade-in">
+          <div className="liquid-glass-card p-5 md:p-6 rounded-3xl space-y-4 shadow-glass-card animate-in fade-in">
             {/* SELLER NAME * */}
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 NAME <span className="text-red-500 font-bold">*</span>
               </label>
               <div
                 onClick={() => setIsSellerModalOpen(true)}
-                className="input-sauda flex items-center justify-between cursor-pointer font-bold uppercase text-gray-900"
+                className="input-sauda flex items-center justify-between cursor-pointer font-bold uppercase text-gray-900 dark:text-gray-100"
               >
                 <span>{sellerName || 'SELECT SELLER'}</span>
                 <ChevronDown className="w-4 h-4 text-gray-400" />
@@ -570,7 +637,7 @@ export const CreateSaudaPage: React.FC = () => {
 
             {/* COMM. RATE */}
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 COMM. RATE
               </label>
               <input
@@ -578,19 +645,19 @@ export const CreateSaudaPage: React.FC = () => {
                 step="any"
                 value={sellerCommRate}
                 onChange={e => setSellerCommRate(e.target.value)}
-                className="input-sauda font-extrabold text-gray-900"
+                className="input-sauda font-extrabold text-gray-900 dark:text-gray-100"
               />
             </div>
 
             {/* Commission Amount Banner (Matching Screenshot 18: ₹806.40) */}
-            <div className="p-3.5 bg-[#E8F5E9] border border-emerald-200 rounded-2xl flex items-center justify-between text-sm font-bold text-emerald-800 shadow-xs">
-              <span>Commission Amount:</span>
-              <span className="text-lg font-black">{formatCurrency(sellerCommissionAmount)}</span>
+            <div className="p-3.5 sm:p-4 bg-emerald-500/10 dark:bg-emerald-500/15 border border-emerald-500/30 rounded-2xl flex flex-wrap items-center justify-between gap-2 text-sm font-bold text-emerald-800 dark:text-emerald-300 shadow-glass-card backdrop-blur-md">
+              <span className="text-[11px] sm:text-xs uppercase tracking-wider font-extrabold text-emerald-700 dark:text-emerald-300">Commission Amount:</span>
+              <span className="text-base sm:text-xl font-black text-emerald-600 dark:text-emerald-400 break-all">{formatCurrency(sellerCommissionAmount)}</span>
             </div>
 
             {/* SELLER CONTACT PERSON */}
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 SELLER CONTACT PERSON
               </label>
               <input
@@ -602,32 +669,36 @@ export const CreateSaudaPage: React.FC = () => {
               />
             </div>
 
-            {/* Buttons: Previous and Next */}
-            <div className="flex gap-3 mt-6 pt-4">
-              <button
-                type="button"
-                onClick={() => setStep(1)}
-                style={{ backgroundColor: palette.primary }}
-                className="flex-1 py-3.5 px-4 hover:opacity-90 text-white font-bold rounded-xl shadow-xs transition-all"
-              >
-                Previous
-              </button>
-              <button
-                type="button"
-                onClick={handleNextFromSeller}
-                disabled={!sellerName}
-                style={{ backgroundColor: palette.primary }}
-                className="flex-1 py-3.5 px-4 hover:opacity-90 text-white font-bold rounded-xl shadow-xs transition-all disabled:opacity-50"
-              >
-                Next
-              </button>
+            {/* Step 2 Footer matching Image 4 */}
+            <div className="flex items-center justify-between pt-4 mt-6 border-t border-gray-200/50 dark:border-white/10">
+              <span className="text-sm font-semibold text-gray-500 dark:text-gray-400">
+                Step 2 of 3
+              </span>
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setStep(1)}
+                  className="px-5 py-2.5 rounded-xl border border-gray-300 dark:border-white/15 bg-white/60 dark:bg-white/10 hover:bg-white/90 dark:hover:bg-white/20 text-gray-700 dark:text-gray-200 font-bold text-sm shadow-sm active:scale-95 transition-all"
+                >
+                  Previous
+                </button>
+                <button
+                  type="button"
+                  onClick={handleNextFromSeller}
+                  disabled={!sellerName}
+                  style={{ backgroundColor: palette.primary }}
+                  className="px-7 py-2.5 rounded-xl text-white font-bold text-sm shadow-glass-card hover:shadow-glass-hover hover:opacity-95 active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  Next
+                </button>
+              </div>
             </div>
           </div>
         )}
 
         {/* STEP 3: BUYER FORM (Replicating Screenshot 22) */}
         {step === 3 && (
-          <div className="space-y-4 animate-in fade-in">
+          <div className="liquid-glass-card p-5 md:p-6 rounded-3xl space-y-4 shadow-glass-card animate-in fade-in">
             {/* BUYER NAME * */}
             <div>
               <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
@@ -657,9 +728,9 @@ export const CreateSaudaPage: React.FC = () => {
             </div>
 
             {/* Commission Amount Banner */}
-            <div className="p-3.5 bg-[#E1F5FE] dark:bg-sky-950/40 border border-sky-200 dark:border-sky-800 rounded-2xl flex items-center justify-between text-sm font-bold text-sky-800 dark:text-sky-300 shadow-xs">
-              <span>Commission Amount:</span>
-              <span className="text-lg font-black">{formatCurrency(buyerCommissionAmount)}</span>
+            <div className="p-3.5 sm:p-4 bg-sky-500/10 dark:bg-sky-500/15 border border-sky-500/30 rounded-2xl flex flex-wrap items-center justify-between gap-2 text-sm font-bold text-sky-800 dark:text-sky-300 shadow-glass-card backdrop-blur-md">
+              <span className="text-[11px] sm:text-xs uppercase tracking-wider font-extrabold text-sky-700 dark:text-sky-300">Commission Amount:</span>
+              <span className="text-base sm:text-xl font-black text-sky-600 dark:text-sky-400 break-all">{formatCurrency(buyerCommissionAmount)}</span>
             </div>
 
             {/* BUYER CONTACT PERSON */}
@@ -676,25 +747,29 @@ export const CreateSaudaPage: React.FC = () => {
               />
             </div>
 
-            {/* Buttons: Previous and SAVE */}
-            <div className="flex gap-3 mt-6 pt-4">
-              <button
-                type="button"
-                onClick={() => setStep(2)}
-                style={{ backgroundColor: palette.primary }}
-                className="flex-1 py-3.5 px-4 hover:opacity-90 text-white font-bold rounded-xl shadow-xs transition-all"
-              >
-                Previous
-              </button>
-              <button
-                type="button"
-                onClick={handleSaveOrder}
-                disabled={!buyerName || isSubmitting}
-                style={{ backgroundColor: palette.primary }}
-                className="flex-1 py-3.5 px-4 hover:opacity-90 text-white font-bold rounded-xl shadow-md transition-all disabled:opacity-50"
-              >
-                {isSubmitting ? 'SAVING...' : 'SAVE'}
-              </button>
+            {/* Step 3 Footer matching Image 4 */}
+            <div className="flex items-center justify-between pt-4 mt-6 border-t border-gray-200/50 dark:border-white/10">
+              <span className="text-sm font-semibold text-gray-500 dark:text-gray-400">
+                Step 3 of 3
+              </span>
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setStep(2)}
+                  className="px-5 py-2.5 rounded-xl border border-gray-300 dark:border-white/15 bg-white/60 dark:bg-white/10 hover:bg-white/90 dark:hover:bg-white/20 text-gray-700 dark:text-gray-200 font-bold text-sm shadow-sm active:scale-95 transition-all"
+                >
+                  Previous
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSaveOrder}
+                  disabled={!buyerName || isSubmitting}
+                  style={{ backgroundColor: palette.primary }}
+                  className="px-7 py-2.5 rounded-xl text-white font-bold text-sm shadow-glass-card hover:shadow-glass-hover hover:opacity-95 active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? 'SAVING...' : 'SAVE'}
+                </button>
+              </div>
             </div>
           </div>
         )}

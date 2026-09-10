@@ -77,7 +77,7 @@ export const AddEditItemPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F7FA] dark:bg-[#0B1120] pb-24 md:pb-12 transition-colors">
+    <div className="min-h-screen pb-24 md:pb-12 transition-colors">
       <PageHeader
         title={isEdit ? 'Edit Item' : 'Add Item'}
         rightAction={
@@ -85,7 +85,7 @@ export const AddEditItemPage: React.FC = () => {
             <button
               type="button"
               onClick={() => setShowDeleteConfirm(true)}
-              className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition-colors"
+              className="p-2 text-red-500 hover:bg-red-500/10 rounded-xl transition-colors"
               title="Delete Item"
             >
               <Trash2 className="w-5 h-5" />
@@ -97,8 +97,8 @@ export const AddEditItemPage: React.FC = () => {
       <div className="p-4 md:p-6 max-w-xl mx-auto space-y-5">
         {/* Info Banner matching screenshot 5 */}
         <div 
-          className="p-4 rounded-2xl flex items-start gap-3 text-xs font-medium leading-relaxed shadow-xs border"
-          style={{ backgroundColor: palette.light, borderColor: palette.primary + '44', color: palette.text }}
+          className="p-4 rounded-2xl flex items-start gap-3 text-xs font-medium leading-relaxed glass-card-subtle"
+          style={{ borderColor: palette.primary + '33', color: palette.text }}
         >
           <Info className="w-5 h-5 shrink-0 mt-0.5" style={{ color: palette.primary }} />
           <span>
@@ -107,87 +107,90 @@ export const AddEditItemPage: React.FC = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 tracking-tight">
-            Item Details
-          </h2>
+          <div className="glass-card p-5 md:p-6 rounded-3xl space-y-4">
+            <h2 className="text-lg font-black text-gray-900 dark:text-gray-100 tracking-tight flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: palette.primary }}></span>
+              Item Details
+            </h2>
 
-          {/* Item Name */}
-          <div>
-            <label className="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1.5">
-              Item Name <span className="text-red-500 font-bold">*</span>
-            </label>
-            <div className="relative">
-              <Package className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                required
-                placeholder="Ex. KAPAS"
-                value={name}
-                onChange={e => setName(e.target.value)}
-                className="w-full pl-12 pr-4 py-3.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-gray-100 font-bold text-sm focus:outline-none focus:border-[var(--primary)] uppercase transition-all"
-              />
+            {/* Item Name */}
+            <div>
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 mb-1.5 uppercase">
+                Item Name <span className="text-red-500 font-bold">*</span>
+              </label>
+              <div className="relative">
+                <Package className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  required
+                  placeholder="Ex. KAPAS"
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                  className="input-vyapar pl-12 pr-4 py-3.5 font-bold text-sm uppercase"
+                />
+              </div>
             </div>
-          </div>
 
-          {/* Commission Rate (Seller) */}
-          <div>
-            <label className="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1.5">
-              Commission Rate (Seller)
-            </label>
-            <div className="relative">
-              <Binary className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
-              <input
-                type="number"
-                step="any"
-                placeholder="2.8"
-                value={sellerRate}
-                onChange={e => setSellerRate(e.target.value)}
-                className="w-full pl-12 pr-4 py-3.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-gray-100 font-bold text-sm focus:outline-none focus:border-[var(--primary)] transition-all"
-              />
+            {/* Commission Rate (Seller) */}
+            <div>
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 mb-1.5 uppercase">
+                Commission Rate (Seller)
+              </label>
+              <div className="relative">
+                <Binary className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
+                <input
+                  type="number"
+                  step="any"
+                  placeholder="2.8"
+                  value={sellerRate}
+                  onChange={e => setSellerRate(e.target.value)}
+                  className="input-vyapar pl-12 pr-4 py-3.5 font-bold text-sm"
+                />
+              </div>
             </div>
-          </div>
 
-          {/* Commission Rate (Buyer) */}
-          <div>
-            <label className="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1.5">
-              Commission Rate (Buyer)
-            </label>
-            <div className="relative">
-              <Binary className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
-              <input
-                type="number"
-                step="any"
-                placeholder="2.6"
-                value={buyerRate}
-                onChange={e => setBuyerRate(e.target.value)}
-                className="w-full pl-12 pr-4 py-3.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-gray-100 font-bold text-sm focus:outline-none focus:border-[var(--primary)] transition-all"
-              />
+            {/* Commission Rate (Buyer) */}
+            <div>
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 mb-1.5 uppercase">
+                Commission Rate (Buyer)
+              </label>
+              <div className="relative">
+                <Binary className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
+                <input
+                  type="number"
+                  step="any"
+                  placeholder="2.6"
+                  value={buyerRate}
+                  onChange={e => setBuyerRate(e.target.value)}
+                  className="input-vyapar pl-12 pr-4 py-3.5 font-bold text-sm"
+                />
+              </div>
             </div>
-          </div>
 
-          {/* Unit */}
-          <div>
-            <label className="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1.5">
-              Unit
-            </label>
-            <div className="relative">
-              <Scale className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                placeholder="100"
-                value={unit}
-                onChange={e => setUnit(e.target.value)}
-                className="w-full pl-12 pr-4 py-3.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-gray-100 font-bold text-sm focus:outline-none focus:border-[var(--primary)] transition-all"
-              />
+            {/* Unit */}
+            <div>
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 mb-1.5 uppercase">
+                Unit
+              </label>
+              <div className="relative">
+                <Scale className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  placeholder="100"
+                  value={unit}
+                  onChange={e => setUnit(e.target.value)}
+                  className="input-vyapar pl-12 pr-4 py-3.5 font-bold text-sm uppercase"
+                />
+              </div>
             </div>
-          </div>
 
-          {/* Dynamic Summary Box matching screenshot 5 */}
-          <div className="p-4 bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-800 rounded-2xl flex items-start gap-3 text-xs text-sky-800 dark:text-sky-300 font-semibold leading-relaxed shadow-xs">
-            <Info className="w-5 h-5 text-sky-600 dark:text-sky-400 shrink-0 mt-0.5" />
-            <div className="space-y-1">
-              <div>Seller Comm: {sellerRate || '0'} per {unit || '100'}</div>
-              <div>Buyer Comm: {buyerRate || '0'} per {unit || '100'}</div>
+            {/* Dynamic Summary Box matching screenshot 5 */}
+            <div className="p-4 bg-sky-500/10 dark:bg-sky-500/15 border border-sky-500/30 rounded-2xl flex items-start gap-3 text-xs text-sky-800 dark:text-sky-300 font-semibold leading-relaxed backdrop-blur-md shadow-glass-card">
+              <Info className="w-5 h-5 text-sky-600 dark:text-sky-400 shrink-0 mt-0.5" />
+              <div className="space-y-1">
+                <div>Seller Comm: <strong>{sellerRate || '0'}</strong> per <strong>{unit || '100'}</strong></div>
+                <div>Buyer Comm: <strong>{buyerRate || '0'}</strong> per <strong>{unit || '100'}</strong></div>
+              </div>
             </div>
           </div>
 
@@ -196,7 +199,7 @@ export const AddEditItemPage: React.FC = () => {
             type="submit"
             disabled={isSubmitting}
             style={{ backgroundColor: palette.primary }}
-            className="w-full py-4 px-4 text-white font-extrabold text-sm uppercase tracking-wider rounded-xl shadow-md transition-all duration-150 active:scale-[0.98] hover:opacity-90 disabled:opacity-50 mt-4"
+            className="w-full py-4 px-4 text-white font-extrabold text-sm uppercase tracking-wider rounded-2xl shadow-glass-card hover:shadow-glass-hover transition-all duration-150 active:scale-[0.98] hover:opacity-90 disabled:opacity-50 mt-4"
           >
             {isSubmitting ? 'SAVING...' : isEdit ? 'UPDATE ITEM' : 'CREATE ITEM'}
           </button>

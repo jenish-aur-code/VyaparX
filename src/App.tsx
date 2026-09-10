@@ -5,8 +5,10 @@ import { AppProvider } from './context/AppContext';
 import { ToastProvider } from './context/ToastContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { LanguageProvider } from './context/LanguageContext';
+import { PwaProvider } from './context/PwaContext';
 import { AppShell } from './components/layout/AppShell';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
+import { InstallAppModal } from './components/common/InstallAppModal';
 
 // Auth Pages
 import { EmailLoginPage } from './pages/auth/EmailLoginPage';
@@ -37,10 +39,12 @@ export function App() {
     <BrowserRouter>
       <ThemeProvider>
         <LanguageProvider>
-          <AuthProvider>
-            <AppProvider>
-              <ToastProvider>
-                <Routes>
+          <PwaProvider>
+            <AuthProvider>
+              <AppProvider>
+                <ToastProvider>
+                  <InstallAppModal />
+                  <Routes>
                   {/* Public Auth Routes */}
                   <Route element={<AppShell />}>
                     <Route path="/login" element={<EmailLoginPage />} />
@@ -106,8 +110,9 @@ export function App() {
               </ToastProvider>
             </AppProvider>
           </AuthProvider>
-        </LanguageProvider>
-      </ThemeProvider>
+        </PwaProvider>
+      </LanguageProvider>
+    </ThemeProvider>
     </BrowserRouter>
   );
 }

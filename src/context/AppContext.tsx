@@ -19,6 +19,8 @@ interface AppContextType {
   isPinLocked: boolean;
   unlockWithPin: (pin: string) => boolean;
   lockApp: () => void;
+  isSidebarCollapsed: boolean;
+  toggleSidebar: () => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -31,6 +33,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isPinLocked, setIsPinLocked] = useState<boolean>(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(() => {
+    return localStorage.getItem('vyapar_sidebar_collapsed') === 'true';
+  });
+
+  const toggleSidebar = () => {
+    setIsSidebarCollapsed(prev => {
+      const next = !prev;
+      localStorage.setItem('vyapar_sidebar_collapsed', String(next));
+      return next;
+    });
+  };
 
   const refreshAppContext = useCallback(async () => {
     try {
@@ -130,6 +143,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         isPinLocked,
         unlockWithPin,
         lockApp,
+        isSidebarCollapsed,
+        toggleSidebar,
       }}
     >
       {children}

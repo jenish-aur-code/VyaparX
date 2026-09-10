@@ -43,27 +43,30 @@ export const ChangeCompanyFYModal: React.FC<Props> = ({ isOpen, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 dark:bg-black/70 backdrop-blur-xl animate-in fade-in"
+      style={{ backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}
+    >
       <div 
-        className="w-full max-w-sm bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-6 space-y-5 animate-in zoom-in-95 border border-gray-100 dark:border-gray-700"
+        className="w-full max-w-sm bg-white/95 dark:bg-gray-900/95 backdrop-blur-3xl rounded-3xl shadow-glass-hover p-6 space-y-5 animate-in zoom-in-95 border border-white/70 dark:border-white/15"
         onClick={e => e.stopPropagation()}
       >
-        <div className="flex justify-between items-center border-b border-gray-100 dark:border-gray-700 pb-3">
-          <h3 className="font-extrabold text-base text-gray-900 dark:text-gray-100">
+        <div className="flex justify-between items-center border-b border-white/60 dark:border-white/10 pb-3">
+          <h3 className="font-extrabold text-base text-gray-900 dark:text-gray-100 tracking-tight">
             Change Company & FY
           </h3>
-          <button onClick={onClose} className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+          <button onClick={onClose} className="p-1 rounded-xl text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-white/40 dark:hover:bg-white/5 transition-colors">
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Company Selector */}
-        <div className="space-y-1.5">
+        <div className="space-y-2">
           <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase flex items-center gap-1.5">
             <Building2 className="w-3.5 h-3.5" style={{ color: palette.primary }} />
             <span>Select Active Company</span>
           </label>
-          <div className="space-y-1.5 max-h-48 overflow-y-auto">
+          <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
             {companies.map(c => {
               const isSelected = selectedCompanyId === c.id;
               return (
@@ -71,18 +74,18 @@ export const ChangeCompanyFYModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   key={c.id}
                   onClick={() => setSelectedCompanyId(c.id!)}
                   style={isSelected ? { borderColor: palette.primary, backgroundColor: palette.light, color: palette.text } : undefined}
-                  className={`p-3 rounded-xl border text-xs font-bold flex items-center justify-between cursor-pointer transition-all ${
+                  className={`p-3 rounded-2xl border text-xs font-bold flex items-center justify-between cursor-pointer transition-all ${
                     isSelected
-                      ? 'border-2'
-                      : 'border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                      ? 'border-2 shadow-xs'
+                      : 'border-white/70 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-700 dark:text-gray-300 hover:bg-white/80 dark:hover:bg-white/10 shadow-2xs'
                   }`}
                 >
-                  <div>
-                    <div>{c.name}</div>
-                    <div className="text-[10px] text-gray-400 font-medium">{c.city} • {c.state}</div>
+                  <div className="min-w-0 flex-1 pr-2">
+                    <div className="font-extrabold text-xs truncate" title={c.name}>{c.name}</div>
+                    <div className="text-[10px] text-gray-400 font-semibold truncate">{c.city} • {c.state}</div>
                   </div>
                   {isSelected && (
-                    <Check className="w-4 h-4" style={{ color: palette.primary }} />
+                    <Check className="w-4 h-4 stroke-[3] shrink-0" style={{ color: palette.primary }} />
                   )}
                 </div>
               );
@@ -91,7 +94,7 @@ export const ChangeCompanyFYModal: React.FC<Props> = ({ isOpen, onClose }) => {
         </div>
 
         {/* Financial Year Selector */}
-        <div className="space-y-1.5">
+        <div className="space-y-2">
           <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase flex items-center gap-1.5">
             <Calendar className="w-3.5 h-3.5" style={{ color: palette.primary }} />
             <span>Select Financial Year</span>
@@ -105,10 +108,10 @@ export const ChangeCompanyFYModal: React.FC<Props> = ({ isOpen, onClose }) => {
                   type="button"
                   onClick={() => setSelectedFY(fy.id)}
                   style={isSelected ? { borderColor: palette.primary, backgroundColor: palette.primary, color: '#fff' } : undefined}
-                  className={`py-2 px-3 rounded-xl border text-xs font-bold transition-all ${
+                  className={`py-2.5 px-3 rounded-2xl border text-xs font-bold transition-all ${
                     isSelected
-                      ? 'shadow-xs'
-                      : 'border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700/50'
+                      ? 'shadow-glass'
+                      : 'border-white/70 dark:border-white/10 bg-white/50 dark:bg-white/5 text-gray-700 dark:text-gray-300 hover:bg-white/80 dark:hover:bg-white/10 shadow-2xs'
                   }`}
                 >
                   {fy.name}
@@ -122,7 +125,7 @@ export const ChangeCompanyFYModal: React.FC<Props> = ({ isOpen, onClose }) => {
           type="button"
           onClick={handleApply}
           style={{ backgroundColor: palette.primary }}
-          className="btn-primary hover:opacity-90 transition-opacity"
+          className="w-full py-3 px-4 font-bold rounded-2xl text-white shadow-glass hover:opacity-90 active:scale-[0.98] transition-all text-xs"
         >
           Switch Context
         </button>

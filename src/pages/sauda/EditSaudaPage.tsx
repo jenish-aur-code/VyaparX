@@ -92,13 +92,13 @@ export const EditSaudaPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F7FA] dark:bg-[#0B1120] pb-24 md:pb-12 transition-colors">
+    <div className="min-h-screen pb-24 md:pb-12 transition-colors">
       <PageHeader title={`Edit Vyapar #${order.id}`} />
 
       <div className="p-4 md:p-6 max-w-xl mx-auto">
         <form onSubmit={handleUpdate} className="space-y-4">
-          <div className="p-4 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 card-shadow space-y-4">
-            <div className="flex justify-between items-center pb-3 border-b border-gray-100 dark:border-gray-700">
+          <div className="liquid-glass-card p-5 md:p-6 rounded-3xl space-y-4 shadow-glass-card">
+            <div className="flex justify-between items-center pb-3 border-b border-gray-200/60 dark:border-white/10">
               <span className="font-extrabold text-base text-gray-900 dark:text-gray-100">{order.itemName}</span>
               <span className="text-xs font-bold text-gray-500 dark:text-gray-400">Date: {order.date}</span>
             </div>
@@ -139,13 +139,13 @@ export const EditSaudaPage: React.FC = () => {
               />
             </div>
 
-            <div className="p-3 bg-emerald-50 dark:bg-emerald-950/40 rounded-xl flex justify-between font-bold text-xs text-emerald-800 dark:text-emerald-300 border border-emerald-100 dark:border-emerald-800">
-              <span>Total Bill Amount:</span>
-              <span className="text-sm font-black">{formatCurrency(totalBillAmount)}</span>
+            <div className="p-3.5 sm:p-4 bg-emerald-500/10 dark:bg-emerald-500/15 rounded-2xl flex flex-wrap justify-between items-center gap-2 font-bold text-xs text-emerald-800 dark:text-emerald-300 border border-emerald-500/30 backdrop-blur-md shadow-glass-card">
+              <span className="uppercase tracking-wider font-extrabold text-[11px] sm:text-xs text-emerald-700 dark:text-emerald-300">Total Bill Amount:</span>
+              <span className="text-base sm:text-lg font-black text-emerald-600 dark:text-emerald-400 break-all">{formatCurrency(totalBillAmount)}</span>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1">Quality / Variety</label>
+              <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Quality / Variety</label>
               <input
                 type="text"
                 value={itemQuality}
@@ -155,7 +155,7 @@ export const EditSaudaPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1">Bill No.</label>
+              <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Bill No.</label>
               <input
                 type="text"
                 value={billNo}
@@ -164,10 +164,11 @@ export const EditSaudaPage: React.FC = () => {
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-3 pt-2 border-t border-gray-100">
-              <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">
-                  Seller ({order.sellerName}) Comm.
+            <div className="grid grid-cols-2 gap-2 sm:gap-3 pt-3 border-t border-gray-200/60 dark:border-white/10 min-w-0">
+              <div className="min-w-0">
+                <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1 truncate" title={`Seller (${order.sellerName}) Comm.`}>
+                  Seller Comm.
+                  <span className="block text-[10px] text-gray-400 dark:text-gray-500 truncate font-normal">({order.sellerName})</span>
                 </label>
                 <input
                   type="number"
@@ -177,9 +178,10 @@ export const EditSaudaPage: React.FC = () => {
                   className="input-sauda text-xs font-bold"
                 />
               </div>
-              <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">
-                  Buyer ({order.buyerName}) Comm.
+              <div className="min-w-0">
+                <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1 truncate" title={`Buyer (${order.buyerName}) Comm.`}>
+                  Buyer Comm.
+                  <span className="block text-[10px] text-gray-400 dark:text-gray-500 truncate font-normal">({order.buyerName})</span>
                 </label>
                 <input
                   type="number"
@@ -192,7 +194,7 @@ export const EditSaudaPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1">Payment Terms</label>
+              <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Payment Terms</label>
               <input
                 type="text"
                 value={paymentTerms}
@@ -202,7 +204,7 @@ export const EditSaudaPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1">Delivery Terms</label>
+              <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Delivery Terms</label>
               <input
                 type="text"
                 value={deliveryTerms}
@@ -212,7 +214,7 @@ export const EditSaudaPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1">Remark</label>
+              <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Remark</label>
               <input
                 type="text"
                 value={remark}
@@ -226,7 +228,7 @@ export const EditSaudaPage: React.FC = () => {
             type="submit"
             disabled={isSubmitting}
             style={{ backgroundColor: palette.primary }}
-            className="btn-primary hover:opacity-90 transition-opacity"
+            className="btn-primary hover:opacity-90 transition-opacity rounded-2xl shadow-glass-card hover:shadow-glass-hover"
           >
             {isSubmitting ? 'Updating...' : 'Update Vyapar Order'}
           </button>
