@@ -156,17 +156,21 @@ export const OtpVerificationPage: React.FC = () => {
 
   return (
     <div 
-      className="min-h-screen flex flex-col items-center justify-between p-6 md:p-12 text-white transition-colors"
+      className="min-h-screen flex flex-col items-center justify-between p-6 md:p-12 text-white transition-colors relative overflow-hidden"
       style={{ backgroundColor: palette.primary }}
     >
-      <div className="w-full flex justify-end">
+      {/* Ambient background refraction blobs */}
+      <div className="absolute -top-28 -left-28 w-80 h-80 rounded-full bg-white/20 blur-3xl pointer-events-none animate-pulse" />
+      <div className="absolute -bottom-32 -right-28 w-96 h-96 rounded-full bg-black/20 blur-3xl pointer-events-none" />
+
+      <div className="w-full flex justify-end relative z-10">
         {/* Top spacer */}
       </div>
 
-      <div className="w-full max-w-sm flex flex-col items-center text-center space-y-6">
+      <div className="w-full max-w-sm flex flex-col items-center text-center p-8 rounded-3xl bg-white/10 backdrop-blur-2xl border border-white/30 shadow-glass-hover space-y-6 relative z-10">
         {/* Verification Icon */}
-        <div className="w-24 h-24 rounded-3xl bg-white/10 backdrop-blur-xs flex items-center justify-center border-2 border-white/20 shadow-2xl">
-          <ShieldCheck className="w-14 h-14 text-white stroke-[2]" />
+        <div className="w-20 h-20 rounded-3xl bg-white/15 backdrop-blur-md flex items-center justify-center border border-white/30 shadow-glass">
+          <ShieldCheck className="w-11 h-11 text-white stroke-[2]" />
         </div>
 
         {/* Title & Masked Email */}
@@ -174,13 +178,13 @@ export const OtpVerificationPage: React.FC = () => {
           <h1 className="text-3xl font-black tracking-tight text-white drop-shadow-sm">
             Verify OTP
           </h1>
-          <p className="text-sm font-semibold text-white/90">
+          <p className="text-xs font-semibold text-white/90">
             Enter Verification Code
           </p>
-          <p className="text-xs text-white/80 pt-1">
+          <p className="text-[11px] text-white/80 pt-0.5">
             We sent a 4-digit code to
           </p>
-          <div className="inline-flex items-center gap-1.5 bg-white/15 px-3 py-1 rounded-full text-xs font-bold text-white tracking-wide border border-white/20">
+          <div className="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-white tracking-wide border border-white/30 shadow-2xs">
             <span>{maskEmail(email)}</span>
             <button
               type="button"
@@ -193,9 +197,9 @@ export const OtpVerificationPage: React.FC = () => {
           </div>
         </div>
 
-        <form onSubmit={handleVerify} className="w-full space-y-5 pt-2">
+        <form onSubmit={handleVerify} className="w-full space-y-5 pt-1">
           {/* 4 OTP Input Boxes */}
-          <div className="flex items-center justify-center gap-3">
+          <div className="flex items-center justify-center gap-2.5">
             {digits.map((digit, index) => (
               <input
                 key={index}
@@ -208,14 +212,14 @@ export const OtpVerificationPage: React.FC = () => {
                 onChange={e => handleChange(index, e.target.value)}
                 onKeyDown={e => handleKeyDown(index, e)}
                 onPaste={handlePaste}
-                className="w-14 h-16 text-center text-2xl font-black bg-white/10 border-2 border-white/60 rounded-2xl text-white focus:bg-white focus:text-[#111827] focus:border-white focus:outline-none shadow-lg transition-all"
+                className="w-13 h-15 text-center text-2xl font-black bg-white/15 border-2 border-white/40 rounded-2xl text-white focus:bg-white focus:text-[#111827] focus:border-white focus:outline-none shadow-glass transition-all"
               />
             ))}
           </div>
 
           {/* Error Message */}
           {errorMessage && (
-            <div className="p-3 bg-red-600/90 text-white rounded-xl text-xs font-bold tracking-wide shadow-md animate-in fade-in">
+            <div className="p-3 bg-rose-600/90 backdrop-blur-sm text-white rounded-2xl text-xs font-bold tracking-wide shadow-glass border border-white/20 animate-in fade-in">
               {errorMessage}
             </div>
           )}
@@ -224,23 +228,23 @@ export const OtpVerificationPage: React.FC = () => {
           <button
             type="submit"
             disabled={!isComplete || isVerifying}
-            className="w-full py-4 px-6 bg-[#111827] hover:bg-black text-white font-bold text-base rounded-2xl shadow-xl transition-all flex items-center justify-center gap-3 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3.5 px-6 bg-slate-950/90 hover:bg-black text-white font-bold text-sm rounded-2xl shadow-glass transition-all flex items-center justify-center gap-2.5 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed border border-white/10"
           >
             {isVerifying ? (
               <div className="flex items-center gap-2">
-                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 <span>Verifying...</span>
               </div>
             ) : (
               <>
-                <ArrowRight className="w-5 h-5" />
+                <ArrowRight className="w-4 h-4" />
                 <span>Verify OTP</span>
               </>
             )}
           </button>
 
           {/* Resend OTP & Countdown */}
-          <div className="pt-2 flex flex-col items-center gap-2">
+          <div className="pt-1 flex flex-col items-center gap-2">
             {countdown > 0 ? (
               <div className="text-xs font-semibold text-white/80">
                 Resend OTP in <span className="font-mono font-bold text-white">00:{countdown.toString().padStart(2, '0')}</span>
@@ -260,7 +264,7 @@ export const OtpVerificationPage: React.FC = () => {
             <button
               type="button"
               onClick={() => navigate('/login')}
-              className="text-xs font-medium text-white/70 hover:text-white transition-colors pt-2"
+              className="text-xs font-medium text-white/75 hover:text-white transition-colors pt-1"
             >
               Entered wrong email? <span className="underline font-bold">Change Email</span>
             </button>
@@ -268,7 +272,7 @@ export const OtpVerificationPage: React.FC = () => {
         </form>
       </div>
 
-      <div className="text-xs text-white/70 font-medium">
+      <div className="text-[11px] text-white/75 font-medium tracking-wide uppercase relative z-10">
         Commodity Brokerage Management System
       </div>
     </div>

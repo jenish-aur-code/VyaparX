@@ -27,21 +27,24 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 dark:bg-black/70 backdrop-blur-xl animate-in fade-in"
+      style={{ backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}
+    >
       <div 
-        className="w-full max-w-sm bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-5 animate-in zoom-in-95 duration-150 border border-gray-100 dark:border-gray-700"
+        className="w-full max-w-sm bg-white/95 dark:bg-gray-900/95 backdrop-blur-3xl rounded-3xl shadow-glass-hover p-6 animate-in zoom-in-95 duration-150 border border-white/70 dark:border-white/15"
         onClick={e => e.stopPropagation()}
       >
-        <div className="flex items-center gap-3 mb-3">
+        <div className="flex items-center gap-3.5 mb-3">
           {isDestructive && (
-            <div className="w-10 h-10 rounded-full bg-red-100 dark:bg-red-950/40 flex items-center justify-center text-red-600 dark:text-red-400 shrink-0">
-              <AlertTriangle className="w-5 h-5" />
+            <div className="w-11 h-11 rounded-2xl bg-rose-500/15 border border-rose-500/25 flex items-center justify-center text-rose-600 dark:text-rose-400 shrink-0 shadow-inner">
+              <AlertTriangle className="w-5 h-5 stroke-[2.5]" />
             </div>
           )}
-          <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">{title}</h3>
+          <h3 className="text-lg font-black text-gray-900 dark:text-gray-100 tracking-tight break-words min-w-0 flex-1">{title}</h3>
         </div>
 
-        <p className="text-sm text-gray-500 dark:text-gray-400 mb-6 leading-relaxed">
+        <p className="text-xs text-gray-600 dark:text-gray-400 mb-6 leading-relaxed font-medium break-words">
           {message}
         </p>
 
@@ -49,7 +52,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 py-2.5 px-4 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-semibold rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm"
+            className="flex-1 py-3 px-4 border border-white/60 dark:border-white/10 bg-white/50 dark:bg-white/5 hover:bg-white/80 dark:hover:bg-white/10 text-gray-700 dark:text-gray-300 font-bold rounded-2xl transition-all text-xs shadow-xs"
           >
             {cancelText}
           </button>
@@ -57,8 +60,8 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
             type="button"
             onClick={onConfirm}
             style={!isDestructive ? { backgroundColor: palette.primary } : undefined}
-            className={`flex-1 py-2.5 px-4 font-semibold rounded-xl text-white transition-colors text-sm shadow-sm ${
-              isDestructive ? 'bg-red-600 hover:bg-red-700' : 'hover:opacity-90'
+            className={`flex-1 py-3 px-4 font-bold rounded-2xl text-white transition-all text-xs shadow-glass active:scale-[0.98] ${
+              isDestructive ? 'bg-gradient-to-r from-red-600 to-rose-600 hover:opacity-95 shadow-red-500/20' : 'hover:opacity-90'
             }`}
           >
             {confirmText}

@@ -40,30 +40,34 @@ export const EmailLoginPage: React.FC = () => {
 
   return (
     <div 
-      className="min-h-screen flex flex-col items-center justify-between p-6 md:p-12 text-white transition-colors"
+      className="min-h-screen flex flex-col items-center justify-between p-6 md:p-12 text-white transition-colors relative overflow-hidden"
       style={{ backgroundColor: palette.primary }}
     >
-      <div className="w-full flex justify-end">
+      {/* Ambient background refraction blobs */}
+      <div className="absolute -top-28 -left-28 w-80 h-80 rounded-full bg-white/20 blur-3xl pointer-events-none animate-pulse" />
+      <div className="absolute -bottom-32 -right-28 w-96 h-96 rounded-full bg-black/20 blur-3xl pointer-events-none" />
+
+      <div className="w-full flex justify-end relative z-10">
         {/* Top spacer */}
       </div>
 
-      <div className="w-full max-w-sm flex flex-col items-center text-center space-y-6">
+      <div className="w-full max-w-sm flex flex-col items-center text-center p-8 rounded-3xl bg-white/10 backdrop-blur-2xl border border-white/30 shadow-glass-hover space-y-6 relative z-10">
         {/* Briefcase App Icon */}
-        <div className="w-24 h-24 rounded-3xl bg-white/10 backdrop-blur-xs flex items-center justify-center border-2 border-white/20 shadow-2xl">
-          <Briefcase className="w-14 h-14 text-white stroke-[2]" />
+        <div className="w-20 h-20 rounded-3xl bg-white/15 backdrop-blur-md flex items-center justify-center border border-white/30 shadow-glass">
+          <Briefcase className="w-11 h-11 text-white stroke-[2]" />
         </div>
 
         {/* Title & Subtitle */}
         <div className="space-y-1.5">
-          <h1 className="text-4xl font-black tracking-tight text-white drop-shadow-sm">
+          <h1 className="text-3xl font-black tracking-tight text-white drop-shadow-sm">
             Welcome Back!
           </h1>
-          <p className="text-sm font-medium text-white/90">
+          <p className="text-xs font-medium text-white/90">
             Enter your email address to continue
           </p>
         </div>
 
-        <form onSubmit={handleSendOtp} className="w-full space-y-4 pt-2">
+        <form onSubmit={handleSendOtp} className="w-full space-y-4 pt-1">
           {/* Email Input */}
           <div className="space-y-1 text-left">
             <div className="relative">
@@ -80,11 +84,11 @@ export const EmailLoginPage: React.FC = () => {
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 onBlur={() => setTouched(true)}
-                className="w-full py-4 pl-12 pr-5 bg-transparent border-2 border-white/60 rounded-2xl text-white placeholder-white/70 font-semibold text-base focus:outline-none focus:border-white transition-all tracking-wide"
+                className="w-full py-3.5 pl-12 pr-4 bg-white/10 backdrop-blur-md border border-white/30 rounded-2xl text-white placeholder-white/70 font-semibold text-sm focus:outline-none focus:border-white focus:bg-white/20 transition-all tracking-wide shadow-inner"
               />
             </div>
             {touched && email.trim() && !isValidEmail && (
-              <p className="text-xs text-white/90 font-medium pl-2 pt-1">
+              <p className="text-xs text-rose-200 font-medium pl-2 pt-1">
                 Please enter a valid email address (e.g. name@example.com)
               </p>
             )}
@@ -94,16 +98,16 @@ export const EmailLoginPage: React.FC = () => {
           <button
             type="submit"
             disabled={!isValidEmail || isSubmitting}
-            className="w-full py-4 px-6 bg-[#111827] hover:bg-black text-white font-bold text-base rounded-2xl shadow-xl transition-all flex items-center justify-center gap-3 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3.5 px-6 bg-slate-950/90 hover:bg-black text-white font-bold text-sm rounded-2xl shadow-glass transition-all flex items-center justify-center gap-2.5 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed border border-white/10"
           >
             {isSubmitting ? (
               <div className="flex items-center gap-2">
-                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 <span>Sending OTP...</span>
               </div>
             ) : (
               <>
-                <ArrowRight className="w-5 h-5" />
+                <ArrowRight className="w-4 h-4" />
                 <span>Send OTP</span>
               </>
             )}
@@ -111,7 +115,7 @@ export const EmailLoginPage: React.FC = () => {
         </form>
       </div>
 
-      <div className="text-xs text-white/70 font-medium">
+      <div className="text-[11px] text-white/75 font-medium tracking-wide uppercase relative z-10">
         Commodity Brokerage Management System
       </div>
     </div>

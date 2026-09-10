@@ -29,7 +29,7 @@ export const SaudaDispatchPage: React.FC = () => {
   }, [currentCompany?.id, currentFinancialYear, searchQuery]);
 
   return (
-    <div className="min-h-screen bg-[#F5F7FA] dark:bg-[#0B1120] pb-24 md:pb-12 transition-colors">
+    <div className="min-h-screen pb-24 md:pb-12 transition-colors">
       <PageHeader
         title="Vyapar Dispatch"
         subtitle="Manage dispatch tracking, vehicle numbers, and delivery status"
@@ -45,7 +45,7 @@ export const SaudaDispatchPage: React.FC = () => {
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             placeholder="Search by #ID, party or item..."
-            className="w-full pl-12 pr-4 py-3.5 bg-white dark:bg-gray-800 border border-gray-200/90 dark:border-gray-700 rounded-2xl text-sm font-medium text-gray-900 dark:text-gray-100 focus:outline-none focus:border-[var(--primary)] transition-all placeholder-gray-400 dark:placeholder-gray-500 card-shadow"
+            className="input-vyapar pl-12 pr-4 py-3.5 text-sm font-medium"
           />
         </div>
 
@@ -59,45 +59,45 @@ export const SaudaDispatchPage: React.FC = () => {
             return (
               <div
                 key={order.id}
-                className="bg-white dark:bg-gray-800 rounded-2xl p-4 card-shadow border border-gray-100 dark:border-gray-700 flex flex-col md:flex-row md:items-center justify-between gap-4"
+                className="glass-card rounded-3xl p-4 sm:p-5 border border-white/60 dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 transition-all hover:shadow-glass-hover min-w-0 overflow-hidden"
               >
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
+                <div className="space-y-1.5 min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-2 min-w-0">
                     <span 
-                      className="text-xs font-black px-2.5 py-0.5 rounded-lg"
+                      className="text-xs font-black px-2.5 py-0.5 rounded-xl backdrop-blur-xs shrink-0"
                       style={{ backgroundColor: palette.light, color: palette.text }}
                     >
                       #{order.id}
                     </span>
-                    <span className="font-extrabold text-base text-gray-900 dark:text-gray-100">{order.itemName}</span>
-                    <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">({order.itemQuality})</span>
+                    <span className="font-extrabold text-sm sm:text-base text-gray-900 dark:text-gray-100 truncate max-w-[180px] sm:max-w-xs" title={order.itemName}>{order.itemName}</span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400 font-medium truncate max-w-[120px]">({order.itemQuality})</span>
                   </div>
 
-                  <div className="text-xs text-gray-600 dark:text-gray-300">
+                  <div className="text-xs text-gray-600 dark:text-gray-300 break-words">
                     <strong>Seller:</strong> {order.sellerName} ➔ <strong>Buyer:</strong> {order.buyerName}
                   </div>
 
-                  <div className="flex items-center gap-3 text-xs pt-1">
-                    <span className="text-gray-500 dark:text-gray-400">Order: <strong>{order.quantity} {order.unit}</strong></span>
-                    <span className="text-emerald-700 dark:text-emerald-400 font-bold">Dispatched: {dispatched}</span>
-                    <span className="text-orange-700 dark:text-orange-400 font-bold">Remaining: {remaining}</span>
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-[11px] sm:text-xs pt-1">
+                    <span className="text-gray-500 dark:text-gray-400 shrink-0">Order: <strong>{order.quantity} {order.unit}</strong></span>
+                    <span className="text-emerald-700 dark:text-emerald-400 font-bold shrink-0">Dispatched: {dispatched}</span>
+                    <span className="text-orange-700 dark:text-orange-400 font-bold shrink-0">Remaining: {remaining}</span>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 self-end md:self-center">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3 shrink-0 pt-2 sm:pt-0">
                   <span
-                    className={`px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5 ${
+                    className={`px-2.5 sm:px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1.5 backdrop-blur-md ${
                       isCompleted
-                        ? 'bg-emerald-100 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300'
+                        ? 'bg-emerald-500/15 border border-emerald-500/30 text-emerald-800 dark:text-emerald-300'
                         : dispatched > 0
-                        ? 'bg-blue-100 dark:bg-blue-950/40 text-blue-800 dark:text-blue-300'
-                        : 'bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300'
+                        ? 'bg-blue-500/15 border border-blue-500/30 text-blue-800 dark:text-blue-300'
+                        : 'bg-amber-500/15 border border-amber-500/30 text-amber-800 dark:text-amber-300'
                     }`}
                   >
                     {isCompleted ? (
-                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
                     ) : (
-                      <Clock className="w-3.5 h-3.5" />
+                      <Clock className="w-3.5 h-3.5 shrink-0" />
                     )}
                     <span>{order.dispatchStatus || 'Pending'}</span>
                   </span>
@@ -106,9 +106,9 @@ export const SaudaDispatchPage: React.FC = () => {
                     type="button"
                     onClick={() => setSelectedOrder(order)}
                     style={{ backgroundColor: palette.primary }}
-                    className="py-2 px-3.5 text-white font-bold text-xs rounded-xl shadow-xs flex items-center gap-1.5 transition-all hover:opacity-90"
+                    className="py-2 sm:py-2.5 px-3.5 sm:px-4 text-white font-bold text-xs rounded-2xl shadow-glass-card hover:shadow-glass-hover flex items-center gap-1.5 transition-all hover:opacity-90 active:scale-95"
                   >
-                    <Truck className="w-4 h-4" />
+                    <Truck className="w-4 h-4 shrink-0" />
                     <span>Dispatch</span>
                   </button>
                 </div>

@@ -80,16 +80,19 @@ export const DispatchModal: React.FC<DispatchModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 dark:bg-black/70 backdrop-blur-xl animate-in fade-in"
+      style={{ backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}
+    >
       <div 
-        className="w-full max-w-lg bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 border border-gray-100 dark:border-gray-700"
+        className="w-full max-w-lg bg-white/95 dark:bg-gray-900/95 backdrop-blur-3xl rounded-3xl shadow-glass-hover overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 border border-white/70 dark:border-white/15"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="p-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between bg-gray-50/60 dark:bg-gray-900/60">
+        <div className="p-4 border-b border-gray-200/50 dark:border-white/10 flex items-center justify-between bg-white/40 dark:bg-white/5 backdrop-blur-xs">
           <div className="flex items-center gap-2.5">
             <div 
-              className="w-9 h-9 rounded-xl text-white flex items-center justify-center shadow-xs"
+              className="w-9 h-9 rounded-xl text-white flex items-center justify-center shadow-glass"
               style={{ backgroundColor: palette.primary }}
             >
               <Truck className="w-5 h-5" />
@@ -101,7 +104,7 @@ export const DispatchModal: React.FC<DispatchModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 rounded-lg hover:bg-white dark:hover:bg-gray-700 transition-colors"
+            className="p-1.5 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 rounded-xl hover:bg-white/60 dark:hover:bg-white/10 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -110,7 +113,7 @@ export const DispatchModal: React.FC<DispatchModalProps> = ({
         {/* Content Body */}
         <div className="flex-1 overflow-y-auto p-5 space-y-4">
           {/* Order Summary Status */}
-          <div className="grid grid-cols-3 gap-2 p-3 bg-gray-50 dark:bg-gray-900 rounded-xl text-center text-xs border border-gray-200 dark:border-gray-700">
+          <div className="grid grid-cols-3 gap-2 p-3.5 glass-card-subtle rounded-2xl text-center text-xs">
             <div>
               <div className="text-gray-400 dark:text-gray-500 font-medium">Order Qty</div>
               <div className="font-bold text-gray-900 dark:text-gray-100 text-sm mt-0.5">{order.quantity} {order.unit}</div>
@@ -221,11 +224,11 @@ export const DispatchModal: React.FC<DispatchModalProps> = ({
         </div>
 
         {/* Footer actions */}
-        <div className="p-4 border-t border-gray-100 dark:border-gray-700 flex gap-3 bg-gray-50 dark:bg-gray-900">
+        <div className="p-4 border-t border-gray-200/50 dark:border-white/10 flex gap-3 bg-white/40 dark:bg-white/5 backdrop-blur-xs">
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 py-2.5 px-4 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-semibold rounded-xl hover:bg-white dark:hover:bg-gray-800 text-sm transition-colors"
+            className="flex-1 py-2.5 px-4 border border-gray-200/80 dark:border-white/10 text-gray-700 dark:text-gray-300 font-semibold rounded-2xl hover:bg-white/60 dark:hover:bg-white/10 text-sm transition-colors"
           >
             Cancel
           </button>
@@ -234,7 +237,7 @@ export const DispatchModal: React.FC<DispatchModalProps> = ({
             form="dispatch-form"
             disabled={isSubmitting}
             style={{ backgroundColor: palette.primary }}
-            className="flex-1 py-2.5 px-4 text-white font-bold rounded-xl text-sm shadow-sm transition-all disabled:opacity-50 hover:opacity-90"
+            className="flex-1 py-2.5 px-4 text-white font-bold rounded-2xl text-sm shadow-glass-card hover:shadow-glass-hover transition-all disabled:opacity-50 hover:opacity-90"
           >
             {isSubmitting ? 'Saving...' : 'Save Dispatch'}
           </button>

@@ -46,36 +46,36 @@ export const PinSecurityPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F7FA] pb-24 md:pb-12">
+    <div className="min-h-screen pb-24 md:pb-12 transition-colors">
       <PageHeader title="Security & PIN" />
 
       <div className="p-4 md:p-6 max-w-md mx-auto space-y-5">
-        <div className="bg-white rounded-3xl p-6 card-shadow space-y-5">
+        <div className="glass-card rounded-3xl p-6 space-y-5 shadow-glass-card">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-2xl bg-purple-500/15 text-purple-600 dark:text-purple-400 flex items-center justify-center shadow-glass backdrop-blur-xs">
               <Lock className="w-6 h-6" />
             </div>
             <div>
-              <h2 className="font-bold text-gray-900 text-base">App Passcode Lock</h2>
-              <p className="text-xs text-gray-500">Protect access to your trade records</p>
+              <h2 className="font-bold text-gray-900 dark:text-white text-base">App Passcode Lock</h2>
+              <p className="text-xs text-gray-500 dark:text-gray-400">Protect access to your trade records</p>
             </div>
           </div>
 
           <form onSubmit={handleSavePin} className="space-y-4 pt-2">
-            <div className="flex items-center justify-between p-3.5 bg-gray-50 rounded-2xl border border-gray-200">
-              <span className="text-xs font-bold text-gray-800">Enable PIN Lock</span>
+            <div className="flex items-center justify-between p-3.5 glass-card-subtle rounded-2xl">
+              <span className="text-xs font-bold text-gray-800 dark:text-gray-200">Enable PIN Lock</span>
               <input
                 type="checkbox"
                 checked={pinEnabled}
                 onChange={e => setPinEnabled(e.target.checked)}
-                className="w-5 h-5 text-purple-600 rounded focus:ring-purple-500"
+                className="w-5 h-5 text-purple-600 rounded focus:ring-purple-500 cursor-pointer"
               />
             </div>
 
             {pinEnabled && (
               <div className="space-y-3 animate-in fade-in">
                 <div>
-                  <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                  <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase mb-1">
                     New PIN (4 digits)
                   </label>
                   <input
@@ -90,7 +90,7 @@ export const PinSecurityPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-gray-700 uppercase mb-1">
+                  <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase mb-1">
                     Confirm PIN
                   </label>
                   <input
@@ -109,7 +109,7 @@ export const PinSecurityPage: React.FC = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-3.5 px-4 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl text-sm shadow-sm transition-all"
+              className="w-full py-3.5 px-4 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-2xl text-sm shadow-glass-card hover:shadow-glass-hover transition-all"
             >
               {isSubmitting ? 'Saving...' : 'Save PIN Settings'}
             </button>
@@ -119,7 +119,7 @@ export const PinSecurityPage: React.FC = () => {
             <button
               type="button"
               onClick={lockApp}
-              className="w-full py-2.5 px-4 border border-purple-200 text-purple-700 font-bold rounded-xl text-xs hover:bg-purple-50 transition-colors"
+              className="w-full py-2.5 px-4 border border-purple-500/30 text-purple-700 dark:text-purple-300 font-bold rounded-2xl text-xs hover:bg-purple-500/10 transition-colors"
             >
               Lock App Now
             </button>
