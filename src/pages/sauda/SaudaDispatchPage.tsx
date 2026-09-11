@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Truck, Search, Plus, CheckCircle2, Clock, AlertCircle } from 'lucide-react';
+import { Truck, Search, Plus, CheckCircle2, Clock, AlertCircle, Info } from 'lucide-react';
 import { PageHeader } from '../../components/layout/PageHeader';
 import { DispatchModal } from '../../components/operations/DispatchModal';
 import { saudaService } from '../../services/saudaService';
@@ -80,7 +80,7 @@ export const SaudaDispatchPage: React.FC = () => {
                   <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-[11px] sm:text-xs pt-1">
                     <span className="text-gray-500 dark:text-gray-400 shrink-0">Order: <strong>{order.quantity} {order.unit}</strong></span>
                     <span className="text-emerald-700 dark:text-emerald-400 font-bold shrink-0">Dispatched: {dispatched}</span>
-                    <span className="text-orange-700 dark:text-orange-400 font-bold shrink-0">Remaining: {remaining}</span>
+                    <span className="text-amber-700 dark:text-amber-400 font-bold shrink-0">Remaining: {remaining}</span>
                   </div>
                 </div>
 
@@ -115,6 +115,25 @@ export const SaudaDispatchPage: React.FC = () => {
               </div>
             );
           })}
+
+          {orders.length > 0 && (
+            <div className="text-center py-6 text-gray-400 dark:text-gray-500 text-xs font-medium flex items-center justify-center gap-1.5">
+              <Info className="w-4 h-4 text-gray-400 dark:text-gray-500 shrink-0" />
+              <span>No more orders</span>
+            </div>
+          )}
+
+          {orders.length === 0 && (
+            <div className="text-center py-12 px-4 rounded-3xl bg-white/40 dark:bg-gray-850/40 backdrop-blur-xl border border-white/50 dark:border-white/10 shadow-glass">
+              <div className="w-12 h-12 rounded-2xl bg-amber-500/10 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 mx-auto flex items-center justify-center mb-3">
+                <Truck className="w-6 h-6 stroke-[2]" />
+              </div>
+              <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200">No dispatch orders found</h3>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                {searchQuery ? 'No orders match your search criteria' : 'All orders are dispatched or no orders exist.'}
+              </p>
+            </div>
+          )}
         </div>
       </div>
 

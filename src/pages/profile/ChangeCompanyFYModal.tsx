@@ -62,7 +62,7 @@ export const ChangeCompanyFYModal: React.FC<Props> = ({ isOpen, onClose }) => {
 
         {/* Company Selector */}
         <div className="space-y-2">
-          <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase flex items-center gap-1.5">
+          <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide flex items-center gap-1.5">
             <Building2 className="w-3.5 h-3.5" style={{ color: palette.primary }} />
             <span>Select Active Company</span>
           </label>
@@ -95,7 +95,7 @@ export const ChangeCompanyFYModal: React.FC<Props> = ({ isOpen, onClose }) => {
 
         {/* Financial Year Selector */}
         <div className="space-y-2">
-          <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase flex items-center gap-1.5">
+          <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide flex items-center gap-1.5">
             <Calendar className="w-3.5 h-3.5" style={{ color: palette.primary }} />
             <span>Select Financial Year</span>
           </label>
@@ -125,9 +125,10 @@ export const ChangeCompanyFYModal: React.FC<Props> = ({ isOpen, onClose }) => {
           type="button"
           onClick={handleApply}
           style={{ backgroundColor: palette.primary }}
-          className="w-full py-3 px-4 font-bold rounded-2xl text-white shadow-glass hover:opacity-90 active:scale-[0.98] transition-all text-xs"
+          className="w-full py-3 px-4 font-bold rounded-2xl text-white shadow-glass hover:opacity-90 active:scale-[0.98] transition-all text-xs flex items-center justify-center gap-2"
         >
-          Switch Context
+          <Check className="w-4 h-4 stroke-[2.5]" />
+          <span>Switch Context</span>
         </button>
       </div>
     </div>

@@ -10,54 +10,28 @@ export interface ThemeColorConfig {
   light: string;
   text: string;
   accent: string;
+  navy: string;
+  cyan: string;
 }
 
+export const APP_THEME: ThemeColorConfig = {
+  name: 'blue',
+  label: 'Vyapar Blue',
+  primary: '#1E74BD',
+  hover: '#1662A0',
+  light: '#EDF6FD',
+  text: '#165A94',
+  accent: 'from-[#272264] via-[#1E74BD] to-[#00ADEF]',
+  navy: '#272264',
+  cyan: '#00ADEF',
+};
+
 export const THEME_PALETTES: Record<ThemeColor, ThemeColorConfig> = {
-  orange: {
-    name: 'orange',
-    label: 'Vyapar Orange',
-    primary: '#FF9800',
-    hover: '#F57C00',
-    light: '#FFF3E0',
-    text: '#E65100',
-    accent: 'from-orange-500 to-amber-500',
-  },
-  green: {
-    name: 'green',
-    label: 'Emerald Green',
-    primary: '#10B981',
-    hover: '#059669',
-    light: '#ECFDF5',
-    text: '#065F46',
-    accent: 'from-emerald-500 to-teal-500',
-  },
-  blue: {
-    name: 'blue',
-    label: 'Royal Blue',
-    primary: '#2563EB',
-    hover: '#1D4ED8',
-    light: '#EFF6FF',
-    text: '#1E40AF',
-    accent: 'from-blue-600 to-cyan-500',
-  },
-  purple: {
-    name: 'purple',
-    label: 'Imperial Purple',
-    primary: '#7C3AED',
-    hover: '#6D28D9',
-    light: '#F5F3FF',
-    text: '#5B21B6',
-    accent: 'from-purple-600 to-indigo-500',
-  },
-  red: {
-    name: 'red',
-    label: 'Crimson Red',
-    primary: '#DC2626',
-    hover: '#B91C1C',
-    light: '#FEF2F2',
-    text: '#991B1B',
-    accent: 'from-red-600 to-rose-500',
-  },
+  orange: APP_THEME,
+  green: APP_THEME,
+  blue: APP_THEME,
+  purple: APP_THEME,
+  red: APP_THEME,
 };
 
 interface ThemeContextType {
@@ -78,10 +52,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   });
 
-  const [themeColor, setThemeColorState] = useState<ThemeColor>(() => {
-    const saved = localStorage.getItem('vyaparx_theme_color') as ThemeColor;
-    return saved && THEME_PALETTES[saved] ? saved : 'orange';
-  });
+  const [themeColor] = useState<ThemeColor>('blue');
 
   // Apply dark mode class to html element
   useEffect(() => {
@@ -97,19 +68,18 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   // Apply CSS color variables
   useEffect(() => {
     const root = document.documentElement;
-    const p = THEME_PALETTES[themeColor];
-    root.style.setProperty('--primary', p.primary);
-    root.style.setProperty('--primary-hover', p.hover);
-    root.style.setProperty('--primary-light', p.light);
-    root.style.setProperty('--primary-text', p.text);
-    localStorage.setItem('vyaparx_theme_color', themeColor);
-  }, [themeColor]);
+    root.style.setProperty('--primary', APP_THEME.primary);
+    root.style.setProperty('--primary-hover', APP_THEME.hover);
+    root.style.setProperty('--primary-light', APP_THEME.light);
+    root.style.setProperty('--primary-text', APP_THEME.text);
+    root.style.setProperty('--primary-navy', APP_THEME.navy);
+    root.style.setProperty('--primary-cyan', APP_THEME.cyan);
+    localStorage.setItem('vyaparx_theme_color', 'blue');
+  }, []);
 
   const toggleDarkMode = () => setIsDarkModeState(prev => !prev);
   const setDarkMode = (val: boolean) => setIsDarkModeState(val);
-  const setThemeColor = (color: ThemeColor) => setThemeColorState(color);
-
-  const palette = THEME_PALETTES[themeColor] || THEME_PALETTES.orange;
+  const setThemeColor = () => { /* Theme is locked to brand blue palette */ };
 
   return (
     <ThemeContext.Provider
@@ -119,7 +89,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         setDarkMode,
         themeColor,
         setThemeColor,
-        palette,
+        palette: APP_THEME,
       }}
     >
       {children}

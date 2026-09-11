@@ -51,7 +51,7 @@ export const InstallAppModal: React.FC = () => {
         aria-modal="true"
       >
         {/* Header */}
-        <div className="relative p-5 border-b border-white/30 dark:border-white/10 bg-gradient-to-r from-orange-50/50 dark:from-white/5 to-transparent">
+        <div className="relative p-5 border-b border-white/30 dark:border-white/10 bg-gradient-to-r from-blue-50/50 dark:from-white/5 to-transparent">
           <button
             type="button"
             onClick={() => setIsInstallModalOpen(false)}
@@ -62,11 +62,8 @@ export const InstallAppModal: React.FC = () => {
           </button>
 
           <div className="flex items-center gap-3">
-            <div
-              className="w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-md shrink-0"
-              style={{ backgroundColor: palette.primary }}
-            >
-              <Download className="w-6 h-6 stroke-[2.5]" />
+            <div className="w-12 h-12 rounded-2xl bg-white/80 dark:bg-gray-800/80 p-1 flex items-center justify-center shadow-md shrink-0 border border-white/60 dark:border-white/10">
+              <img src="/logo.png" alt="VyaparX" className="w-full h-full object-contain drop-shadow-sm" />
             </div>
             <div>
               <div className="flex items-center gap-2">
@@ -100,12 +97,12 @@ export const InstallAppModal: React.FC = () => {
 
           {/* Direct Install Button (if browser triggered beforeinstallprompt) */}
           {canPromptDirectly && !isInstalled && (
-            <div className="p-4 rounded-xl bg-orange-50 dark:bg-orange-950/20 border border-orange-200 dark:border-orange-800/50 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div className="p-4 rounded-xl bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800/50 flex flex-col sm:flex-row items-center justify-between gap-3">
               <div>
-                <p className="text-xs font-bold text-orange-900 dark:text-orange-200">
+                <p className="text-xs font-bold text-blue-900 dark:text-blue-200">
                   {t('pwa.readyToInstall', 'Quick 1-Click Install Available')}
                 </p>
-                <p className="text-[11px] text-orange-700 dark:text-orange-400">
+                <p className="text-[11px] text-blue-700 dark:text-blue-400">
                   {t('pwa.readyToInstallDesc', 'Click below to install immediately onto your device')}
                 </p>
               </div>
@@ -173,21 +170,21 @@ export const InstallAppModal: React.FC = () => {
             {selectedPlatform === 'desktop' && (
               <div className="space-y-2.5 text-xs text-gray-700 dark:text-gray-300">
                 <div className="flex items-start gap-2.5">
-                  <div className="w-5 h-5 rounded-full bg-orange-100 dark:bg-orange-950/60 text-orange-600 dark:text-orange-400 flex items-center justify-center font-bold text-[11px] shrink-0 mt-0.5">
+                  <div className="w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-[11px] shrink-0 mt-0.5">
                     1
                   </div>
                   <div>
                     <span className="font-bold">Chrome / Edge Address Bar:</span>{' '}
                     Look at the right side of the browser URL bar for the{' '}
                     <span className="inline-flex items-center font-mono font-bold bg-white dark:bg-gray-700 px-1.5 py-0.5 rounded border border-gray-200 dark:border-gray-600">
-                      Install <Download className="w-3 h-3 ml-1 inline text-orange-500" />
+                      Install <Download className="w-3 h-3 ml-1 inline text-blue-500" />
                     </span>{' '}
                     icon.
                   </div>
                 </div>
 
                 <div className="flex items-start gap-2.5">
-                  <div className="w-5 h-5 rounded-full bg-orange-100 dark:bg-orange-950/60 text-orange-600 dark:text-orange-400 flex items-center justify-center font-bold text-[11px] shrink-0 mt-0.5">
+                  <div className="w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-[11px] shrink-0 mt-0.5">
                     2
                   </div>
                   <div>
@@ -200,7 +197,7 @@ export const InstallAppModal: React.FC = () => {
                 </div>
 
                 <div className="flex items-start gap-2.5">
-                  <div className="w-5 h-5 rounded-full bg-orange-100 dark:bg-orange-950/60 text-orange-600 dark:text-orange-400 flex items-center justify-center font-bold text-[11px] shrink-0 mt-0.5">
+                  <div className="w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-[11px] shrink-0 mt-0.5">
                     3
                   </div>
                   <div>
@@ -214,7 +211,7 @@ export const InstallAppModal: React.FC = () => {
             {selectedPlatform === 'android' && (
               <div className="space-y-2.5 text-xs text-gray-700 dark:text-gray-300">
                 <div className="flex items-start gap-2.5">
-                  <div className="w-5 h-5 rounded-full bg-orange-100 dark:bg-orange-950/60 text-orange-600 dark:text-orange-400 flex items-center justify-center font-bold text-[11px] shrink-0 mt-0.5">
+                  <div className="w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-[11px] shrink-0 mt-0.5">
                     1
                   </div>
                   <div>
@@ -227,7 +224,7 @@ export const InstallAppModal: React.FC = () => {
                 </div>
 
                 <div className="flex items-start gap-2.5">
-                  <div className="w-5 h-5 rounded-full bg-orange-100 dark:bg-orange-950/60 text-orange-600 dark:text-orange-400 flex items-center justify-center font-bold text-[11px] shrink-0 mt-0.5">
+                  <div className="w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-[11px] shrink-0 mt-0.5">
                     2
                   </div>
                   <div>
@@ -238,7 +235,7 @@ export const InstallAppModal: React.FC = () => {
                 </div>
 
                 <div className="flex items-start gap-2.5">
-                  <div className="w-5 h-5 rounded-full bg-orange-100 dark:bg-orange-950/60 text-orange-600 dark:text-orange-400 flex items-center justify-center font-bold text-[11px] shrink-0 mt-0.5">
+                  <div className="w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-[11px] shrink-0 mt-0.5">
                     3
                   </div>
                   <div>
@@ -252,7 +249,7 @@ export const InstallAppModal: React.FC = () => {
             {selectedPlatform === 'ios' && (
               <div className="space-y-2.5 text-xs text-gray-700 dark:text-gray-300">
                 <div className="flex items-start gap-2.5">
-                  <div className="w-5 h-5 rounded-full bg-orange-100 dark:bg-orange-950/60 text-orange-600 dark:text-orange-400 flex items-center justify-center font-bold text-[11px] shrink-0 mt-0.5">
+                  <div className="w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-[11px] shrink-0 mt-0.5">
                     1
                   </div>
                   <div>
@@ -265,7 +262,7 @@ export const InstallAppModal: React.FC = () => {
                 </div>
 
                 <div className="flex items-start gap-2.5">
-                  <div className="w-5 h-5 rounded-full bg-orange-100 dark:bg-orange-950/60 text-orange-600 dark:text-orange-400 flex items-center justify-center font-bold text-[11px] shrink-0 mt-0.5">
+                  <div className="w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-[11px] shrink-0 mt-0.5">
                     2
                   </div>
                   <div>
@@ -277,7 +274,7 @@ export const InstallAppModal: React.FC = () => {
                 </div>
 
                 <div className="flex items-start gap-2.5">
-                  <div className="w-5 h-5 rounded-full bg-orange-100 dark:bg-orange-950/60 text-orange-600 dark:text-orange-400 flex items-center justify-center font-bold text-[11px] shrink-0 mt-0.5">
+                  <div className="w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-[11px] shrink-0 mt-0.5">
                     3
                   </div>
                   <div>

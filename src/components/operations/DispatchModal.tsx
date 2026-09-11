@@ -131,7 +131,9 @@ export const DispatchModal: React.FC<DispatchModalProps> = ({
           <form id="dispatch-form" onSubmit={handleSubmit} className="space-y-3">
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Dispatch Date *</label>
+                <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
+                  DISPATCH DATE <span className="text-red-500 font-bold">*</span>
+                </label>
                 <input
                   type="date"
                   required
@@ -141,7 +143,9 @@ export const DispatchModal: React.FC<DispatchModalProps> = ({
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Quantity ({order.unit}) *</label>
+                <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
+                  QUANTITY ({order.unit}) <span className="text-red-500 font-bold">*</span>
+                </label>
                 <input
                   type="number"
                   step="any"
@@ -155,7 +159,9 @@ export const DispatchModal: React.FC<DispatchModalProps> = ({
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Vehicle Number *</label>
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
+                VEHICLE NUMBER <span className="text-red-500 font-bold">*</span>
+              </label>
               <input
                 type="text"
                 required
@@ -168,7 +174,9 @@ export const DispatchModal: React.FC<DispatchModalProps> = ({
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Transporter Name</label>
+                <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
+                  TRANSPORTER NAME
+                </label>
                 <input
                   type="text"
                   placeholder="Ex. Maruti Roadways"
@@ -178,7 +186,9 @@ export const DispatchModal: React.FC<DispatchModalProps> = ({
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Driver Contact</label>
+                <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
+                  DRIVER CONTACT
+                </label>
                 <input
                   type="text"
                   placeholder="Phone number"
@@ -190,7 +200,9 @@ export const DispatchModal: React.FC<DispatchModalProps> = ({
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Remarks</label>
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
+                REMARKS
+              </label>
               <input
                 type="text"
                 placeholder="Optional notes or lr no."
@@ -228,18 +240,20 @@ export const DispatchModal: React.FC<DispatchModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 py-2.5 px-4 border border-gray-200/80 dark:border-white/10 text-gray-700 dark:text-gray-300 font-semibold rounded-2xl hover:bg-white/60 dark:hover:bg-white/10 text-sm transition-colors"
+            className="flex-1 py-2.5 px-4 border border-gray-200/80 dark:border-white/10 text-gray-700 dark:text-gray-300 font-semibold rounded-2xl hover:bg-white/60 dark:hover:bg-white/10 text-sm transition-colors flex items-center justify-center gap-1.5"
           >
-            Cancel
+            <X className="w-4 h-4" />
+            <span>Cancel</span>
           </button>
           <button
             type="submit"
             form="dispatch-form"
             disabled={isSubmitting}
             style={{ backgroundColor: palette.primary }}
-            className="flex-1 py-2.5 px-4 text-white font-bold rounded-2xl text-sm shadow-glass-card hover:shadow-glass-hover transition-all disabled:opacity-50 hover:opacity-90"
+            className="flex-1 py-2.5 px-4 text-white font-bold rounded-2xl text-sm shadow-glass-card hover:shadow-glass-hover transition-all disabled:opacity-50 hover:opacity-90 flex items-center justify-center gap-1.5"
           >
-            {isSubmitting ? 'Saving...' : 'Save Dispatch'}
+            <Truck className="w-4 h-4" />
+            <span>{isSubmitting ? 'Saving...' : 'Save Dispatch'}</span>
           </button>
         </div>
       </div>

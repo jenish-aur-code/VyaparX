@@ -107,9 +107,9 @@ export const HomePage: React.FC = () => {
       >
         {/* Radiant Glass Gradient Background */}
         <div
-          className="absolute inset-0 bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 opacity-95 transition-opacity"
+          className="absolute inset-0 bg-gradient-to-r from-[#272264] via-[#1E74BD] to-[#00ADEF] opacity-95 transition-opacity"
           style={{
-            background: `linear-gradient(135deg, ${palette.primary} 0%, #F59E0B 50%, #EA580C 100%)`,
+            background: `linear-gradient(135deg, #272264 0%, ${palette.primary} 50%, #00ADEF 100%)`,
           }}
         />
         {/* Frosted glass top specular highlight */}
@@ -171,10 +171,10 @@ export const HomePage: React.FC = () => {
         <button
           type="button"
           onClick={() => navigate('/vyapar/create')}
-          className="relative group overflow-hidden rounded-3xl p-3.5 sm:p-5 glass-card-interactive flex flex-col items-center justify-center text-center gap-2 sm:gap-3 min-h-[115px] sm:min-h-[135px] border-orange-300/60 dark:border-orange-500/30"
+          className="relative group overflow-hidden rounded-3xl p-3.5 sm:p-5 glass-card-interactive flex flex-col items-center justify-center text-center gap-2 sm:gap-3 min-h-[115px] sm:min-h-[135px] border-blue-300/60 dark:border-blue-500/30"
         >
           <div
-            className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl text-white flex items-center justify-center shadow-md shadow-orange-500/25 group-hover:scale-110 transition-transform duration-300 shrink-0"
+            className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl text-white flex items-center justify-center shadow-md shadow-blue-500/25 group-hover:scale-110 transition-transform duration-300 shrink-0"
             style={{ backgroundColor: palette.primary }}
           >
             <PlusCircle className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.3]" />

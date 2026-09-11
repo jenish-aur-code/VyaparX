@@ -27,25 +27,28 @@ import {
   Globe,
   X,
   Mail,
+  Phone,
 } from 'lucide-react';
 import { PageHeader } from '../../components/layout/PageHeader';
 import { useApp } from '../../context/AppContext';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
-import { useTheme, THEME_PALETTES, type ThemeColor } from '../../context/ThemeContext';
+import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { ChangeCompanyFYModal } from './ChangeCompanyFYModal';
+import { ConfirmDialog } from '../../components/common/ConfirmDialog';
 
 export const ProfilePage: React.FC = () => {
   const navigate = useNavigate();
   const toast = useToast();
   const { userProfile, lockApp, currentCompany } = useApp();
   const { currentUser, logout } = useAuth();
-  const { isDarkMode, setDarkMode, themeColor, setThemeColor, palette } = useTheme();
+  const { isDarkMode, setDarkMode, palette } = useTheme();
   const { language, setLanguage, languages, t } = useLanguage();
 
   const [showSwitchModal, setShowSwitchModal] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const referralCode = userProfile?.referralCode || 'LHPXC3';
@@ -181,7 +184,7 @@ export const ProfilePage: React.FC = () => {
                   }}
                   className={`py-3 px-2 rounded-2xl border flex flex-col items-center justify-center text-center transition-all ${
                     isSelected
-                      ? 'border-gray-900 dark:border-white ring-2 ring-orange-200 dark:ring-gray-600 bg-orange-500/10 dark:bg-white/10 shadow-glass backdrop-blur-md'
+                      ? 'border-gray-900 dark:border-white ring-2 ring-blue-200 dark:ring-gray-600 bg-blue-500/10 dark:bg-white/10 shadow-glass backdrop-blur-md'
                       : 'border-white/40 dark:border-white/10 bg-white/40 dark:bg-white/5 hover:bg-white/60 dark:hover:bg-white/10 text-gray-700 dark:text-gray-300'
                   }`}
                 >
@@ -218,7 +221,7 @@ export const ProfilePage: React.FC = () => {
                 onClick={() => setDarkMode(false)}
                 className={`py-3 px-4 rounded-2xl border flex items-center justify-center gap-2.5 text-xs font-bold transition-all ${
                   !isDarkMode
-                    ? 'border-gray-900 dark:border-white bg-orange-500/15 dark:bg-white/10 text-gray-900 dark:text-white shadow-glass backdrop-blur-md'
+                    ? 'border-gray-900 dark:border-white bg-blue-500/15 dark:bg-white/10 text-gray-900 dark:text-white shadow-glass backdrop-blur-md'
                     : 'border-white/40 dark:border-white/10 bg-white/40 dark:bg-white/5 text-gray-600 dark:text-gray-400 hover:bg-white/60 dark:hover:bg-white/10'
                 }`}
               >
@@ -237,41 +240,6 @@ export const ProfilePage: React.FC = () => {
                 <Moon className="w-4 h-4 text-indigo-400" />
                 <span>{t('common.darkMode', 'Dark Mode')}</span>
               </button>
-            </div>
-          </div>
-
-          {/* Accent Color Palettes */}
-          <div>
-            <label className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
-              {t('profile.brandAccent', 'Brand Accent Color')}
-            </label>
-            <div className="grid grid-cols-5 gap-2">
-              {(Object.keys(THEME_PALETTES) as ThemeColor[]).map(c => {
-                const item = THEME_PALETTES[c];
-                const isSelected = themeColor === c;
-                return (
-                  <button
-                    key={c}
-                    type="button"
-                    onClick={() => setThemeColor(c)}
-                    className={`p-2 rounded-2xl border flex flex-col items-center gap-1.5 transition-all ${
-                      isSelected
-                        ? 'border-gray-900 dark:border-white ring-2 ring-orange-200 dark:ring-gray-600 bg-orange-500/10 dark:bg-white/10 shadow-glass'
-                        : 'border-white/40 dark:border-white/10 bg-white/40 dark:bg-white/5 hover:bg-white/60 dark:hover:bg-white/10'
-                    }`}
-                  >
-                    <span
-                      className="w-6 h-6 rounded-full shadow-glass flex items-center justify-center text-white"
-                      style={{ backgroundColor: item.primary }}
-                    >
-                      {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
-                    </span>
-                    <span className="text-[10px] font-bold text-gray-700 dark:text-gray-300 truncate max-w-full">
-                      {item.label.split(' ')[0]}
-                    </span>
-                  </button>
-                );
-              })}
             </div>
           </div>
         </div>
@@ -437,7 +405,7 @@ export const ProfilePage: React.FC = () => {
         {/* Logout Red Button */}
         <button
           type="button"
-          onClick={handleLogout}
+          onClick={() => setShowLogoutConfirm(true)}
           className="w-full py-4 px-4 bg-red-600/90 hover:bg-red-600 text-white font-extrabold text-sm uppercase tracking-wider rounded-2xl shadow-glass-card hover:shadow-glass-hover backdrop-blur-md transition-all flex items-center justify-center gap-2 active:scale-[0.98]"
         >
           <LogOut className="w-5 h-5" />
@@ -484,7 +452,7 @@ export const ProfilePage: React.FC = () => {
               {/* Phone / Mobile */}
               <div className="p-3.5 glass-card-subtle rounded-2xl flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-xl bg-orange-500/15 text-orange-600 dark:text-orange-400 flex items-center justify-center shrink-0">
+                  <div className="w-8 h-8 rounded-xl bg-blue-500/15 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
                     <Smartphone className="w-4 h-4" />
                   </div>
                   <div>
@@ -498,9 +466,10 @@ export const ProfilePage: React.FC = () => {
                   <a
                     href={`tel:${currentCompany?.contactNumber || userProfile?.phone}`}
                     style={{ backgroundColor: palette.primary }}
-                    className="px-3.5 py-1.5 text-white text-xs font-bold rounded-xl shadow-glass transition-opacity hover:opacity-90"
+                    className="px-3.5 py-1.5 text-white text-xs font-bold rounded-xl shadow-glass transition-opacity hover:opacity-90 flex items-center gap-1.5"
                   >
-                    Call
+                    <Phone className="w-3.5 h-3.5" />
+                    <span>Call</span>
                   </a>
                 )}
               </div>
@@ -521,9 +490,10 @@ export const ProfilePage: React.FC = () => {
                 {(currentCompany?.email || currentCompany?.userEmail || currentUser?.email) && (
                   <a
                     href={`mailto:${currentCompany?.email || currentCompany?.userEmail || currentUser?.email}`}
-                    className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-glass transition-colors shrink-0"
+                    className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-glass transition-colors shrink-0 flex items-center gap-1.5"
                   >
-                    Email
+                    <Mail className="w-3.5 h-3.5" />
+                    <span>Email</span>
                   </a>
                 )}
               </div>
@@ -543,13 +513,29 @@ export const ProfilePage: React.FC = () => {
             <button
               type="button"
               onClick={() => setShowContactModal(false)}
-              className="w-full py-3 bg-white/60 dark:bg-white/10 text-gray-700 dark:text-gray-200 font-bold text-xs rounded-2xl hover:bg-white/80 dark:hover:bg-white/20 transition-colors"
+              className="w-full py-3 bg-white/60 dark:bg-white/10 text-gray-700 dark:text-gray-200 font-bold text-xs rounded-2xl hover:bg-white/80 dark:hover:bg-white/20 transition-colors flex items-center justify-center gap-1.5"
             >
-              Close
+              <X className="w-4 h-4" />
+              <span>Close</span>
             </button>
           </div>
         </div>
       )}
+
+      {/* Logout Confirmation Dialog */}
+      <ConfirmDialog
+        isOpen={showLogoutConfirm}
+        title={t('profile.logoutConfirmTitle', 'Confirm Logout')}
+        message={t('profile.logoutConfirmMsg', 'Are you sure you want to log out of your account?')}
+        confirmText={t('profile.logout', 'Logout')}
+        cancelText={t('common.cancel', 'Cancel')}
+        isDestructive={true}
+        onConfirm={() => {
+          setShowLogoutConfirm(false);
+          handleLogout();
+        }}
+        onCancel={() => setShowLogoutConfirm(false)}
+      />
     </div>
   );
 };

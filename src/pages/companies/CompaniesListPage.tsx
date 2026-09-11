@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Building2, Phone, Plus, CheckCircle2 } from 'lucide-react';
+import { Search, Building2, Phone, Plus, CheckCircle2, Info } from 'lucide-react';
 import { companyService } from '../../services/companyService';
 import type { Company } from '../../types';
 import { PageHeader } from '../../components/layout/PageHeader';
@@ -100,6 +100,25 @@ export const CompaniesListPage: React.FC = () => {
               </div>
             </div>
           ))}
+
+          {!isLoading && companies.length > 0 && (
+            <div className="text-center py-6 text-gray-400 dark:text-gray-500 text-xs font-medium flex items-center justify-center gap-1.5">
+              <Info className="w-4 h-4 text-gray-400 dark:text-gray-500 shrink-0" />
+              <span>No more companies</span>
+            </div>
+          )}
+
+          {!isLoading && companies.length === 0 && (
+            <div className="text-center py-12 px-4 rounded-3xl bg-white/40 dark:bg-gray-850/40 backdrop-blur-xl border border-white/50 dark:border-white/10 shadow-glass">
+              <div className="w-12 h-12 rounded-2xl bg-teal-500/10 dark:bg-teal-500/20 text-teal-600 dark:text-teal-400 mx-auto flex items-center justify-center mb-3">
+                <Building2 className="w-6 h-6 stroke-[2]" />
+              </div>
+              <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200">No companies found</h3>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                {searchQuery ? 'No companies match your search criteria' : 'Click the + button below to register your first company.'}
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
@@ -108,7 +127,7 @@ export const CompaniesListPage: React.FC = () => {
         type="button"
         onClick={() => navigate('/companies/new')}
         style={{ backgroundColor: palette.primary }}
-        className="fixed bottom-20 md:bottom-8 right-6 z-40 w-14 h-14 text-white rounded-2xl shadow-xl shadow-orange-500/30 flex items-center justify-center transition-all active:scale-90 hover:opacity-95"
+        className="fixed bottom-20 md:bottom-8 right-6 z-40 w-14 h-14 text-white rounded-2xl shadow-xl shadow-blue-500/30 flex items-center justify-center transition-all active:scale-90 hover:opacity-95"
         aria-label="Add Company"
       >
         <Plus className="w-7 h-7 stroke-[2.5]" />

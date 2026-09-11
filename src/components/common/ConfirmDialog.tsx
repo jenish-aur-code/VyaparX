@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle, X, Check, Trash2 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 
 interface ConfirmDialogProps {
@@ -52,19 +52,21 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 py-3 px-4 border border-white/60 dark:border-white/10 bg-white/50 dark:bg-white/5 hover:bg-white/80 dark:hover:bg-white/10 text-gray-700 dark:text-gray-300 font-bold rounded-2xl transition-all text-xs shadow-xs"
+            className="flex-1 py-3 px-4 border border-white/60 dark:border-white/10 bg-white/50 dark:bg-white/5 hover:bg-white/80 dark:hover:bg-white/10 text-gray-700 dark:text-gray-300 font-bold rounded-2xl transition-all text-xs shadow-xs flex items-center justify-center gap-1.5"
           >
-            {cancelText}
+            <X className="w-4 h-4" />
+            <span>{cancelText}</span>
           </button>
           <button
             type="button"
             onClick={onConfirm}
             style={!isDestructive ? { backgroundColor: palette.primary } : undefined}
-            className={`flex-1 py-3 px-4 font-bold rounded-2xl text-white transition-all text-xs shadow-glass active:scale-[0.98] ${
+            className={`flex-1 py-3 px-4 font-bold rounded-2xl text-white transition-all text-xs shadow-glass active:scale-[0.98] flex items-center justify-center gap-1.5 ${
               isDestructive ? 'bg-gradient-to-r from-red-600 to-rose-600 hover:opacity-95 shadow-red-500/20' : 'hover:opacity-90'
             }`}
           >
-            {confirmText}
+            {isDestructive ? <Trash2 className="w-4 h-4" /> : <Check className="w-4 h-4" />}
+            <span>{confirmText}</span>
           </button>
         </div>
       </div>

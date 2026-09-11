@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FileSpreadsheet, Printer, Download, Eye, X } from 'lucide-react';
+import { FileSpreadsheet, Printer, Download, Eye, X, Info } from 'lucide-react';
 import { PageHeader } from '../../components/layout/PageHeader';
 import { SaudaNoteTemplate } from '../../components/pdf/SaudaNoteTemplate';
 import { saudaService } from '../../services/saudaService';
@@ -107,7 +107,7 @@ export const SaudaBillsPage: React.FC = () => {
                   onClick={() => setActiveColor(col.label)}
                   style={{ backgroundColor: col.hex }}
                   className={`w-6 h-6 rounded-full border-2 transition-transform ${
-                    activeColor === col.label ? 'scale-125 border-gray-900 dark:border-white ring-2 ring-orange-200' : 'border-transparent'
+                    activeColor === col.label ? 'scale-125 border-gray-900 dark:border-white ring-2 ring-sky-200 dark:ring-sky-800' : 'border-transparent'
                   }`}
                   title={col.label}
                 />
@@ -158,7 +158,7 @@ export const SaudaBillsPage: React.FC = () => {
                   style={selectedOrder?.id === order.id ? { borderColor: palette.primary } : undefined}
                   className={`p-3 sm:p-3.5 rounded-2xl cursor-pointer transition-all min-w-0 overflow-hidden ${
                     selectedOrder?.id === order.id
-                      ? 'border-2 shadow-glass-hover bg-orange-500/10 dark:bg-orange-500/20 backdrop-blur-md'
+                      ? 'border-2 shadow-glass-hover bg-sky-500/10 dark:bg-sky-500/20 backdrop-blur-md'
                       : 'glass-card-interactive'
                   }`}
                 >
@@ -179,9 +179,18 @@ export const SaudaBillsPage: React.FC = () => {
                 </div>
               ))}
 
+              {orders.length > 0 && (
+                <div className="text-center py-4 text-gray-400 dark:text-gray-500 text-xs font-medium flex items-center justify-center gap-1.5">
+                  <Info className="w-4 h-4 text-gray-400 dark:text-gray-500 shrink-0" />
+                  <span>No more orders</span>
+                </div>
+              )}
+
               {orders.length === 0 && (
-                <div className="p-8 text-center glass-card rounded-2xl text-gray-400 text-xs">
-                  No Vyapar orders found for selected company & financial year.
+                <div className="p-8 text-center glass-card rounded-2xl border border-white/40 dark:border-white/10">
+                  <FileSpreadsheet className="w-10 h-10 text-gray-300 dark:text-gray-600 mx-auto mb-2" />
+                  <div className="font-bold text-gray-700 dark:text-gray-200 text-xs">No Vyapar orders found</div>
+                  <p className="text-[11px] text-gray-400 mt-1">No orders found for selected company & financial year.</p>
                 </div>
               )}
             </div>

@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Briefcase, Mail, ArrowRight } from 'lucide-react';
+import { Mail, ArrowRight, Download } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 import { useTheme } from '../../context/ThemeContext';
+import { usePwa } from '../../context/PwaContext';
+import { useLanguage } from '../../context/LanguageContext';
 
 export const EmailLoginPage: React.FC = () => {
   const navigate = useNavigate();
   const toast = useToast();
   const { palette } = useTheme();
   const { sendOtp, pendingEmail, setPendingEmail } = useAuth();
+  const { promptInstall, isInstalled } = usePwa();
+  const { t } = useLanguage();
 
   const [email, setEmail] = useState<string>(pendingEmail || '');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -40,26 +44,43 @@ export const EmailLoginPage: React.FC = () => {
 
   return (
     <div 
-      className="min-h-screen flex flex-col items-center justify-between p-6 md:p-12 text-white transition-colors relative overflow-hidden"
+      className="h-screen h-[100dvh] max-h-screen flex flex-col items-center justify-between p-3 sm:p-4 md:p-6 text-white transition-colors relative overflow-hidden select-none"
       style={{ backgroundColor: palette.primary }}
     >
       {/* Ambient background refraction blobs */}
-      <div className="absolute -top-28 -left-28 w-80 h-80 rounded-full bg-white/20 blur-3xl pointer-events-none animate-pulse" />
-      <div className="absolute -bottom-32 -right-28 w-96 h-96 rounded-full bg-black/20 blur-3xl pointer-events-none" />
+      <div className="absolute -top-28 -left-28 w-80 h-80 rounded-full bg-[#00ADEF]/25 blur-3xl pointer-events-none animate-pulse" />
+      <div className="absolute -bottom-32 -right-28 w-96 h-96 rounded-full bg-[#272264]/40 blur-3xl pointer-events-none" />
 
-      <div className="w-full flex justify-end relative z-10">
-        {/* Top spacer */}
+      {/* Top Header / Download Button */}
+      <div className="w-full flex justify-end relative z-10 shrink-0">
+        <button
+          type="button"
+          onClick={promptInstall}
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/15 hover:bg-white/25 active:scale-95 backdrop-blur-md border border-white/30 text-white text-xs font-bold shadow-glass transition-all cursor-pointer"
+          title={isInstalled ? t('nav.appInstalled', 'App Installed') : t('nav.downloadApp', 'Download App')}
+        >
+          <Download className="w-3.5 h-3.5 stroke-[2.5]" />
+          <span>{isInstalled ? t('nav.appInstalled', 'App Installed') : t('nav.downloadApp', 'Download App')}</span>
+        </button>
       </div>
 
-      <div className="w-full max-w-sm flex flex-col items-center text-center p-8 rounded-3xl bg-white/10 backdrop-blur-2xl border border-white/30 shadow-glass-hover space-y-6 relative z-10">
-        {/* Briefcase App Icon */}
-        <div className="w-20 h-20 rounded-3xl bg-white/15 backdrop-blur-md flex items-center justify-center border border-white/30 shadow-glass">
-          <Briefcase className="w-11 h-11 text-white stroke-[2]" />
+      {/* Main Login Card */}
+      <div className="w-full max-w-sm flex flex-col items-center text-center p-5 sm:p-6 rounded-3xl bg-white/10 backdrop-blur-2xl border border-white/30 shadow-glass-hover space-y-3.5 sm:space-y-4 relative z-10 my-auto shrink-0">
+        {/* 3D App Logo Emblem */}
+        <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 shadow-glass p-2 shrink-0">
+          <img src="/logo.png" alt="VyaparX Logo" className="w-full h-full object-contain drop-shadow-md" />
         </div>
 
+        {/* Brand Banner */}
+        <img
+          src="/logo-name.png"
+          alt="VyaparX - Business Made Simple"
+          className="h-8 sm:h-9 w-auto max-w-[200px] object-contain drop-shadow-md"
+        />
+
         {/* Title & Subtitle */}
-        <div className="space-y-1.5">
-          <h1 className="text-3xl font-black tracking-tight text-white drop-shadow-sm">
+        <div className="space-y-1">
+          <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white drop-shadow-sm">
             Welcome Back!
           </h1>
           <p className="text-xs font-medium text-white/90">
@@ -67,12 +88,12 @@ export const EmailLoginPage: React.FC = () => {
           </p>
         </div>
 
-        <form onSubmit={handleSendOtp} className="w-full space-y-4 pt-1">
+        <form onSubmit={handleSendOtp} className="w-full space-y-3 pt-0.5">
           {/* Email Input */}
           <div className="space-y-1 text-left">
             <div className="relative">
-              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-white/80">
-                <Mail className="w-5 h-5" />
+              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-white/80">
+                <Mail className="w-4 h-4" />
               </div>
               <input
                 type="email"
@@ -84,11 +105,11 @@ export const EmailLoginPage: React.FC = () => {
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 onBlur={() => setTouched(true)}
-                className="w-full py-3.5 pl-12 pr-4 bg-white/10 backdrop-blur-md border border-white/30 rounded-2xl text-white placeholder-white/70 font-semibold text-sm focus:outline-none focus:border-white focus:bg-white/20 transition-all tracking-wide shadow-inner"
+                className="w-full py-2.5 sm:py-3 pl-10 pr-3 bg-white/10 backdrop-blur-md border border-white/30 rounded-xl sm:rounded-2xl text-white placeholder-white/70 font-semibold text-xs sm:text-sm focus:outline-none focus:border-white focus:bg-white/20 transition-all tracking-wide shadow-inner"
               />
             </div>
             {touched && email.trim() && !isValidEmail && (
-              <p className="text-xs text-rose-200 font-medium pl-2 pt-1">
+              <p className="text-[11px] text-rose-200 font-medium pl-2 pt-0.5">
                 Please enter a valid email address (e.g. name@example.com)
               </p>
             )}
@@ -98,7 +119,7 @@ export const EmailLoginPage: React.FC = () => {
           <button
             type="submit"
             disabled={!isValidEmail || isSubmitting}
-            className="w-full py-3.5 px-6 bg-slate-950/90 hover:bg-black text-white font-bold text-sm rounded-2xl shadow-glass transition-all flex items-center justify-center gap-2.5 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed border border-white/10"
+            className="w-full py-2.5 sm:py-3 px-5 bg-slate-950/90 hover:bg-black text-white font-bold text-xs sm:text-sm rounded-xl sm:rounded-2xl shadow-glass transition-all flex items-center justify-center gap-2 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed border border-white/10"
           >
             {isSubmitting ? (
               <div className="flex items-center gap-2">
@@ -113,9 +134,24 @@ export const EmailLoginPage: React.FC = () => {
             )}
           </button>
         </form>
+
+        {/* Direct Application Download Option */}
+        <div className="w-full pt-2 border-t border-white/20 space-y-1.5">
+          <p className="text-[11px] text-white/80 font-medium">
+            Install on your phone or PC for 1-tap access
+          </p>
+          <button
+            type="button"
+            onClick={promptInstall}
+            className="w-full py-2.5 px-4 bg-white/15 hover:bg-white/25 active:scale-[0.98] text-white font-bold text-xs sm:text-sm rounded-xl sm:rounded-2xl border border-white/30 shadow-glass backdrop-blur-md transition-all flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <Download className="w-4 h-4 stroke-[2.5]" />
+            <span>{isInstalled ? t('nav.appInstalled', 'App Installed') : t('nav.downloadApp', 'Download App')}</span>
+          </button>
+        </div>
       </div>
 
-      <div className="text-[11px] text-white/75 font-medium tracking-wide uppercase relative z-10">
+      <div className="text-[10px] sm:text-[11px] text-white/75 font-medium tracking-wide uppercase relative z-10 shrink-0 py-1">
         Commodity Brokerage Management System
       </div>
     </div>

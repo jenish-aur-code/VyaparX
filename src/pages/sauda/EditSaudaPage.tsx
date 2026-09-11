@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Save } from 'lucide-react';
 import { PageHeader } from '../../components/layout/PageHeader';
 import { saudaService } from '../../services/saudaService';
 import { useToast } from '../../context/ToastContext';
@@ -105,7 +106,9 @@ export const EditSaudaPage: React.FC = () => {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Quantity *</label>
+                <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
+                  QUANTITY <span className="text-red-500 font-bold">*</span>
+                </label>
                 <input
                   type="number"
                   step="any"
@@ -116,7 +119,9 @@ export const EditSaudaPage: React.FC = () => {
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Unit</label>
+                <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
+                  UNIT
+                </label>
                 <input
                   type="text"
                   value={unit}
@@ -127,7 +132,9 @@ export const EditSaudaPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Bill Rate *</label>
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
+                BILL RATE <span className="text-red-500 font-bold">*</span>
+              </label>
               <input
                 type="number"
                 step="any"
@@ -145,7 +152,9 @@ export const EditSaudaPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Quality / Variety</label>
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
+                QUALITY / VARIETY
+              </label>
               <input
                 type="text"
                 value={itemQuality}
@@ -155,7 +164,9 @@ export const EditSaudaPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Bill No.</label>
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
+                BILL NO.
+              </label>
               <input
                 type="text"
                 value={billNo}
@@ -166,8 +177,8 @@ export const EditSaudaPage: React.FC = () => {
 
             <div className="grid grid-cols-2 gap-2 sm:gap-3 pt-3 border-t border-gray-200/60 dark:border-white/10 min-w-0">
               <div className="min-w-0">
-                <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1 truncate" title={`Seller (${order.sellerName}) Comm.`}>
-                  Seller Comm.
+                <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5 truncate" title={`Seller (${order.sellerName}) Comm.`}>
+                  SELLER COMM.
                   <span className="block text-[10px] text-gray-400 dark:text-gray-500 truncate font-normal">({order.sellerName})</span>
                 </label>
                 <input
@@ -179,8 +190,8 @@ export const EditSaudaPage: React.FC = () => {
                 />
               </div>
               <div className="min-w-0">
-                <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1 truncate" title={`Buyer (${order.buyerName}) Comm.`}>
-                  Buyer Comm.
+                <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5 truncate" title={`Buyer (${order.buyerName}) Comm.`}>
+                  BUYER COMM.
                   <span className="block text-[10px] text-gray-400 dark:text-gray-500 truncate font-normal">({order.buyerName})</span>
                 </label>
                 <input
@@ -194,7 +205,9 @@ export const EditSaudaPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Payment Terms</label>
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
+                PAYMENT TERMS
+              </label>
               <input
                 type="text"
                 value={paymentTerms}
@@ -204,7 +217,9 @@ export const EditSaudaPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Delivery Terms</label>
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
+                DELIVERY TERMS
+              </label>
               <input
                 type="text"
                 value={deliveryTerms}
@@ -214,7 +229,9 @@ export const EditSaudaPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Remark</label>
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
+                REMARK
+              </label>
               <input
                 type="text"
                 value={remark}
@@ -228,9 +245,10 @@ export const EditSaudaPage: React.FC = () => {
             type="submit"
             disabled={isSubmitting}
             style={{ backgroundColor: palette.primary }}
-            className="btn-primary hover:opacity-90 transition-opacity rounded-2xl shadow-glass-card hover:shadow-glass-hover"
+            className="btn-primary hover:opacity-90 transition-opacity rounded-2xl shadow-glass-card hover:shadow-glass-hover flex items-center justify-center gap-2"
           >
-            {isSubmitting ? 'Updating...' : 'Update Vyapar Order'}
+            <Save className={`w-4 h-4 stroke-[2.5] ${isSubmitting ? 'animate-spin' : ''}`} />
+            <span>{isSubmitting ? 'UPDATING...' : 'UPDATE VYAPAR ORDER'}</span>
           </button>
         </form>
       </div>

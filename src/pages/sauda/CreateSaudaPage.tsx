@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Check, CheckCircle2, ChevronDown } from 'lucide-react';
+import { Check, CheckCircle2, ChevronDown, ArrowLeft, ArrowRight } from 'lucide-react';
 import { PageHeader } from '../../components/layout/PageHeader';
 import { SearchSelectModal, type SelectOption } from '../../components/common/SearchSelectModal';
 import { QuickAddItemModal } from '../../components/common/QuickAddItemModal';
 import { QuickAddPartyModal } from '../../components/common/QuickAddPartyModal';
+import { GlassSelect } from '../../components/common/GlassSelect';
 import { useApp } from '../../context/AppContext';
 import { useToast } from '../../context/ToastContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -376,7 +377,7 @@ export const CreateSaudaPage: React.FC = () => {
           <div className="liquid-glass-card p-5 md:p-6 rounded-3xl space-y-4 shadow-glass-card">
             {/* DATE */}
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 DATE
               </label>
               <input
@@ -389,12 +390,12 @@ export const CreateSaudaPage: React.FC = () => {
 
             {/* ITEM NAME * */}
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 ITEM NAME <span className="text-red-500 font-bold">*</span>
               </label>
               <div
                 onClick={() => setIsItemModalOpen(true)}
-                className="input-sauda flex items-center justify-between cursor-pointer font-bold uppercase text-gray-900"
+                className="input-sauda flex items-center justify-between cursor-pointer font-bold uppercase text-gray-900 dark:text-gray-100"
               >
                 <span>{itemName || 'SELECT ITEM NAME'}</span>
                 <ChevronDown className="w-4 h-4 text-gray-400" />
@@ -403,7 +404,7 @@ export const CreateSaudaPage: React.FC = () => {
 
             {/* ITEM QUALITY / VARIETY */}
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 ITEM QUALITY / VARIETY
               </label>
               <input
@@ -421,7 +422,7 @@ export const CreateSaudaPage: React.FC = () => {
                       key={val}
                       type="button"
                       onClick={() => setItemQuality(val)}
-                      className="text-[10px] px-2 py-0.5 rounded-md bg-gray-100 text-gray-700 hover:bg-orange-100 hover:text-orange-800 font-semibold transition-colors"
+                      className="text-[10px] px-2 py-0.5 rounded-md bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-gray-300 hover:bg-sky-100 dark:hover:bg-sky-900/40 hover:text-sky-800 dark:hover:text-sky-300 font-semibold transition-colors"
                     >
                       + {val}
                     </button>
@@ -433,7 +434,7 @@ export const CreateSaudaPage: React.FC = () => {
             {/* QUANTITY & UNIT */}
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+                <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                   QUANTITY <span className="text-red-500 font-bold">*</span>
                 </label>
                 <input
@@ -443,12 +444,12 @@ export const CreateSaudaPage: React.FC = () => {
                   placeholder="EX. 200"
                   value={quantity}
                   onChange={e => setQuantity(e.target.value)}
-                  className="input-sauda font-extrabold text-gray-900"
+                  className="input-sauda font-extrabold text-gray-900 dark:text-gray-100"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+                <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                   UNIT
                 </label>
                 <input
@@ -456,14 +457,14 @@ export const CreateSaudaPage: React.FC = () => {
                   placeholder="EX. KG"
                   value={unit}
                   onChange={e => setUnit(e.target.value)}
-                  className="input-sauda font-bold text-gray-900"
+                  className="input-sauda font-bold text-gray-900 dark:text-gray-100"
                 />
               </div>
             </div>
 
             {/* BILL RATE * */}
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 BILL RATE <span className="text-red-500 font-bold">*</span>
               </label>
               <input
@@ -494,26 +495,24 @@ export const CreateSaudaPage: React.FC = () => {
                 onChange={e => setWithGST(e.target.checked)}
                 className="w-5 h-5 text-[var(--primary)] rounded border-gray-300 dark:border-gray-600 focus:ring-[var(--primary)]"
               />
-              <label htmlFor="withGST" className="text-xs font-extrabold text-gray-800 uppercase tracking-wider cursor-pointer">
+              <label htmlFor="withGST" className="text-xs font-extrabold text-gray-800 dark:text-gray-200 uppercase tracking-wider cursor-pointer">
                 WITH GST
               </label>
             </div>
 
             {withGST && (
-              <div className="p-4 glass-card-subtle rounded-2xl space-y-2 text-xs">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600 dark:text-gray-300 font-medium">GST Percentage:</span>
-                  <select
-                    value={gstPercent}
-                    onChange={e => setGstPercent(e.target.value)}
-                    className="p-1.5 bg-white/70 dark:bg-gray-800/80 border border-gray-200 dark:border-gray-700 rounded-lg font-bold backdrop-blur-xs text-gray-800 dark:text-gray-100"
-                  >
-                    <option value="5">5% (Commodity/Cotton)</option>
-                    <option value="12">12%</option>
-                    <option value="18">18%</option>
-                    <option value="28">28%</option>
-                  </select>
-                </div>
+              <div className="p-4 glass-card-subtle rounded-2xl space-y-3 text-xs">
+                <GlassSelect
+                  label="GST Percentage"
+                  value={gstPercent}
+                  onChange={setGstPercent}
+                  options={[
+                    { value: '5', label: '5% (Commodity/Cotton)' },
+                    { value: '12', label: '12%' },
+                    { value: '18', label: '18%' },
+                    { value: '28', label: '28%' },
+                  ]}
+                />
                 <div className="flex justify-between font-bold text-gray-800 dark:text-gray-100 pt-2 border-t border-gray-200/60 dark:border-white/10">
                   <span>GST Amount:</span>
                   <span className="text-emerald-600 dark:text-emerald-400">{formatCurrency(gstAmount)}</span>
@@ -523,7 +522,7 @@ export const CreateSaudaPage: React.FC = () => {
 
             {/* BILL NO. & PAYMENT TERMS (Progressive fields from Screenshot 20) */}
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 BILL NO.
               </label>
               <input
@@ -536,7 +535,7 @@ export const CreateSaudaPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 PAYMENT TERMS
               </label>
               <input
@@ -553,7 +552,7 @@ export const CreateSaudaPage: React.FC = () => {
                       key={val}
                       type="button"
                       onClick={() => setPaymentTerms(val)}
-                      className="text-[10px] px-2 py-0.5 rounded-md bg-gray-100 text-gray-700 hover:bg-orange-100 hover:text-orange-800 font-semibold transition-colors"
+                      className="text-[10px] px-2 py-0.5 rounded-md bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-gray-300 hover:bg-sky-100 dark:hover:bg-sky-900/40 hover:text-sky-800 dark:hover:text-sky-300 font-semibold transition-colors"
                     >
                       + {val}
                     </button>
@@ -563,7 +562,7 @@ export const CreateSaudaPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 DELIVERY TERMS
               </label>
               <input
@@ -576,7 +575,7 @@ export const CreateSaudaPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 REMARK
               </label>
               <input
@@ -589,7 +588,7 @@ export const CreateSaudaPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 TERMS & CONDITIONS
               </label>
               <textarea
@@ -610,9 +609,10 @@ export const CreateSaudaPage: React.FC = () => {
                 onClick={handleNextFromItem}
                 disabled={!quantity || !billRate}
                 style={{ backgroundColor: palette.primary }}
-                className="px-7 py-2.5 rounded-xl text-white font-bold text-sm shadow-glass-card hover:shadow-glass-hover hover:opacity-95 active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                className="px-7 py-2.5 rounded-xl text-white font-bold text-sm shadow-glass-card hover:shadow-glass-hover hover:opacity-95 active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2"
               >
-                Next
+                <span>Next</span>
+                <ArrowRight className="w-4 h-4" />
               </button>
             </div>
           </div>
@@ -678,18 +678,20 @@ export const CreateSaudaPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setStep(1)}
-                  className="px-5 py-2.5 rounded-xl border border-gray-300 dark:border-white/15 bg-white/60 dark:bg-white/10 hover:bg-white/90 dark:hover:bg-white/20 text-gray-700 dark:text-gray-200 font-bold text-sm shadow-sm active:scale-95 transition-all"
+                  className="px-5 py-2.5 rounded-xl border border-gray-300 dark:border-white/15 bg-white/60 dark:bg-white/10 hover:bg-white/90 dark:hover:bg-white/20 text-gray-700 dark:text-gray-200 font-bold text-sm shadow-sm active:scale-95 transition-all flex items-center gap-1.5"
                 >
-                  Previous
+                  <ArrowLeft className="w-4 h-4" />
+                  <span>Previous</span>
                 </button>
                 <button
                   type="button"
                   onClick={handleNextFromSeller}
                   disabled={!sellerName}
                   style={{ backgroundColor: palette.primary }}
-                  className="px-7 py-2.5 rounded-xl text-white font-bold text-sm shadow-glass-card hover:shadow-glass-hover hover:opacity-95 active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="px-7 py-2.5 rounded-xl text-white font-bold text-sm shadow-glass-card hover:shadow-glass-hover hover:opacity-95 active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2"
                 >
-                  Next
+                  <span>Next</span>
+                  <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
             </div>
@@ -756,18 +758,29 @@ export const CreateSaudaPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setStep(2)}
-                  className="px-5 py-2.5 rounded-xl border border-gray-300 dark:border-white/15 bg-white/60 dark:bg-white/10 hover:bg-white/90 dark:hover:bg-white/20 text-gray-700 dark:text-gray-200 font-bold text-sm shadow-sm active:scale-95 transition-all"
+                  className="px-5 py-2.5 rounded-xl border border-gray-300 dark:border-white/15 bg-white/60 dark:bg-white/10 hover:bg-white/90 dark:hover:bg-white/20 text-gray-700 dark:text-gray-200 font-bold text-sm shadow-sm active:scale-95 transition-all flex items-center gap-1.5"
                 >
-                  Previous
+                  <ArrowLeft className="w-4 h-4" />
+                  <span>Previous</span>
                 </button>
                 <button
                   type="button"
                   onClick={handleSaveOrder}
                   disabled={!buyerName || isSubmitting}
                   style={{ backgroundColor: palette.primary }}
-                  className="px-7 py-2.5 rounded-xl text-white font-bold text-sm shadow-glass-card hover:shadow-glass-hover hover:opacity-95 active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="px-7 py-2.5 rounded-xl text-white font-bold text-sm shadow-glass-card hover:shadow-glass-hover hover:opacity-95 active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2"
                 >
-                  {isSubmitting ? 'SAVING...' : 'SAVE'}
+                  {isSubmitting ? (
+                    <>
+                      <CheckCircle2 className="w-4 h-4 animate-spin" />
+                      <span>SAVING...</span>
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle2 className="w-4 h-4" />
+                      <span>SAVE</span>
+                    </>
+                  )}
                 </button>
               </div>
             </div>

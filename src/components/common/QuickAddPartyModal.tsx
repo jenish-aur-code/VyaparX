@@ -198,9 +198,10 @@ export const QuickAddPartyModal: React.FC<QuickAddPartyModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-3 px-4 border border-white/60 dark:border-white/10 bg-white/50 dark:bg-white/5 hover:bg-white/80 dark:hover:bg-white/10 text-gray-700 dark:text-gray-300 font-bold rounded-2xl text-xs transition-all shadow-xs"
+              className="flex-1 py-3 px-4 border border-white/60 dark:border-white/10 bg-white/50 dark:bg-white/5 hover:bg-white/80 dark:hover:bg-white/10 text-gray-700 dark:text-gray-300 font-bold rounded-2xl text-xs transition-all shadow-xs flex items-center justify-center gap-1.5"
             >
-              Cancel
+              <X className="w-4 h-4" />
+              <span>Cancel</span>
             </button>
             <button
               type="submit"
