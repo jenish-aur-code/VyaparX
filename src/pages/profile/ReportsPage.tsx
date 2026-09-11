@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Printer, Download, BarChart2, Users } from 'lucide-react';
+import { Search, Printer, Download, BarChart2, Users, Info } from 'lucide-react';
 import { PageHeader } from '../../components/layout/PageHeader';
 import { reportService, type PartyWiseReportRow } from '../../services/reportService';
 import { useApp } from '../../context/AppContext';
@@ -124,8 +124,12 @@ export const ReportsPage: React.FC = () => {
 
                 {filteredData.length === 0 && (
                   <tr>
-                    <td colSpan={5} className="p-12 text-center text-gray-400">
-                      No brokerage records for the selected criteria.
+                    <td colSpan={5} className="p-12 text-center text-gray-400 dark:text-gray-500">
+                      <BarChart2 className="w-10 h-10 text-gray-300 dark:text-gray-600 mx-auto mb-2" />
+                      <div className="font-bold text-gray-700 dark:text-gray-200 text-sm">No brokerage records found</div>
+                      <p className="text-xs text-gray-400 mt-1">
+                        {searchQuery ? 'No records match your search filter' : 'No records found for the selected company & financial year.'}
+                      </p>
                     </td>
                   </tr>
                 )}
@@ -133,6 +137,13 @@ export const ReportsPage: React.FC = () => {
             </table>
           </div>
         </div>
+
+        {filteredData.length > 0 && (
+          <div className="text-center py-4 text-gray-400 dark:text-gray-500 text-xs font-medium flex items-center justify-center gap-1.5">
+            <Info className="w-4 h-4 text-gray-400 dark:text-gray-500 shrink-0" />
+            <span>No more records</span>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Lock, ShieldCheck, KeyRound } from 'lucide-react';
+import { Lock, ShieldCheck, KeyRound, Save } from 'lucide-react';
 import { PageHeader } from '../../components/layout/PageHeader';
 import { profileService } from '../../services/profileService';
 import { useApp } from '../../context/AppContext';
@@ -75,8 +75,8 @@ export const PinSecurityPage: React.FC = () => {
             {pinEnabled && (
               <div className="space-y-3 animate-in fade-in">
                 <div>
-                  <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase mb-1">
-                    New PIN (4 digits)
+                  <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
+                    NEW PIN (4 DIGITS)
                   </label>
                   <input
                     type="password"
@@ -90,8 +90,8 @@ export const PinSecurityPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase mb-1">
-                    Confirm PIN
+                  <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
+                    CONFIRM PIN
                   </label>
                   <input
                     type="password"
@@ -109,9 +109,10 @@ export const PinSecurityPage: React.FC = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-3.5 px-4 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-2xl text-sm shadow-glass-card hover:shadow-glass-hover transition-all"
+              className="w-full py-3.5 px-4 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-2xl text-sm shadow-glass-card hover:shadow-glass-hover transition-all flex items-center justify-center gap-2"
             >
-              {isSubmitting ? 'Saving...' : 'Save PIN Settings'}
+              <Save className={`w-4 h-4 stroke-[2.5] ${isSubmitting ? 'animate-spin' : ''}`} />
+              <span>{isSubmitting ? 'Saving...' : 'Save PIN Settings'}</span>
             </button>
           </form>
 
@@ -119,9 +120,10 @@ export const PinSecurityPage: React.FC = () => {
             <button
               type="button"
               onClick={lockApp}
-              className="w-full py-2.5 px-4 border border-purple-500/30 text-purple-700 dark:text-purple-300 font-bold rounded-2xl text-xs hover:bg-purple-500/10 transition-colors"
+              className="w-full py-2.5 px-4 border border-purple-500/30 text-purple-700 dark:text-purple-300 font-bold rounded-2xl text-xs hover:bg-purple-500/10 transition-colors flex items-center justify-center gap-2"
             >
-              Lock App Now
+              <Lock className="w-4 h-4 stroke-[2.5]" />
+              <span>Lock App Now</span>
             </button>
           )}
         </div>

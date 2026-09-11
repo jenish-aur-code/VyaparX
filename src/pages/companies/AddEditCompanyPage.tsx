@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, useSearchParams, useLocation } from 'react-router-dom';
-import { Info, Trash2, Search, CheckCircle, LogOut } from 'lucide-react';
+import { Info, Trash2, Search, CheckCircle, LogOut, Plus, Save, X, Check } from 'lucide-react';
 import { PageHeader } from '../../components/layout/PageHeader';
 import { companyService } from '../../services/companyService';
 import { authService } from '../../services/authService';
@@ -12,6 +12,8 @@ import { useAuth } from '../../context/AuthContext';
 import { ConfirmDialog } from '../../components/common/ConfirmDialog';
 import { SaudaNoteTemplate } from '../../components/pdf/SaudaNoteTemplate';
 import { useTheme } from '../../context/ThemeContext';
+import { useLanguage } from '../../context/LanguageContext';
+import { GlassSelect } from '../../components/common/GlassSelect';
 
 const INDIAN_STATES = [
   'GUJARAT',
@@ -24,8 +26,10 @@ const INDIAN_STATES = [
   'TELANGANA',
   'KARNATAKA',
   'TAMIL NADU',
-  'DELHI',
+  'WEST BENGAL',
   'UTTAR PRADESH',
+  'BIHAR',
+  'DELHI',
 ];
 
 const COLOR_OPTIONS = [
@@ -40,6 +44,7 @@ export const AddEditCompanyPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { palette } = useTheme();
+  const { t } = useLanguage();
   const { id } = useParams<{ id: string }>();
   const [searchParams] = useSearchParams();
   const isFirstCompany = searchParams.get('firstCompany') === 'true' || location.pathname === '/create-first-company';
@@ -47,6 +52,8 @@ export const AddEditCompanyPage: React.FC = () => {
   const toast = useToast();
   const { refreshAppContext, setCurrentCompany } = useApp();
   const { currentUser, logout } = useAuth();
+
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   const [name, setName] = useState('');
   const [username, setUsername] = useState('');
@@ -238,11 +245,7 @@ export const AddEditCompanyPage: React.FC = () => {
           isFirstCompany ? (
             <button
               type="button"
-              onClick={() => {
-                logout();
-                navigate('/login');
-                toast.info('Logged out');
-              }}
+              onClick={() => setShowLogoutConfirm(true)}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-gray-200 dark:border-gray-700 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
               title="Sign out"
             >
@@ -293,7 +296,7 @@ export const AddEditCompanyPage: React.FC = () => {
             </h2>
 
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 COMPANY NAME <span className="text-red-500 font-bold">*</span>
               </label>
               <input
@@ -307,7 +310,7 @@ export const AddEditCompanyPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 USERNAME <span className="text-red-500 font-bold">*</span>
               </label>
               <input
@@ -324,7 +327,7 @@ export const AddEditCompanyPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 CONTACT NUMBER <span className="text-red-500 font-bold">*</span>
               </label>
               <input
@@ -338,7 +341,7 @@ export const AddEditCompanyPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 EMAIL (OPTIONAL)
               </label>
               <input
@@ -351,7 +354,7 @@ export const AddEditCompanyPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                 ADDRESS <span className="text-red-500 font-bold">*</span>
               </label>
               <input
@@ -364,24 +367,19 @@ export const AddEditCompanyPage: React.FC = () => {
               />
             </div>
 
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div className="col-span-1">
-                <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
-                  STATE <span className="text-red-500 font-bold">*</span>
-                </label>
-                <select
+                <GlassSelect
+                  label="STATE"
+                  required
                   value={state}
-                  onChange={e => setState(e.target.value)}
-                  className="input-sauda font-semibold text-xs px-2"
-                >
-                  {INDIAN_STATES.map(s => (
-                    <option key={s} value={s}>{s}</option>
-                  ))}
-                </select>
+                  onChange={setState}
+                  options={INDIAN_STATES.map(s => ({ value: s, label: s }))}
+                />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+                <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                   CITY <span className="text-red-500 font-bold">*</span>
                 </label>
                 <input
@@ -395,7 +393,7 @@ export const AddEditCompanyPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-800 uppercase tracking-wide mb-1.5">
+                <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
                   PIN CODE <span className="text-red-500 font-bold">*</span>
                 </label>
                 <input
@@ -530,15 +528,16 @@ export const AddEditCompanyPage: React.FC = () => {
                 VYAPAR NOTE COLOR
               </label>
               <div className="flex items-center gap-3">
-                <select
+                <GlassSelect
                   value={saudaNoteColor}
-                  onChange={e => setSaudaNoteColor(e.target.value as Company['saudaNoteColor'])}
-                  className="input-sauda font-bold uppercase flex-1"
-                >
-                  {COLOR_OPTIONS.map(c => (
-                    <option key={c.label} value={c.label}>{c.label}</option>
-                  ))}
-                </select>
+                  onChange={v => setSaudaNoteColor(v as Company['saudaNoteColor'])}
+                  options={COLOR_OPTIONS.map(c => ({
+                    value: c.label,
+                    label: c.label,
+                    colorSwatch: c.hex,
+                  }))}
+                  className="flex-1"
+                />
                 <div
                   className="w-12 h-12 rounded-2xl shadow-glass border border-white/40 dark:border-white/10 shrink-0"
                   style={{ backgroundColor: currentColorHex }}
@@ -645,15 +644,29 @@ export const AddEditCompanyPage: React.FC = () => {
             type="submit"
             disabled={isSubmitting}
             style={{ backgroundColor: palette.primary }}
-            className="w-full py-4 px-4 text-white font-extrabold text-sm uppercase tracking-wider rounded-2xl shadow-glass-card hover:shadow-glass-hover transition-all duration-150 active:scale-[0.98] hover:opacity-90 disabled:opacity-50 mt-6"
+            className="w-full py-4 px-4 text-white font-extrabold text-sm uppercase tracking-wider rounded-2xl shadow-glass-card hover:shadow-glass-hover transition-all duration-150 active:scale-[0.98] hover:opacity-90 disabled:opacity-50 mt-6 flex items-center justify-center gap-2"
           >
-            {isSubmitting
-              ? 'SAVING...'
-              : isFirstCompany
-              ? 'CREATE COMPANY & ENTER APPLICATION'
-              : isEdit
-              ? 'UPDATE COMPANY'
-              : 'CREATE COMPANY'}
+            {isSubmitting ? (
+              <>
+                <Save className="w-4 h-4 animate-spin" />
+                <span>SAVING...</span>
+              </>
+            ) : isFirstCompany ? (
+              <>
+                <Plus className="w-4 h-4 stroke-[2.5]" />
+                <span>CREATE COMPANY & ENTER APPLICATION</span>
+              </>
+            ) : isEdit ? (
+              <>
+                <Save className="w-4 h-4 stroke-[2.5]" />
+                <span>UPDATE COMPANY</span>
+              </>
+            ) : (
+              <>
+                <Plus className="w-4 h-4 stroke-[2.5]" />
+                <span>CREATE COMPANY</span>
+              </>
+            )}
           </button>
         </form>
       </div>
@@ -680,17 +693,19 @@ export const AddEditCompanyPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowGstModal(false)}
-                className="flex-1 py-2.5 px-3 border border-gray-200/80 dark:border-white/10 text-gray-600 dark:text-gray-300 text-xs font-bold rounded-2xl hover:bg-white/60 dark:hover:bg-white/10"
+                className="flex-1 py-2.5 px-3 border border-gray-200/80 dark:border-white/10 text-gray-600 dark:text-gray-300 text-xs font-bold rounded-2xl hover:bg-white/60 dark:hover:bg-white/10 flex items-center justify-center gap-1.5"
               >
-                Cancel
+                <X className="w-4 h-4" />
+                <span>Cancel</span>
               </button>
               <button
                 type="button"
                 onClick={handleApplyGst}
                 style={{ backgroundColor: palette.primary }}
-                className="flex-1 py-2.5 px-3 text-white text-xs font-bold rounded-2xl shadow-glass-card hover:shadow-glass-hover hover:opacity-90 transition-opacity"
+                className="flex-1 py-2.5 px-3 text-white text-xs font-bold rounded-2xl shadow-glass-card hover:shadow-glass-hover hover:opacity-90 transition-opacity flex items-center justify-center gap-1.5"
               >
-                Apply
+                <Check className="w-4 h-4" />
+                <span>Apply</span>
               </button>
             </div>
           </div>
@@ -703,6 +718,22 @@ export const AddEditCompanyPage: React.FC = () => {
         message="Are you sure you want to delete this company profile? This action cannot be undone."
         onConfirm={handleDelete}
         onCancel={() => setShowDeleteConfirm(false)}
+      />
+
+      <ConfirmDialog
+        isOpen={showLogoutConfirm}
+        title={t('profile.logoutConfirmTitle', 'Confirm Logout')}
+        message={t('profile.logoutConfirmMsg', 'Are you sure you want to log out of your account?')}
+        confirmText={t('profile.logout', 'Logout')}
+        cancelText={t('common.cancel', 'Cancel')}
+        isDestructive={true}
+        onConfirm={() => {
+          setShowLogoutConfirm(false);
+          logout();
+          navigate('/login');
+          toast.info('Logged out');
+        }}
+        onCancel={() => setShowLogoutConfirm(false)}
       />
     </div>
   );

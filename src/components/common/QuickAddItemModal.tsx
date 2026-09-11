@@ -130,9 +130,10 @@ export const QuickAddItemModal: React.FC<QuickAddItemModalProps> = ({
                   key={u}
                   type="button"
                   onClick={() => setUnit(u)}
+                  style={unit === u ? { backgroundColor: `${palette.primary}20`, borderColor: palette.primary, color: palette.primary } : {}}
                   className={`text-[10px] font-bold px-2.5 py-1 rounded-xl transition-all border ${
                     unit === u
-                      ? 'bg-orange-500/15 text-orange-800 dark:text-orange-200 border-orange-500/30 shadow-glass'
+                      ? 'shadow-glass'
                       : 'bg-white/40 dark:bg-white/5 text-gray-600 dark:text-gray-400 border-white/40 dark:border-white/10 hover:bg-white/60 dark:hover:bg-white/10'
                   }`}
                 >
@@ -177,9 +178,10 @@ export const QuickAddItemModal: React.FC<QuickAddItemModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-3 px-4 border border-gray-200/80 dark:border-white/10 text-gray-700 dark:text-gray-300 font-bold rounded-2xl text-xs hover:bg-white/60 dark:hover:bg-white/10 transition-colors"
+              className="flex-1 py-3 px-4 border border-gray-200/80 dark:border-white/10 text-gray-700 dark:text-gray-300 font-bold rounded-2xl text-xs hover:bg-white/60 dark:hover:bg-white/10 transition-colors flex items-center justify-center gap-1.5"
             >
-              Cancel
+              <X className="w-4 h-4" />
+              <span>Cancel</span>
             </button>
             <button
               type="submit"

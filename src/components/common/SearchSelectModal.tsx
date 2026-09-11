@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Search, X, Plus } from 'lucide-react';
+import { Search, X, Plus, Info } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 
 export interface SelectOption {
@@ -120,8 +120,9 @@ export const SearchSelectModal: React.FC<SearchSelectModalProps> = ({
 
           {/* End of list text matching screenshot */}
           {filteredOptions.length > 0 && (
-            <div className="py-4 text-center text-xs text-gray-400 font-medium">
-              No more items to load
+            <div className="py-4 text-center text-xs text-gray-400 dark:text-gray-500 font-medium flex items-center justify-center gap-1.5">
+              <Info className="w-4 h-4 text-gray-400 dark:text-gray-500 shrink-0" />
+              <span>No more records</span>
             </div>
           )}
         </div>

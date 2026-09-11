@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, SlidersHorizontal, Plus, Info, X, Printer, Share2 } from 'lucide-react';
+import { Search, SlidersHorizontal, Plus, Info, X, Printer, Share2, ReceiptText } from 'lucide-react';
 import { PageHeader } from '../../components/layout/PageHeader';
 import { SaudaCard } from '../../components/sauda/SaudaCard';
 import { ConfirmDialog } from '../../components/common/ConfirmDialog';
@@ -126,11 +126,26 @@ export const SaudaListPage: React.FC = () => {
             />
           ))}
 
-          {/* End of list text matching screenshot 23 */}
-          <div className="text-center py-6 text-gray-400 dark:text-gray-500 text-xs font-medium flex items-center justify-center gap-1.5">
-            <Info className="w-4 h-4 text-gray-300 dark:text-gray-600" />
-            <span>No more orders</span>
-          </div>
+          {!isLoading && orders.length > 0 && (
+            <div className="text-center py-6 text-gray-400 dark:text-gray-500 text-xs font-medium flex items-center justify-center gap-1.5">
+              <Info className="w-4 h-4 text-gray-400 dark:text-gray-500 shrink-0" />
+              <span>No more orders</span>
+            </div>
+          )}
+
+          {!isLoading && orders.length === 0 && (
+            <div className="text-center py-12 px-4 rounded-3xl bg-white/40 dark:bg-gray-850/40 backdrop-blur-xl border border-white/50 dark:border-white/10 shadow-glass">
+              <div className="w-12 h-12 rounded-2xl bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 mx-auto flex items-center justify-center mb-3">
+                <ReceiptText className="w-6 h-6 stroke-[2]" />
+              </div>
+              <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200">No orders found</h3>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                {searchQuery || selectedItemId !== null
+                  ? 'No orders match your search or filter criteria'
+                  : 'Click the + button below to create your first Vyapar order.'}
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
@@ -158,9 +173,9 @@ export const SaudaListPage: React.FC = () => {
       {activeShareOrder && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in">
           <div className="w-full max-w-3xl bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
-            <div className="p-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between bg-orange-50/50 dark:bg-gray-700/50">
+            <div className="p-4 border-b border-gray-100 dark:border-gray-700 flex items-center justify-between bg-sky-50/50 dark:bg-gray-700/50">
               <div className="flex items-center gap-2">
-                <Share2 className="w-5 h-5 text-orange-600 dark:text-orange-400" />
+                <Share2 className="w-5 h-5 text-sky-600 dark:text-sky-400" />
                 <h3 className="font-bold text-gray-900 dark:text-white text-base">
                   Vyapar Note #{activeShareOrder.id} Preview
                 </h3>
@@ -222,7 +237,7 @@ export const SaudaListPage: React.FC = () => {
                 }}
                 className={`w-full text-left py-2.5 px-3.5 rounded-xl text-xs font-bold transition-all ${
                   selectedItemId === null
-                    ? 'bg-orange-500/15 text-orange-900 dark:text-orange-300 border border-orange-400/40 shadow-2xs'
+                    ? 'bg-sky-500/15 text-sky-900 dark:text-sky-300 border border-sky-400/40 shadow-2xs'
                     : 'hover:bg-white/60 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200'
                 }`}
               >
@@ -238,7 +253,7 @@ export const SaudaListPage: React.FC = () => {
                   }}
                   className={`w-full text-left py-2.5 px-3.5 rounded-xl text-xs font-bold transition-all uppercase ${
                     selectedItemId === itm.id
-                      ? 'bg-orange-500/15 text-orange-900 dark:text-orange-300 border border-orange-400/40 shadow-2xs'
+                      ? 'bg-sky-500/15 text-sky-900 dark:text-sky-300 border border-sky-400/40 shadow-2xs'
                       : 'hover:bg-white/60 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200'
                   }`}
                 >

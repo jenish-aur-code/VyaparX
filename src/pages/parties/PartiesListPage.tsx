@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Building, Phone, Plus, CheckCircle2 } from 'lucide-react';
+import { Search, Building, Phone, Plus, CheckCircle2, Info, Users } from 'lucide-react';
 import { partyService } from '../../services/partyService';
 import type { Party } from '../../types';
 import { PageHeader } from '../../components/layout/PageHeader';
@@ -91,11 +91,24 @@ export const PartiesListPage: React.FC = () => {
             </div>
           ))}
 
-          {/* Bottom message matching screenshot 8 */}
-          <div className="text-center py-8 text-gray-400 text-xs font-medium flex flex-col items-center gap-1">
-            <CheckCircle2 className="w-6 h-6 text-gray-300 stroke-[1.5]" />
-            <span>No more parties to load</span>
-          </div>
+          {!isLoading && parties.length > 0 && (
+            <div className="text-center py-6 text-gray-400 dark:text-gray-500 text-xs font-medium flex items-center justify-center gap-1.5">
+              <Info className="w-4 h-4 text-gray-400 dark:text-gray-500 shrink-0" />
+              <span>No more parties</span>
+            </div>
+          )}
+
+          {!isLoading && parties.length === 0 && (
+            <div className="text-center py-12 px-4 rounded-3xl bg-white/40 dark:bg-gray-850/40 backdrop-blur-xl border border-white/50 dark:border-white/10 shadow-glass">
+              <div className="w-12 h-12 rounded-2xl bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 mx-auto flex items-center justify-center mb-3">
+                <Users className="w-6 h-6 stroke-[2]" />
+              </div>
+              <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200">No parties found</h3>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                {searchQuery ? 'No parties match your search criteria' : 'Click the + button below to add your first party.'}
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
@@ -104,7 +117,7 @@ export const PartiesListPage: React.FC = () => {
         type="button"
         onClick={() => navigate('/parties/new')}
         style={{ backgroundColor: palette.primary }}
-        className="fixed bottom-20 md:bottom-8 right-6 z-40 w-14 h-14 text-white rounded-2xl shadow-xl shadow-orange-500/30 flex items-center justify-center transition-all active:scale-90 hover:opacity-95"
+        className="fixed bottom-20 md:bottom-8 right-6 z-40 w-14 h-14 text-white rounded-2xl shadow-xl shadow-blue-500/30 flex items-center justify-center transition-all active:scale-90 hover:opacity-95"
         aria-label="Add Party"
       >
         <Plus className="w-7 h-7 stroke-[2.5]" />

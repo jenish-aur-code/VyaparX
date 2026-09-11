@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Info, Package, Scale, Binary, Trash2 } from 'lucide-react';
+import { Info, Package, Scale, Binary, Trash2, Plus, Save } from 'lucide-react';
 import { PageHeader } from '../../components/layout/PageHeader';
 import { itemService } from '../../services/itemService';
 import { useToast } from '../../context/ToastContext';
@@ -199,9 +199,24 @@ export const AddEditItemPage: React.FC = () => {
             type="submit"
             disabled={isSubmitting}
             style={{ backgroundColor: palette.primary }}
-            className="w-full py-4 px-4 text-white font-extrabold text-sm uppercase tracking-wider rounded-2xl shadow-glass-card hover:shadow-glass-hover transition-all duration-150 active:scale-[0.98] hover:opacity-90 disabled:opacity-50 mt-4"
+            className="w-full py-4 px-4 text-white font-extrabold text-sm uppercase tracking-wider rounded-2xl shadow-glass-card hover:shadow-glass-hover transition-all duration-150 active:scale-[0.98] hover:opacity-90 disabled:opacity-50 mt-4 flex items-center justify-center gap-2"
           >
-            {isSubmitting ? 'SAVING...' : isEdit ? 'UPDATE ITEM' : 'CREATE ITEM'}
+            {isSubmitting ? (
+              <div className="flex items-center justify-center gap-2">
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <span>SAVING...</span>
+              </div>
+            ) : isEdit ? (
+              <div className="flex items-center justify-center gap-2">
+                <Save className="w-4 h-4 stroke-[2.5]" />
+                <span>UPDATE ITEM</span>
+              </div>
+            ) : (
+              <div className="flex items-center justify-center gap-2">
+                <Plus className="w-4 h-4 stroke-[2.5]" />
+                <span>CREATE ITEM</span>
+              </div>
+            )}
           </button>
         </form>
       </div>

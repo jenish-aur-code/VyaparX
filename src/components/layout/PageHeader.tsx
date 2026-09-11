@@ -74,7 +74,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
           <button
             type="button"
             onClick={onSearchByGst}
-            className="text-xs font-bold text-[var(--primary)] hover:opacity-80 transition-opacity py-1.5 px-3 rounded-xl bg-orange-50/70 dark:bg-orange-950/30 border border-orange-200/60 dark:border-orange-800/40 shadow-2xs active:scale-95"
+            className="text-xs font-bold text-[var(--primary)] hover:opacity-80 transition-opacity py-1.5 px-3 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200/60 dark:border-blue-800/40 shadow-2xs active:scale-95"
           >
             Search by GST
           </button>

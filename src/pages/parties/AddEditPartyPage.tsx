@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Info, Contact, Trash2, Search } from 'lucide-react';
+import { Info, Contact, Trash2, Search, Plus, Save, X, Check } from 'lucide-react';
 import { PageHeader } from '../../components/layout/PageHeader';
 import { partyService } from '../../services/partyService';
 import { useToast } from '../../context/ToastContext';
 import { ConfirmDialog } from '../../components/common/ConfirmDialog';
 import { useTheme } from '../../context/ThemeContext';
+import { GlassSelect } from '../../components/common/GlassSelect';
 
 const INDIAN_STATES = [
   'GUJARAT',
@@ -249,20 +250,13 @@ export const AddEditPartyPage: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
-                  STATE <span className="text-red-500 font-bold">*</span>
-                </label>
-                <select
-                  value={state}
-                  onChange={e => setState(e.target.value)}
-                  className="input-sauda font-semibold"
-                >
-                  {INDIAN_STATES.map(s => (
-                    <option key={s} value={s}>{s}</option>
-                  ))}
-                </select>
-              </div>
+              <GlassSelect
+                label="STATE"
+                required
+                value={state}
+                onChange={setState}
+                options={INDIAN_STATES.map(s => ({ value: s, label: s }))}
+              />
 
               <div>
                 <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
@@ -391,9 +385,24 @@ export const AddEditPartyPage: React.FC = () => {
             type="submit"
             disabled={isSubmitting}
             style={{ backgroundColor: palette.primary }}
-            className="w-full py-4 px-4 text-white font-extrabold text-sm uppercase tracking-wider rounded-2xl shadow-glass-card hover:shadow-glass-hover transition-all duration-150 active:scale-[0.98] hover:opacity-90 disabled:opacity-50 mt-6"
+            className="w-full py-4 px-4 text-white font-extrabold text-sm uppercase tracking-wider rounded-2xl shadow-glass-card hover:shadow-glass-hover transition-all duration-150 active:scale-[0.98] hover:opacity-90 disabled:opacity-50 mt-6 flex items-center justify-center gap-2"
           >
-            {isSubmitting ? 'SAVING...' : isEdit ? 'UPDATE PARTY' : 'CREATE PARTY'}
+            {isSubmitting ? (
+              <>
+                <Save className="w-4 h-4 animate-spin" />
+                <span>SAVING...</span>
+              </>
+            ) : isEdit ? (
+              <>
+                <Save className="w-4 h-4 stroke-[2.5]" />
+                <span>UPDATE PARTY</span>
+              </>
+            ) : (
+              <>
+                <Plus className="w-4 h-4 stroke-[2.5]" />
+                <span>CREATE PARTY</span>
+              </>
+            )}
           </button>
         </form>
       </div>
@@ -420,17 +429,19 @@ export const AddEditPartyPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowGstModal(false)}
-                className="flex-1 py-2.5 px-3 border border-gray-200/80 dark:border-white/10 text-gray-600 dark:text-gray-300 text-xs font-bold rounded-2xl hover:bg-white/60 dark:hover:bg-white/10"
+                className="flex-1 py-2.5 px-3 border border-gray-200/80 dark:border-white/10 text-gray-600 dark:text-gray-300 text-xs font-bold rounded-2xl hover:bg-white/60 dark:hover:bg-white/10 flex items-center justify-center gap-1.5"
               >
-                Cancel
+                <X className="w-4 h-4" />
+                <span>Cancel</span>
               </button>
               <button
                 type="button"
                 onClick={handleApplyGst}
                 style={{ backgroundColor: palette.primary }}
-                className="flex-1 py-2.5 px-3 text-white text-xs font-bold rounded-2xl shadow-glass-card hover:shadow-glass-hover hover:opacity-90 transition-opacity"
+                className="flex-1 py-2.5 px-3 text-white text-xs font-bold rounded-2xl shadow-glass-card hover:shadow-glass-hover hover:opacity-90 transition-opacity flex items-center justify-center gap-1.5"
               >
-                Apply
+                <Check className="w-4 h-4" />
+                <span>Apply</span>
               </button>
             </div>
           </div>

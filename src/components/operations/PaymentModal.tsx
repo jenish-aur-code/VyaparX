@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { X, CreditCard } from 'lucide-react';
+import { X, CreditCard, Check } from 'lucide-react';
 import type { SaudaOrder, PaymentRecord } from '../../types';
 import { paymentService } from '../../services/paymentService';
 import { useToast } from '../../context/ToastContext';
 import { formatCurrency, formatISODate } from '../../utils/formatters';
+import { GlassSelect } from '../common/GlassSelect';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -101,25 +102,27 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
         {/* Content Body */}
         <div className="flex-1 overflow-y-auto p-5 space-y-4">
           {/* Amount Status Card */}
-          <div className="grid grid-cols-3 gap-2 p-3 bg-gray-50 rounded-xl text-center text-xs border border-gray-200">
+          <div className="grid grid-cols-3 gap-2 p-3 bg-gray-50 dark:bg-white/5 rounded-xl text-center text-xs border border-gray-200 dark:border-white/10">
             <div>
               <div className="text-gray-400 font-medium">Bill Amount</div>
-              <div className="font-bold text-gray-900 text-xs mt-0.5">{formatCurrency(order.totalBillAmount)}</div>
+              <div className="font-bold text-gray-900 dark:text-gray-100 text-xs mt-0.5">{formatCurrency(order.totalBillAmount)}</div>
             </div>
             <div>
               <div className="text-gray-400 font-medium">Paid</div>
-              <div className="font-bold text-emerald-600 text-xs mt-0.5">{formatCurrency(order.paidAmount || 0)}</div>
+              <div className="font-bold text-emerald-600 dark:text-emerald-400 text-xs mt-0.5">{formatCurrency(order.paidAmount || 0)}</div>
             </div>
             <div>
               <div className="text-gray-400 font-medium">Remaining</div>
-              <div className="font-bold text-red-600 text-xs mt-0.5">{formatCurrency(remainingAmt)}</div>
+              <div className="font-bold text-red-600 dark:text-red-400 text-xs mt-0.5">{formatCurrency(remainingAmt)}</div>
             </div>
           </div>
 
           <form id="payment-form" onSubmit={handleSubmit} className="space-y-3">
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">Payment Date *</label>
+                <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
+                  PAYMENT DATE <span className="text-red-500 font-bold">*</span>
+                </label>
                 <input
                   type="date"
                   required
@@ -129,7 +132,9 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">Amount (₹) *</label>
+                <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
+                  AMOUNT (₹) <span className="text-red-500 font-bold">*</span>
+                </label>
                 <input
                   type="number"
                   step="any"
@@ -137,41 +142,43 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
                   placeholder="Amount"
                   value={amount}
                   onChange={e => setAmount(e.target.value)}
-                  className="input-sauda text-xs font-bold text-emerald-700"
+                  className="input-sauda text-xs font-bold text-emerald-700 dark:text-emerald-400"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">Party</label>
-                <select
+                <GlassSelect
+                  label="PARTY"
                   value={partyType}
-                  onChange={e => setPartyType(e.target.value as 'buyer' | 'seller')}
-                  className="input-sauda text-xs font-semibold"
-                >
-                  <option value="buyer">Buyer ({order.buyerName})</option>
-                  <option value="seller">Seller ({order.sellerName})</option>
-                </select>
+                  onChange={v => setPartyType(v as 'buyer' | 'seller')}
+                  options={[
+                    { value: 'buyer', label: `Buyer (${order.buyerName})` },
+                    { value: 'seller', label: `Seller (${order.sellerName})` },
+                  ]}
+                />
               </div>
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">Payment Mode</label>
-                <select
+                <GlassSelect
+                  label="PAYMENT MODE"
                   value={paymentMode}
-                  onChange={e => setPaymentMode(e.target.value as PaymentRecord['paymentMode'])}
-                  className="input-sauda text-xs font-semibold"
-                >
-                  <option value="Bank Transfer">Bank Transfer / NEFT</option>
-                  <option value="UPI">UPI</option>
-                  <option value="Cash">Cash</option>
-                  <option value="Cheque">Cheque</option>
-                  <option value="Other">Other</option>
-                </select>
+                  onChange={v => setPaymentMode(v as PaymentRecord['paymentMode'])}
+                  options={[
+                    { value: 'Bank Transfer', label: 'Bank Transfer / NEFT' },
+                    { value: 'UPI', label: 'UPI' },
+                    { value: 'Cash', label: 'Cash' },
+                    { value: 'Cheque', label: 'Cheque' },
+                    { value: 'Other', label: 'Other' },
+                  ]}
+                />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1">Reference / UTR / Cheque No.</label>
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
+                REFERENCE / UTR / CHEQUE NO.
+              </label>
               <input
                 type="text"
                 placeholder="Ex. UTR12345678"
@@ -182,7 +189,9 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1">Remarks</label>
+              <label className="block text-xs font-bold text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-1.5">
+                REMARKS
+              </label>
               <input
                 type="text"
                 placeholder="Optional notes"
@@ -195,15 +204,15 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
 
           {/* Past Payments History */}
           {history.length > 0 && (
-            <div className="pt-3 border-t border-gray-100">
+            <div className="pt-3 border-t border-gray-100 dark:border-white/10">
               <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Previous Payments</h4>
               <div className="space-y-2">
                 {history.map(item => (
-                  <div key={item.id} className="p-2.5 bg-gray-50 rounded-lg text-xs flex justify-between items-center border border-gray-200">
+                  <div key={item.id} className="p-2.5 bg-gray-50 dark:bg-white/5 rounded-lg text-xs flex justify-between items-center border border-gray-200 dark:border-white/10">
                     <div>
-                      <span className="font-bold text-emerald-700">{formatCurrency(item.amount)}</span>
-                      <span className="text-gray-500 ml-2">via {item.paymentMode}</span>
-                      <div className="text-[10px] text-gray-400">
+                      <span className="font-bold text-emerald-700 dark:text-emerald-400">{formatCurrency(item.amount)}</span>
+                      <span className="text-gray-500 dark:text-gray-400 ml-2">via {item.paymentMode}</span>
+                      <div className="text-[10px] text-gray-400 dark:text-gray-500">
                         {item.paymentDate} • {item.partyType === 'buyer' ? 'Received from Buyer' : 'Paid to Seller'}
                         {item.referenceNumber ? ` • Ref: ${item.referenceNumber}` : ''}
                       </div>
@@ -216,21 +225,23 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({
         </div>
 
         {/* Footer actions */}
-        <div className="p-4 border-t border-gray-100 flex gap-3 bg-gray-50">
+        <div className="p-4 border-t border-gray-100 dark:border-white/10 flex gap-3 bg-gray-50 dark:bg-gray-800/80">
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 py-2.5 px-4 border border-gray-200 text-gray-700 font-semibold rounded-xl hover:bg-white text-sm"
+            className="flex-1 py-2.5 px-4 border border-gray-200 dark:border-white/10 text-gray-700 dark:text-gray-300 font-semibold rounded-xl hover:bg-white dark:hover:bg-white/10 text-sm flex items-center justify-center gap-1.5"
           >
-            Cancel
+            <X className="w-4 h-4" />
+            <span>Cancel</span>
           </button>
           <button
             type="submit"
             form="payment-form"
             disabled={isSubmitting}
-            className="flex-1 py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-sm shadow-sm transition-all disabled:opacity-50"
+            className="flex-1 py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-sm shadow-sm transition-all disabled:opacity-50 flex items-center justify-center gap-1.5"
           >
-            {isSubmitting ? 'Saving...' : 'Save Payment'}
+            <Check className="w-4 h-4" />
+            <span>{isSubmitting ? 'Saving...' : 'Save Payment'}</span>
           </button>
         </div>
       </div>

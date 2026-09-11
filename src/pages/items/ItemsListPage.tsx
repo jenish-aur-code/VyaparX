@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Package, Plus } from 'lucide-react';
+import { Search, Package, Plus, Info } from 'lucide-react';
 import { itemService } from '../../services/itemService';
 import type { Item } from '../../types';
 import { PageHeader } from '../../components/layout/PageHeader';
@@ -88,11 +88,22 @@ export const ItemsListPage: React.FC = () => {
             </div>
           ))}
 
+          {!isLoading && items.length > 0 && (
+            <div className="text-center py-6 text-gray-400 dark:text-gray-500 text-xs font-medium flex items-center justify-center gap-1.5">
+              <Info className="w-4 h-4 text-gray-400 dark:text-gray-500 shrink-0" />
+              <span>No more items</span>
+            </div>
+          )}
+
           {!isLoading && items.length === 0 && (
-            <div className="text-center py-12 glass-card p-6 border border-white/40 dark:border-white/10">
-              <Package className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-2" />
-              <div className="font-bold text-gray-700 dark:text-gray-200">No commodity items found</div>
-              <p className="text-xs text-gray-400 mt-1">Click the + button below to add your first item.</p>
+            <div className="text-center py-12 px-4 rounded-3xl bg-white/40 dark:bg-gray-850/40 backdrop-blur-xl border border-white/50 dark:border-white/10 shadow-glass">
+              <div className="w-12 h-12 rounded-2xl bg-purple-500/10 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 mx-auto flex items-center justify-center mb-3">
+                <Package className="w-6 h-6 stroke-[2]" />
+              </div>
+              <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200">No commodity items found</h3>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                {searchQuery ? 'No items match your search criteria' : 'Click the + button below to add your first item.'}
+              </p>
             </div>
           )}
         </div>
@@ -103,7 +114,7 @@ export const ItemsListPage: React.FC = () => {
         type="button"
         onClick={() => navigate('/items/new')}
         style={{ backgroundColor: palette.primary }}
-        className="fixed bottom-20 md:bottom-8 right-6 z-40 w-14 h-14 text-white rounded-2xl shadow-xl shadow-orange-500/30 flex items-center justify-center transition-all active:scale-90 hover:opacity-95"
+        className="fixed bottom-20 md:bottom-8 right-6 z-40 w-14 h-14 text-white rounded-2xl shadow-xl shadow-blue-500/30 flex items-center justify-center transition-all active:scale-90 hover:opacity-95"
         aria-label="Add Item"
       >
         <Plus className="w-7 h-7 stroke-[2.5]" />
