@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertTriangle, X, Check, Trash2 } from 'lucide-react';
+import { AlertTriangle, X, Check, Trash2, LogOut } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 
 interface ConfirmDialogProps {
@@ -8,6 +8,7 @@ interface ConfirmDialogProps {
   message: string;
   confirmText?: string;
   cancelText?: string;
+  confirmIcon?: React.ReactNode;
   isDestructive?: boolean;
   onConfirm: () => void;
   onCancel: () => void;
@@ -19,12 +20,21 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   message,
   confirmText = 'Delete',
   cancelText = 'Cancel',
+  confirmIcon,
   isDestructive = true,
   onConfirm,
   onCancel,
 }) => {
   const { palette } = useTheme();
   if (!isOpen) return null;
+
+  const isLogout =
+    title.toLowerCase().includes('logout') ||
+    title.toLowerCase().includes('log out') ||
+    confirmText.toLowerCase().includes('logout') ||
+    confirmText.toLowerCase().includes('log out') ||
+    confirmText === 'लॉग आउट' ||
+    confirmText === 'લૉગ આઉટ';
 
   return (
     <div 
@@ -36,11 +46,15 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
         onClick={e => e.stopPropagation()}
       >
         <div className="flex items-center gap-3.5 mb-3">
-          {isDestructive && (
+          {isLogout ? (
+            <div className="w-11 h-11 rounded-2xl bg-rose-500/15 border border-rose-500/25 flex items-center justify-center text-rose-600 dark:text-rose-400 shrink-0 shadow-inner">
+              <LogOut className="w-5 h-5 stroke-[2.2]" />
+            </div>
+          ) : isDestructive ? (
             <div className="w-11 h-11 rounded-2xl bg-rose-500/15 border border-rose-500/25 flex items-center justify-center text-rose-600 dark:text-rose-400 shrink-0 shadow-inner">
               <AlertTriangle className="w-5 h-5 stroke-[2.5]" />
             </div>
-          )}
+          ) : null}
           <h3 className="text-lg font-black text-gray-900 dark:text-gray-100 tracking-tight break-words min-w-0 flex-1">{title}</h3>
         </div>
 
@@ -65,7 +79,15 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
               isDestructive ? 'bg-gradient-to-r from-red-600 to-rose-600 hover:opacity-95 shadow-red-500/20' : 'hover:opacity-90'
             }`}
           >
-            {isDestructive ? <Trash2 className="w-4 h-4" /> : <Check className="w-4 h-4" />}
+            {confirmIcon ? (
+              confirmIcon
+            ) : isLogout ? (
+              <LogOut className="w-4 h-4 stroke-[2.2]" />
+            ) : isDestructive ? (
+              <Trash2 className="w-4 h-4" />
+            ) : (
+              <Check className="w-4 h-4" />
+            )}
             <span>{confirmText}</span>
           </button>
         </div>
