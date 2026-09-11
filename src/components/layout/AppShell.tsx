@@ -79,7 +79,7 @@ export const AppShell: React.FC = () => {
         <TopHeader />
         
         {/* Isolated Scrollable Viewport - Only this container scrolls */}
-        <main className="relative z-10 flex-1 overflow-y-auto min-w-0 w-full scroll-smooth">
+        <main className="relative z-10 flex-1 overflow-y-auto min-w-0 w-full scroll-smooth pb-24 md:pb-0">
           <Outlet />
         </main>
       </div>

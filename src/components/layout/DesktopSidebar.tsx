@@ -58,40 +58,55 @@ export const DesktopSidebar: React.FC = () => {
     <aside
       className={`hidden md:flex flex-col ${
         isSidebarCollapsed ? 'w-[72px]' : 'w-64'
-      } bg-white/75 dark:bg-gray-900/70 backdrop-blur-2xl border-r border-white/50 dark:border-white/15 h-screen shrink-0 z-30 shadow-glass dark:shadow-glass-dark select-none transition-[width] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] overflow-hidden`}
+      } bg-white/75 dark:bg-gray-900/70 backdrop-blur-2xl border-r border-white/50 dark:border-white/15 h-screen shrink-0 z-30 shadow-glass dark:shadow-glass-dark select-none transition-[width] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] overflow-hidden will-change-[width]`}
     >
       {/* Brand Header - Exactly h-16 to perfectly align horizontally with TopHeader */}
       <NavLink
         to="/home"
-        className={`h-16 border-b border-white/40 dark:border-white/10 flex items-center shrink-0 bg-gradient-to-r from-blue-50/50 dark:from-white/5 to-transparent overflow-hidden group cursor-pointer ${
-          isSidebarCollapsed ? 'px-3.5 justify-center' : 'px-4'
-        }`}
+        className="h-16 border-b border-white/40 dark:border-white/10 flex items-center shrink-0 px-2.5 bg-gradient-to-r from-blue-50/50 dark:from-white/5 to-transparent overflow-hidden group cursor-pointer relative"
       >
-        {isSidebarCollapsed ? (
-          <div
-            className="w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 transition-transform active:scale-95 group-hover:scale-105 mx-auto"
-            title="VyaparX Commodity ERP"
-          >
-            <img src="/logo.png" alt="VyaparX" className="w-10 h-10 object-contain drop-shadow-md" />
-          </div>
-        ) : (
-          <div className="flex items-center w-full h-full py-1.5">
-            <img
-              src="/logo-name.png"
-              alt="VyaparX - Business Made Simple"
-              className="h-11 sm:h-12 w-auto max-w-[215px] object-contain dark:drop-shadow-[0_1px_4px_rgba(255,255,255,0.35)] transition-all"
-            />
-          </div>
-        )}
+        {/* 1. Collapsed Emblem Logo (Image 2) - Centered when collapsed */}
+        <div
+          className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 transition-all duration-300 ease-out mx-auto ${
+            isSidebarCollapsed
+              ? 'opacity-100 scale-100 pointer-events-auto'
+              : 'opacity-0 scale-75 -translate-x-6 pointer-events-none absolute left-2.5'
+          }`}
+          title="VyaparX Commodity ERP"
+        >
+          <img
+            src="/logo.png"
+            alt="VyaparX Logo"
+            className="w-11 h-11 object-contain drop-shadow-md transition-transform active:scale-95 group-hover:scale-105"
+          />
+        </div>
+
+        {/* 2. Expanded Name Logo - Smoothly slides in from left to right */}
+        <div
+          className={`flex items-center w-full h-full py-1.5 pl-1 transition-all duration-300 ease-out overflow-hidden whitespace-nowrap ${
+            isSidebarCollapsed
+              ? 'opacity-0 -translate-x-8 max-w-0 pointer-events-none'
+              : 'opacity-100 translate-x-0 max-w-[215px] pointer-events-auto'
+          }`}
+        >
+          <img
+            src="/logo-name.png"
+            alt="VyaparX - Business Made Simple"
+            className="h-11 sm:h-12 w-auto max-w-[215px] object-contain dark:drop-shadow-[0_1px_4px_rgba(255,255,255,0.35)] transition-all"
+          />
+        </div>
       </NavLink>
 
       {/* Main Navigation Links */}
-      <div className={`flex-1 overflow-y-auto space-y-1.5 scrollbar-thin pt-3.5 ${isSidebarCollapsed ? 'px-2 pb-2' : 'px-3 pb-2'}`}>
-        {!isSidebarCollapsed ? (
-          <div className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider px-3 mb-1 animate-in fade-in duration-200">
-            {t('nav.mainMenu', 'Main Menu')}
-          </div>
-        ) : null}
+      <div className="flex-1 overflow-y-auto space-y-1 scrollbar-thin pt-3.5 px-2.5 pb-2">
+        {/* Main Menu Label */}
+        <div
+          className={`text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider px-3 transition-all duration-300 ease-out overflow-hidden whitespace-nowrap ${
+            isSidebarCollapsed ? 'opacity-0 max-h-0 -translate-x-3 mb-0' : 'opacity-100 max-h-6 translate-x-0 mb-1.5'
+          }`}
+        >
+          {t('nav.mainMenu', 'Main Menu')}
+        </div>
 
         {mainNav.map(item => {
           const Icon = item.icon;
@@ -102,22 +117,22 @@ export const DesktopSidebar: React.FC = () => {
               to={item.to}
               title={isSidebarCollapsed ? item.label : undefined}
               style={active ? { backgroundColor: palette.primary } : undefined}
-              className={`flex items-center rounded-2xl transition-all duration-200 active:scale-95 overflow-hidden whitespace-nowrap ${
-                isSidebarCollapsed
-                  ? 'justify-center w-11 h-11 mx-auto px-0'
-                  : 'gap-3 px-3.5 py-2.5 text-sm font-semibold'
-              } ${
+              className={`w-full h-11 flex items-center px-1.5 rounded-2xl transition-colors duration-200 active:scale-95 overflow-hidden whitespace-nowrap group ${
                 active
                   ? 'text-white shadow-md shadow-blue-500/20 font-bold'
                   : item.isHighlight
                   ? 'bg-blue-50/70 dark:bg-blue-950/30 text-blue-800 dark:text-blue-300 hover:bg-blue-100/70 dark:hover:bg-blue-900/40 border border-blue-200/50 dark:border-blue-800/30 font-bold'
-                  : 'text-gray-600 dark:text-gray-300 hover:bg-white/60 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white'
+                  : 'text-gray-600 dark:text-gray-300 hover:bg-white/60 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white font-semibold'
               }`}
             >
-              <Icon className={`${isSidebarCollapsed ? 'w-5 h-5' : 'w-4 h-4'} stroke-[2.2] shrink-0`} />
+              <div className="w-9 h-9 shrink-0 flex items-center justify-center rounded-xl transition-transform group-hover:scale-105">
+                <Icon className="w-5 h-5 stroke-[2.2]" />
+              </div>
               <span
-                className={`transition-all duration-200 ease-out overflow-hidden whitespace-nowrap truncate ${
-                  isSidebarCollapsed ? 'opacity-0 max-w-0 pointer-events-none' : 'opacity-100 max-w-[180px]'
+                className={`ml-2 text-sm transition-all duration-300 ease-out overflow-hidden whitespace-nowrap truncate ${
+                  isSidebarCollapsed
+                    ? 'opacity-0 -translate-x-4 max-w-0 pointer-events-none'
+                    : 'opacity-100 translate-x-0 max-w-[175px]'
                 }`}
               >
                 {item.label}
@@ -127,13 +142,16 @@ export const DesktopSidebar: React.FC = () => {
         })}
 
         {/* Section Divider */}
-        {isSidebarCollapsed ? (
-          <div className="my-2 border-t border-white/40 dark:border-white/10 mx-2" />
-        ) : (
-          <div className="pt-3 text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider px-3 mb-1 animate-in fade-in duration-200">
-            {t('nav.operations', 'Operations & Reports')}
-          </div>
-        )}
+        <div className="my-2 border-t border-white/40 dark:border-white/10 mx-1 transition-all duration-300" />
+
+        {/* Operations & Reports Label */}
+        <div
+          className={`text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider px-3 transition-all duration-300 ease-out overflow-hidden whitespace-nowrap ${
+            isSidebarCollapsed ? 'opacity-0 max-h-0 -translate-x-3 mb-0' : 'opacity-100 max-h-6 translate-x-0 mb-1.5'
+          }`}
+        >
+          {t('nav.operations', 'Operations & Reports')}
+        </div>
 
         {quickLinks.map(item => {
           const Icon = item.icon;
@@ -144,20 +162,20 @@ export const DesktopSidebar: React.FC = () => {
               to={item.to}
               title={isSidebarCollapsed ? item.label : undefined}
               style={active ? { backgroundColor: palette.primary } : undefined}
-              className={`flex items-center rounded-2xl transition-all duration-200 active:scale-95 overflow-hidden whitespace-nowrap ${
-                isSidebarCollapsed
-                  ? 'justify-center w-11 h-11 mx-auto px-0'
-                  : 'gap-3 px-3.5 py-2.5 text-sm font-semibold'
-              } ${
+              className={`w-full h-11 flex items-center px-1.5 rounded-2xl transition-colors duration-200 active:scale-95 overflow-hidden whitespace-nowrap group ${
                 active
                   ? 'text-white shadow-md shadow-blue-500/20 font-bold'
-                  : 'text-gray-600 dark:text-gray-300 hover:bg-white/60 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white'
+                  : 'text-gray-600 dark:text-gray-300 hover:bg-white/60 dark:hover:bg-white/10 hover:text-gray-900 dark:hover:text-white font-semibold'
               }`}
             >
-              <Icon className={`${isSidebarCollapsed ? 'w-5 h-5' : 'w-4 h-4'} stroke-[2.2] shrink-0`} />
+              <div className="w-9 h-9 shrink-0 flex items-center justify-center rounded-xl transition-transform group-hover:scale-105">
+                <Icon className="w-5 h-5 stroke-[2.2]" />
+              </div>
               <span
-                className={`transition-all duration-200 ease-out overflow-hidden whitespace-nowrap truncate ${
-                  isSidebarCollapsed ? 'opacity-0 max-w-0 pointer-events-none' : 'opacity-100 max-w-[180px]'
+                className={`ml-2 text-sm transition-all duration-300 ease-out overflow-hidden whitespace-nowrap truncate ${
+                  isSidebarCollapsed
+                    ? 'opacity-0 -translate-x-4 max-w-0 pointer-events-none'
+                    : 'opacity-100 translate-x-0 max-w-[175px]'
                 }`}
               >
                 {item.label}
@@ -168,21 +186,21 @@ export const DesktopSidebar: React.FC = () => {
       </div>
 
       {/* Download Web App Button in Sidebar */}
-      <div className={isSidebarCollapsed ? 'px-2 pb-2 flex justify-center' : 'px-3 pb-2'}>
+      <div className="px-2.5 pb-2">
         <button
           type="button"
           onClick={promptInstall}
           title={isSidebarCollapsed ? (isInstalled ? t('nav.appInstalled', 'App Installed') : t('nav.downloadApp', 'Download App')) : undefined}
-          className={`${
-            isSidebarCollapsed
-              ? 'w-11 h-11 flex items-center justify-center rounded-2xl'
-              : 'w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-2xl text-xs'
-          } bg-blue-50/70 hover:bg-blue-100/70 dark:bg-blue-950/30 dark:hover:bg-blue-900/40 backdrop-blur-xl border border-blue-200/80 dark:border-blue-800/50 text-blue-700 dark:text-blue-300 font-bold transition-all shadow-2xs active:scale-95 cursor-pointer overflow-hidden whitespace-nowrap`}
+          className="w-full h-11 flex items-center px-1.5 rounded-2xl bg-blue-50/70 hover:bg-blue-100/70 dark:bg-blue-950/30 dark:hover:bg-blue-900/40 backdrop-blur-xl border border-blue-200/80 dark:border-blue-800/50 text-blue-700 dark:text-blue-300 font-bold transition-all duration-200 shadow-2xs active:scale-95 cursor-pointer overflow-hidden whitespace-nowrap group"
         >
-          <Download className="w-4 h-4 stroke-[2.5] shrink-0" />
+          <div className="w-9 h-9 shrink-0 flex items-center justify-center rounded-xl transition-transform group-hover:scale-105">
+            <Download className="w-4 h-4 stroke-[2.5]" />
+          </div>
           <span
-            className={`transition-all duration-200 ease-out overflow-hidden whitespace-nowrap truncate ${
-              isSidebarCollapsed ? 'opacity-0 max-w-0 pointer-events-none' : 'opacity-100 max-w-[180px]'
+            className={`ml-2 text-xs transition-all duration-300 ease-out overflow-hidden whitespace-nowrap truncate ${
+              isSidebarCollapsed
+                ? 'opacity-0 -translate-x-4 max-w-0 pointer-events-none'
+                : 'opacity-100 translate-x-0 max-w-[170px]'
             }`}
           >
             {isInstalled ? t('nav.appInstalled', 'App Installed') : t('nav.downloadApp', 'Download App')}
@@ -191,29 +209,31 @@ export const DesktopSidebar: React.FC = () => {
       </div>
 
       {/* Footer Info (Plain text Security info & v1.0) */}
-      <div
-        className={`border-t border-white/40 dark:border-white/10 flex items-center ${
-          isSidebarCollapsed ? 'h-12 justify-center px-1' : 'h-12 px-4 justify-between text-xs'
-        } text-gray-400 dark:text-gray-500 bg-white/20 dark:bg-gray-900/20 shrink-0 overflow-hidden whitespace-nowrap select-none`}
-      >
+      <div className="h-12 border-t border-white/40 dark:border-white/10 flex items-center px-3 justify-between text-xs text-gray-400 dark:text-gray-500 bg-white/20 dark:bg-gray-900/20 shrink-0 overflow-hidden whitespace-nowrap select-none">
         <div
           title={isSidebarCollapsed ? 'Security • v1.0' : undefined}
-          className="flex items-center gap-1.5 font-medium text-gray-500 dark:text-gray-400 overflow-hidden"
+          className="flex items-center font-medium text-gray-500 dark:text-gray-400 overflow-hidden"
         >
-          <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+          <div className="w-8 h-8 shrink-0 flex items-center justify-center">
+            <ShieldCheck className="w-4 h-4 text-emerald-500" />
+          </div>
           <span
-            className={`text-xs font-semibold tracking-wide transition-all duration-200 ease-out overflow-hidden whitespace-nowrap truncate ${
-              isSidebarCollapsed ? 'opacity-0 max-w-0 pointer-events-none' : 'opacity-100 max-w-[120px]'
+            className={`text-xs font-semibold tracking-wide transition-all duration-300 ease-out overflow-hidden whitespace-nowrap truncate ml-1 ${
+              isSidebarCollapsed
+                ? 'opacity-0 -translate-x-4 max-w-0 pointer-events-none'
+                : 'opacity-100 translate-x-0 max-w-[120px]'
             }`}
           >
             {t('nav.security', 'Security')}
           </span>
         </div>
-        {!isSidebarCollapsed && (
-          <span className="font-mono text-[10px] px-1.5 py-0.5 rounded-md bg-white/50 dark:bg-gray-800/50 border border-white/40 dark:border-white/10 text-gray-400 dark:text-gray-500 font-bold shrink-0 animate-in fade-in">
-            v1.0
-          </span>
-        )}
+        <span
+          className={`font-mono text-[10px] px-1.5 py-0.5 rounded-md bg-white/50 dark:bg-gray-800/50 border border-white/40 dark:border-white/10 text-gray-400 dark:text-gray-500 font-bold shrink-0 transition-all duration-300 ease-out ${
+            isSidebarCollapsed ? 'opacity-0 scale-50 pointer-events-none' : 'opacity-100 scale-100'
+          }`}
+        >
+          v1.0
+        </span>
       </div>
     </aside>
   );

@@ -149,12 +149,12 @@ export const SaudaListPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Floating Action Button (+) */}
+      {/* Floating Action Button (+) for Desktop (Mobile uses the center glass dock FAB) */}
       <button
         type="button"
         onClick={() => navigate('/vyapar/create')}
         style={{ backgroundColor: palette.primary }}
-        className="fixed bottom-20 md:bottom-8 right-6 z-40 w-14 h-14 hover:opacity-90 text-white rounded-2xl shadow-xl flex items-center justify-center transition-all active:scale-95"
+        className="hidden md:flex fixed bottom-8 right-6 z-40 w-14 h-14 hover:opacity-90 text-white rounded-2xl shadow-xl items-center justify-center transition-all active:scale-95"
         aria-label="Create Vyapar"
       >
         <Plus className="w-7 h-7 stroke-[2.5]" />
